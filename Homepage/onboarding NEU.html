@@ -2107,6 +2107,15 @@
       hpFrame.removeAttribute('scrolling');
       history.replaceState(null, '', 'Homepage.html');
     }, 1280);
+
+    /*
+     * Nach dem sichtbaren Morph den iframe durch die echte Seite ersetzen.
+     * Die Homepage ist zu diesem Zeitpunkt bereits vollständig im Cache;
+     * direkte DOM-Trefferflächen funktionieren auf iOS zuverlässiger.
+     */
+    window.setTimeout(() => {
+      window.location.replace('Homepage.html?from=onboarding');
+    }, 2100);
   }
 
   function finish() {

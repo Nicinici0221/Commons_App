@@ -20,16 +20,16 @@
   };
 
   window.addEventListener('DOMContentLoaded', () => {
-    const fallback = window.setTimeout(showWithFinalFonts, 1800);
-    if (document.fonts && document.fonts.ready) {
-      document.fonts.ready.then(() => {
-        window.clearTimeout(fallback);
-        showWithFinalFonts();
-      }, showWithFinalFonts);
-    } else {
+    const fallback = window.setTimeout(showWithFinalFonts, 4000);
+    const fontsReady = document.fonts?.ready || Promise.resolve();
+    const assetsReady = document.readyState === 'complete'
+      ? Promise.resolve()
+      : new Promise((resolve) => window.addEventListener('load', resolve, { once: true }));
+
+    Promise.all([fontsReady, assetsReady]).then(() => {
       window.clearTimeout(fallback);
       showWithFinalFonts();
-    }
+    }, showWithFinalFonts);
   }, { once: true });
 
   try {

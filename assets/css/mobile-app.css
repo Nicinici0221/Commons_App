@@ -10,6 +10,17 @@ html {
   text-size-adjust: 100%;
 }
 
+button,
+a,
+[role="button"],
+[data-href],
+label,
+input,
+select,
+textarea {
+  touch-action: manipulation;
+}
+
 /* Keep every navigation glyph on the exact visual centre of its circle. */
 .tabbar .tab {
   display: grid !important;
