@@ -204,6 +204,19 @@ html {
     display: none !important;
   }
 
+  /*
+   * iOS 26 zieht die Systemleiste vom dynamischen Viewport ab. Die App
+   * behält trotzdem die volle Main-Referenzhöhe und wird um exakt diesen
+   * Unterschied nach oben gesetzt. So bleiben alle 440/956-Abstände gleich.
+   */
+  body > .phone {
+    position: relative !important;
+    top: calc(100dvh - 100lvh) !important;
+    height: 100lvh !important;
+    min-height: 100lvh !important;
+    max-height: 100lvh !important;
+  }
+
   /* Full-Bleed-Farbe hinter der echten iOS-Statusleiste. */
   html:has(body > .phone.is-intro),
   body:has(> .phone.is-intro) {
