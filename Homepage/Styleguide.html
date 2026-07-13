@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#FF7B00" />
+  <link rel="manifest" href="../manifest.json" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-title" content="HfG Erbe" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <link rel="apple-touch-icon" href="../assets/icons/icon-512.png" />
+  <title>COMMONS — Brand & UI Styleguide</title>
+  <style>
+    @font-face { font-family: "Kurdis"; src: url("Kurdis Family Delivderables/WOFF2/Kurdis-Wide.woff2") format("woff2"), url("Kurdis Family Delivderables/WOFF/Kurdis-Wide.woff") format("woff"), url("Kurdis Family Delivderables/TTF/Kurdis-Wide.ttf") format("truetype"); font-weight: 400; font-style: normal; font-display: swap; }
+    @font-face { font-family: "KurdisRegular"; src: url("Kurdis Family Delivderables/WOFF2/Kurdis-Regular.woff2") format("woff2"), url("Kurdis Family Delivderables/WOFF/Kurdis-Regular.woff") format("woff"), url("Kurdis Family Delivderables/TTF/Kurdis-Regular.ttf") format("truetype"); font-weight: 400; font-style: normal; font-display: swap; }
+    @font-face { font-family: "General Sans"; src: url("GeneralSans_Complete/GeneralSans_Complete/Fonts/WEB/fonts/GeneralSans-Variable.woff2") format("woff2"); font-weight: 100 900; font-style: normal; font-display: swap; }
+    @font-face { font-family: "HelvenaLight"; src: url("helvena-grotesk-modern-bold-brand-identity-font-2026-04-07-06-20-11-utc/Helvena Font File/WOFF2/Helvena-Light.woff2") format("woff2"), url("helvena-grotesk-modern-bold-brand-identity-font-2026-04-07-06-20-11-utc/Helvena Font File/WOFF/Helvena-Light.woff") format("woff"), url("helvena-grotesk-modern-bold-brand-identity-font-2026-04-07-06-20-11-utc/Helvena Font File/TTF/Helvena-Light.ttf") format("truetype"); font-weight: 300; font-style: normal; font-display: swap; }
+
+    :root {
+      --ink: #171a16;
+      --bg: #f7f7f6;
+      --paper: #fbfbfa;
+      --paper-2: #f3f3f1;
+      --app-bg: #e2e5df;
+      --white: #ffffff;
+      --ink-70: rgba(23,26,22,.72);
+      --ink-55: rgba(23,26,22,.55);
+      --ink-40: rgba(23,26,22,.40);
+      --ink-25: rgba(23,26,22,.25);
+      --ink-12: rgba(23,26,22,.12);
+      --rule: rgba(23,26,22,.13);
+      --green-soft: #6fcf9e;
+      --green-bright: #96ecc0;
+      --green-deep: #4a7c59;
+      --coral: #e4977c;
+      --navy: #0b162a;
+      --blue: #15213a;
+      --body: "General Sans", "SF Pro Display", -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+      --display: "Kurdis", "SF Pro Display", "Helvetica Neue", Arial, sans-serif;
+      --editorial: "HelvenaLight", "General Sans", sans-serif;
+      --radius-card: 28px;
+      --ease: cubic-bezier(.22,1,.36,1);
+    }
+
+    * { box-sizing: border-box; }
+    html, body { margin: 0; min-height: 100%; background: var(--app-bg); color: var(--ink); font-family: var(--body); -webkit-font-smoothing: antialiased; text-rendering: geometricPrecision; }
+    body { padding: 32px; }
+
+    .sheet {
+      width: min(1600px, calc(100vw - 64px));
+      min-height: 900px;
+      margin: 0 auto;
+      background:
+        radial-gradient(ellipse 60% 38% at 100% 0%, rgba(228,151,124,.13), transparent 62%),
+        radial-gradient(ellipse 48% 32% at 0% 100%, rgba(11,22,42,.055), transparent 60%),
+        var(--paper);
+      border-radius: 40px;
+      padding: 52px;
+      box-shadow: 0 28px 80px rgba(35,42,36,.18);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .topline { display: flex; justify-content: space-between; align-items: flex-start; gap: 32px; border-bottom: 1px solid var(--rule); padding-bottom: 34px; }
+    .brand-kicker, .label { font-family: var(--display); font-size: 11px; letter-spacing: 2.6px; text-transform: uppercase; color: var(--ink-55); }
+    h1 { margin: 20px 0 0; font-family: var(--editorial); font-weight: 300; font-size: clamp(54px, 7vw, 104px); line-height: .92; letter-spacing: -4px; max-width: 980px; }
+    h1 em { font-family: var(--display); font-style: normal; letter-spacing: -2.8px; }
+    .intro { max-width: 430px; color: var(--ink-70); line-height: 1.5; font-size: 17px; font-weight: 300; margin: 16px 0 0; }
+    .mark { width: 76px; height: 76px; flex: 0 0 auto; border-radius: 50%; background: #101110; color: #fff; display: grid; place-items: center; box-shadow: inset 0 1px 0 rgba(255,255,255,.14), 0 16px 34px rgba(0,0,0,.18); position: relative; }
+    .mark:before { content: "C"; font-family: var(--display); font-size: 26px; letter-spacing: -1px; }
+    .mark:after { content: ""; position: absolute; inset: -1px; border-radius: 50%; border: 1px solid rgba(255,255,255,.25); }
+
+    .grid { display: grid; grid-template-columns: 1.08fr .92fr; gap: 28px; margin-top: 34px; }
+    .panel { background: linear-gradient(180deg, rgba(255,255,255,.76), rgba(247,248,245,.62)); border: 1px solid rgba(23,26,22,.08); border-radius: var(--radius-card); padding: 28px; box-shadow: inset 0 1px 0 rgba(255,255,255,.75), 0 8px 24px rgba(30,32,30,.055); }
+    .panel.dark { color: #fff; background:
+      radial-gradient(ellipse 92% 82% at 114% 104%, rgba(228,151,124,.58) 0%, rgba(184,107,102,.38) 38%, rgba(99,74,83,.20) 66%, rgba(7,14,28,0) 88%),
+      radial-gradient(ellipse 76% 58% at 64% 58%, rgba(30,41,66,.38) 0%, rgba(7,14,28,0) 72%),
+      linear-gradient(to right, rgba(1,4,10,.48) 0%, rgba(5,10,21,.12) 56%, transparent 78%),
+      linear-gradient(180deg, #000 0%, var(--navy) 54%, var(--blue) 100%);
+      border: 1px solid rgba(255,255,255,.11); min-height: 340px; position: relative; overflow: hidden; }
+    .panel-title { margin: 0 0 20px; font-family: var(--display); font-weight: 400; font-size: 13px; letter-spacing: 2.2px; text-transform: uppercase; color: var(--ink-55); }
+    .dark .panel-title { color: rgba(255,255,255,.52); }
+
+    .palette { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+    .swatch { border-radius: 22px; min-height: 118px; padding: 14px; display: flex; flex-direction: column; justify-content: flex-end; border: 1px solid rgba(23,26,22,.09); overflow: hidden; }
+    .swatch span:first-child { font-size: 11px; letter-spacing: 1.2px; text-transform: uppercase; color: rgba(23,26,22,.56); }
+    .swatch span:last-child { margin-top: 5px; font-family: var(--display); font-size: 14px; letter-spacing: .8px; color: var(--ink); }
+    .swatch.darktxt span { color: rgba(255,255,255,.78); }
+    .swatch.darktxt span:last-child { color: #fff; }
+
+    .type-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+    .type-sample { padding-top: 18px; border-top: 1px solid var(--rule); }
+    .type-sample .name { font-size: 12px; color: var(--ink-55); margin-bottom: 10px; }
+    .display-xl { font-family: var(--display); font-size: 96px; line-height: .9; letter-spacing: -4px; }
+    .headline { font-family: var(--editorial); font-size: 42px; line-height: 1.02; letter-spacing: -1.4px; font-weight: 300; }
+    .body-copy { color: var(--ink-70); font-size: 16px; line-height: 1.5; font-weight: 300; }
+    .eyebrow { font-family: var(--display); font-size: 10.5px; letter-spacing: 2.4px; text-transform: uppercase; color: var(--ink-55); }
+
+    .hero-copy { position: absolute; left: 32px; right: 32px; bottom: 30px; text-align: left; }
+    .hero-number { font-family: var(--display); display: block; font-size: 138px; line-height: .86; letter-spacing: -5px; text-shadow: 0 2px 40px rgba(0,0,0,.25); }
+    .hero-desc { max-width: 360px; color: rgba(255,255,255,.82); font-size: 15px; line-height: 1.45; font-weight: 300; }
+    .glass-pill { position: absolute; top: 26px; right: 26px; padding: 10px 18px; border-radius: 999px; background: rgba(8,14,30,.22); backdrop-filter: blur(28px) saturate(180%); border: 1px solid rgba(255,255,255,.18); box-shadow: inset 0 1px 0 rgba(255,255,255,.12), inset 0 -1px 0 rgba(0,0,0,.18), 0 4px 16px rgba(0,0,0,.16); font-size: 13px; color: rgba(255,255,255,.9); }
+
+    .components { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 28px; }
+    .metric-card, .cta-card, .form-card { border-radius: 28px; min-height: 190px; background: linear-gradient(180deg, rgba(255,255,255,.94), rgba(247,248,245,.78)), rgba(232,235,230,.85); border: 1px solid rgba(23,26,22,.08); box-shadow: inset 0 1px 0 rgba(255,255,255,.85), inset 0 -1px 0 rgba(20,22,20,.05), 0 8px 24px rgba(30,32,30,.07); padding: 22px; position: relative; }
+    .metric-card .bubble { position: absolute; top: 18px; right: 18px; width: 54px; height: 54px; border-radius: 50%; background: linear-gradient(180deg, rgba(255,255,255,.8), rgba(255,255,255,.22)), rgba(232,233,232,.74); display: grid; place-items: center; color: var(--ink-70); }
+    .metric-card .metric { position: absolute; left: 22px; bottom: 22px; }
+    .metric strong { font-family: var(--display); font-weight: 400; font-size: 44px; letter-spacing: -1.2px; }
+    .metric .sub { margin-top: 8px; color: var(--ink-55); font-size: 13px; }
+    .cta-card { display: flex; align-items: center; justify-content: space-between; background: linear-gradient(180deg, rgba(238,238,237,.92), rgba(224,224,223,.86)); }
+    .cta-label { font-family: var(--editorial); font-size: 30px; line-height: 1.05; letter-spacing: -1px; }
+    .arrow { width: 58px; height: 58px; border-radius: 50%; background: #fff; display: grid; place-items: center; box-shadow: 0 4px 12px rgba(30,32,30,.08); }
+    .field { margin-top: 20px; }
+    .field label { font-family: var(--display); font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--ink-40); }
+    .field .input { margin-top: 8px; padding-bottom: 10px; border-bottom: 1px solid var(--ink-25); font-family: var(--editorial); font-size: 25px; color: var(--ink); }
+    .choice { display: grid; grid-template-columns: 38px 1fr 22px; gap: 12px; padding: 18px 0; border-top: 1px solid var(--rule); align-items: center; }
+    .choice:last-child { border-bottom: 1px solid var(--rule); }
+    .choice .num { font-family: var(--display); color: var(--ink-40); font-size: 12px; letter-spacing: 1.2px; }
+    .choice .ttl { font-family: var(--display); font-size: 18px; letter-spacing: -.3px; }
+    .choice .desc { font-size: 12px; color: var(--ink-55); margin-top: 4px; }
+    .dot { width: 22px; height: 22px; border-radius: 50%; background: var(--ink); position: relative; }
+    .dot:after { content: "✓"; position: absolute; inset: 0; color: #fff; font-size: 12px; display: grid; place-items: center; }
+
+    .principles { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-top: 28px; }
+    .principle { border-top: 1px solid var(--rule); padding-top: 18px; }
+    .principle .n { font-family: var(--display); font-size: 14px; letter-spacing: 1.5px; color: var(--ink-40); }
+    .principle h3 { margin: 14px 0 8px; font-family: var(--editorial); font-weight: 300; font-size: 24px; line-height: 1.05; letter-spacing: -.6px; }
+    .principle p { margin: 0; color: var(--ink-70); font-size: 13px; line-height: 1.42; font-weight: 300; }
+
+    .footer { margin-top: 34px; padding-top: 24px; border-top: 1px solid var(--rule); display: flex; justify-content: space-between; color: var(--ink-55); font-size: 12px; letter-spacing: .2px; }
+
+    @media print {
+      body { padding: 0; background: #fff; }
+      .sheet { width: 100vw; min-height: 100vh; border-radius: 0; box-shadow: none; }
+    }
+    @media (max-width: 980px) {
+      body { padding: 16px; }
+      .sheet { width: calc(100vw - 32px); padding: 28px; border-radius: 28px; }
+      .topline, .grid, .components, .principles { grid-template-columns: 1fr; }
+      .grid { display: grid; }
+      .palette { grid-template-columns: repeat(2, 1fr); }
+      .type-grid { grid-template-columns: 1fr; }
+      .hero-number { font-size: 96px; }
+      h1 { letter-spacing: -2px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="sheet" aria-label="COMMONS Brand und UI Styleguide">
+    <section class="topline">
+      <div>
+        <div class="brand-kicker">COMMONS · extracted styleguide</div>
+        <h1>Editorial <em>Solar</em> Design System</h1>
+        <p class="intro">Premium Mobile-App-Look mit Paper-Surfaces, warmem Solar-Gradient, großen Display-Zahlen, Hairlines und weichem Glassmorphism.</p>
+      </div>
+      <div class="mark" aria-label="COMMONS Mark"></div>
+    </section>
+
+    <section class="grid">
+      <div class="panel">
+        <h2 class="panel-title">01 · Farbpalette</h2>
+        <div class="palette">
+          <div class="swatch darktxt" style="background:#171a16"><span>Ink</span><span>#171A16</span></div>
+          <div class="swatch" style="background:#fbfbfa"><span>Paper</span><span>#FBFBFA</span></div>
+          <div class="swatch" style="background:#f7f7f6"><span>Soft BG</span><span>#F7F7F6</span></div>
+          <div class="swatch" style="background:#e2e5df"><span>App BG</span><span>#E2E5DF</span></div>
+          <div class="swatch" style="background:#6fcf9e"><span>Green Soft</span><span>#6FCF9E</span></div>
+          <div class="swatch" style="background:#96ecc0"><span>Lime</span><span>#96ECC0</span></div>
+          <div class="swatch darktxt" style="background:#4a7c59"><span>Deep Green</span><span>#4A7C59</span></div>
+          <div class="swatch" style="background:#e4977c"><span>Coral</span><span>#E4977C</span></div>
+        </div>
+      </div>
+
+      <div class="panel dark">
+        <h2 class="panel-title">02 · Hero Atmosphere</h2>
+        <div class="glass-pill">Glass Pill · 28px Blur</div>
+        <div class="hero-copy">
+          <span class="hero-number">82%</span>
+          <p class="hero-desc">Dunkles Navy trifft warmes Coral-Licht. Glass-Elemente nur auf Hero- oder dunklen Flächen verwenden.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="grid">
+      <div class="panel">
+        <h2 class="panel-title">03 · Typografie</h2>
+        <div class="type-grid">
+          <div class="type-sample">
+            <div class="name">Kurdis · Display Numbers</div>
+            <div class="display-xl">134</div>
+          </div>
+          <div class="type-sample">
+            <div class="name">HelvenaLight · Editorial Headline</div>
+            <div class="headline">Energie wird gemeinschaftlich.</div>
+          </div>
+          <div class="type-sample">
+            <div class="name">General Sans · Body</div>
+            <div class="body-copy">Ruhige, klare UI-Texte mit leichtem Gewicht, hoher Lesbarkeit und großzügiger Zeilenhöhe.</div>
+          </div>
+          <div class="type-sample">
+            <div class="name">Kurdis · Eyebrow</div>
+            <div class="eyebrow">SOLAR COMMUNITY</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h2 class="panel-title">04 · Radius / Surfaces</h2>
+        <div class="principle" style="border-top:0;padding-top:0">
+          <div class="n">Radius</div>
+          <h3>Soft, rounded, mobile-first</h3>
+          <p>Phone: 32px · Cards: 26–28px · Pills: 999px · Icons: 50%. Helle Flächen nutzen subtile Verläufe, Hairline-Borders und weiche Inset-Highlights.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="components" aria-label="Komponenten">
+      <article class="metric-card">
+        <div class="label">Metric Card</div>
+        <div class="bubble">☀</div>
+        <div class="metric"><strong>4.8</strong> kWh<div class="sub">Heute erzeugt</div></div>
+      </article>
+      <article class="cta-card">
+        <div class="cta-label">Energie<br>spenden</div>
+        <div class="arrow">→</div>
+      </article>
+      <article class="form-card">
+        <div class="label">Editorial Form</div>
+        <div class="field"><label>Postleitzahl</label><div class="input">10405</div></div>
+        <div class="choice"><div class="num">01</div><div><div class="ttl">Community Solar</div><div class="desc">Lokale Energie teilen</div></div><div class="dot"></div></div>
+      </article>
+    </section>
+
+    <section class="principles">
+      <div class="principle"><div class="n">01</div><h3>Editorial statt generisch</h3><p>Große Zahlen, Uppercase-Labels und magazinartige Hierarchien prägen den Look.</p></div>
+      <div class="principle"><div class="n">02</div><h3>Paper UI</h3><p>Offwhite, subtile Körnung, Hairlines und weiche Schatten statt harter Container.</p></div>
+      <div class="principle"><div class="n">03</div><h3>Solar Gradient</h3><p>Coral, Navy und Schwarz erzeugen warme Energie-Atmosphäre im Hero.</p></div>
+      <div class="principle"><div class="n">04</div><h3>Premium Motion</h3><p>Weiche Interaktionen mit cubic-bezier(.22,1,.36,1) und minimalem Scale-Feedback.</p></div>
+    </section>
+
+    <footer class="footer">
+      <span>Design Tokens: Ink · Paper · Green · Coral · Navy</span>
+      <span>COMMONS Styleguide · HTML/CSS/JS Extraction</span>
+    </footer>
+  </main>
+</body>
+</html>

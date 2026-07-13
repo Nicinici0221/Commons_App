@@ -1,0 +1,3 @@
+# Large, unreferenced local source/download folders are not part of the web app.
+Homepage/Downloads/
+Homepage/Animatic/

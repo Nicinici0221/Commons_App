@@ -1,0 +1,1776 @@
+﻿<!doctype html>
+<html lang="de">
+<head>
+  <style>html,body{background:#e2e5df}</style>
+  <script>(function(){try{if(localStorage.getItem("commons_setting_dark-mode")==="true")document.documentElement.classList.add("dark-mode");}catch(e){}})();</script>
+  <link rel="stylesheet" href="dark-mode.css" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#FF7B00" />
+  <link rel="manifest" href="../manifest.json" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-title" content="HfG Erbe" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <link rel="apple-touch-icon" href="../assets/icons/icon-512.png" />
+  <link rel="stylesheet" href="../assets/css/mobile-app.css" />
+  <title>Community</title>
+  <script src="page-transition-head.js"></script>
+  <script>(function(){if(!sessionStorage.getItem('cm_visited')){document.documentElement.classList.remove('wc-route-return');}})();</script>
+  <link rel="stylesheet" href="page-transitions.css" />
+  <style>
+    @font-face { font-family: "Kurdis"; src: url("Kurdis Family Delivderables/WOFF2/Kurdis-Wide.woff2") format("woff2"), url("Kurdis Family Delivderables/WOFF/Kurdis-Wide.woff") format("woff"), url("Kurdis Family Delivderables/TTF/Kurdis-Wide.ttf") format("truetype"); font-weight: 400; font-style: normal; font-display: swap; }
+    @font-face { font-family: "Kurdis"; src: url("Kurdis Family Delivderables/WOFF2/Kurdis-WideBold.woff2") format("woff2"), url("Kurdis Family Delivderables/WOFF/Kurdis-WideBold.woff") format("woff"), url("Kurdis Family Delivderables/TTF/Kurdis-WideBold.ttf") format("truetype"); font-weight: 700; font-style: normal; font-display: swap; }
+    @font-face { font-family: "HelvenaLight"; src: url("helvena-grotesk-modern-bold-brand-identity-font-2026-04-07-06-20-11-utc/Helvena Font File/WOFF2/Helvena-Light.woff2") format("woff2"); font-weight: 300; font-style: normal; font-display: swap; }
+    @font-face {
+      font-family: "General Sans";
+      src: url("GeneralSans_Complete/GeneralSans_Complete/Fonts/WEB/fonts/GeneralSans-Variable.woff2") format("woff2");
+      font-weight: 100 900; font-style: normal; font-display: swap;
+    }
+
+    :root {
+      --bg: #f7f7f6;
+      --panel: #fbfbfa;
+      --muted: #787f79;
+      --text: #171a16;
+      --border-faint: rgba(23,26,22,.06);
+      --card-solid: #ffffff;
+      --overlay: rgba(23,26,22,.22);
+    }
+
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+    html { background: #fbfbfa; }
+    html, body {
+      width: 100%; min-height: 100%; margin: 0;
+      background: #e2e5df;
+      font-family: "General Sans", "SF Pro Display", -apple-system, BlinkMacSystemFont, sans-serif;
+      color: var(--text);
+      -webkit-font-smoothing: antialiased;
+      text-rendering: geometricPrecision;
+    }
+
+    body { display: grid; place-items: center; padding: 20px; }
+
+    .phone {
+      position: relative;
+      width: min(440px, calc(100vw - 40px));
+      height: auto;
+      aspect-ratio: 440 / 956;
+      overflow: hidden;
+      background:
+        radial-gradient(ellipse 88% 48% at 50% 106%, rgba(232,235,230,.92) 0%, rgba(251,251,250,0) 66%),
+        #fbfbfa;
+      border-radius: 32px;
+      box-shadow: 0 28px 80px rgba(35,42,36,.18);
+      isolation: isolate;
+      animation: pageIn .13s ease both;
+    }
+    @keyframes pageIn { from { opacity: 0; } to { opacity: 1; } }
+
+    /* Bottom fade */
+    .phone::after {
+      content: "";
+      position: absolute;
+      left: 0; right: 0; bottom: 0;
+      height: 78px;
+      pointer-events: none;
+      z-index: 20;
+      background: linear-gradient(
+        to top,
+        rgba(251,251,251,.78) 0%,
+        rgba(251,251,251,.42) 42%,
+        rgba(251,251,251,0) 100%
+      );
+    }
+
+    /* Notch */
+    .phone::before {
+      content: "";
+      position: absolute;
+      top: 16px; left: 50%;
+      width: 128px; height: 31px;
+      border-radius: 18px;
+      transform: translateX(-50%);
+      background: #0a1020;
+      z-index: 40;
+    }
+
+    /* ── Status bar — always visible overlay ── */
+    .statusbar {
+      position: absolute;
+      top: 25px; left: 0; right: 0;
+      height: 20px;
+      z-index: 30;
+      pointer-events: none;
+    }
+
+    .time {
+      position: absolute;
+      left: 45px; top: -1px;
+      color: #171a16;
+      font-family: "General Sans", "SF Pro Display", -apple-system, sans-serif;
+      font-size: 17px;
+      font-weight: 600;
+      letter-spacing: -.15px;
+    }
+
+    .status-icons {
+      position: absolute;
+      right: 43px; top: 0;
+      display: flex; align-items: center; gap: 6px;
+      color: #171a16;
+    }
+
+    .signal { display: flex; align-items: flex-end; gap: 2px; height: 12px; }
+    .signal span { width: 3px; background: currentColor; border-radius: 2px; }
+    .signal span:nth-child(1) { height: 4px; opacity: .7; }
+    .signal span:nth-child(2) { height: 6px; opacity: .8; }
+    .signal span:nth-child(3) { height: 9px; opacity: .9; }
+    .signal span:nth-child(4) { height: 12px; }
+
+    .wifi { width: 17px; height: 12px; position: relative; }
+    .wifi::before, .wifi::after {
+      content: ""; position: absolute; left: 50%;
+      border: 2px solid currentColor; border-bottom: 0;
+      border-left-color: transparent; border-right-color: transparent;
+      transform: translateX(-50%);
+    }
+    .wifi::before { top: 1px; width: 16px; height: 8px; border-radius: 16px 16px 0 0; opacity: .9; }
+    .wifi::after { top: 6px; width: 8px; height: 5px; border-radius: 10px 10px 0 0; }
+
+    .battery { width: 23px; height: 12px; border: 1.7px solid currentColor; border-radius: 4px; position: relative; }
+    .battery::before { content: ""; position: absolute; right: -4px; top: 3px; width: 2px; height: 5px; border-radius: 2px; background: currentColor; }
+    .battery::after { content: ""; position: absolute; inset: 2px 3px 2px 2px; border-radius: 2px; background: currentColor; }
+
+    /* ── Scroll content ── */
+    .scroll-content {
+      position: absolute;
+      inset: 0;
+      overflow-y: auto;
+      overflow-x: hidden;
+      scrollbar-width: none;
+      z-index: 10;
+      padding-bottom: 100px;
+    }
+    .scroll-content::-webkit-scrollbar { display: none; }
+
+    /* ── Hero section — white, no gradient ── */
+    .hero-section {
+      background: transparent;
+      padding-bottom: 0;
+    }
+
+    /* ── Header ── */
+    .app-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 78px 24px 0;
+    }
+
+    .header-copy { min-width: 0; }
+
+    .header-eyebrow {
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: rgba(23,26,22,.38);
+      margin-bottom: 4px;
+      font-family: "General Sans", sans-serif;
+    }
+
+    .header-title {
+      font-family: "Kurdis", "SF Pro Display", sans-serif;
+      font-size: 36px;
+      font-weight: 400;
+      color: #171a16;
+      letter-spacing: -.8px;
+      line-height: 1;
+    }
+
+    .app-actions { display: flex; align-items: center; gap: 8px; flex: 0 0 auto; }
+
+    .app-icon-btn {
+      position: relative;
+      width: 48px; height: 48px;
+      border: 1px solid rgba(23,26,22,.07);
+      border-radius: 50%;
+      background: linear-gradient(180deg, rgba(255,255,255,.94), rgba(242,243,240,.78));
+      display: grid;
+      place-items: center;
+      color: #171a16;
+      text-decoration: none;
+      cursor: pointer;
+      transition: transform .16s ease;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.9), 0 2px 8px rgba(30,32,30,.05);
+    }
+    .app-icon-btn:active { transform: scale(.96); }
+    .app-icon-btn svg { width: 20px; height: 20px; stroke: currentColor; fill: none; stroke-width: 1.55; stroke-linecap: round; stroke-linejoin: round; }
+    .app-icon-btn .badge {
+      position: absolute;
+      top: 9px; right: 11px;
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: #171a16;
+      box-shadow: 0 0 0 2px rgba(255,255,255,.95);
+      z-index: 4;
+    }
+
+    /* ── Stats bar ── */
+    .stats-bar {
+      display: flex;
+      gap: 12px;
+      padding: 36px 28px 0;
+    }
+
+    .stat-pill {
+      flex: 1;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.94), rgba(247,248,245,.78)),
+        rgba(232,235,230,.85);
+      border: 1px solid rgba(23,26,22,.08);
+      border-radius: 20px;
+      padding: 13px 14px;
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.85),
+        inset 0 -1px 0 rgba(20,22,20,.05),
+        0 6px 18px rgba(30,32,30,.07);
+    }
+
+    .stat-label {
+      font-size: 9px;
+      font-weight: 500;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: rgba(23,26,22,.62);
+      margin-bottom: 12px;
+      font-family: "General Sans", sans-serif;
+    }
+
+    .stat-value {
+      font-family: "Kurdis", sans-serif;
+      font-size: 22px;
+      font-weight: 400;
+      color: #171a16;
+      letter-spacing: -.4px;
+      line-height: 1;
+    }
+
+    .stat-unit {
+      font-family: "General Sans", sans-serif;
+      font-size: 11px;
+      font-weight: 300;
+      color: rgba(23,26,22,.62);
+      margin-left: 3px;
+    }
+
+    /* ── Ziel der Woche ── */
+    .topf-wrap { padding: 28px 26px 0; }
+
+    .topf-label {
+      font-size: 11.2px; font-weight: 600;
+      letter-spacing: 1.2px; text-transform: uppercase;
+      color: rgba(23,26,22,.45); margin-bottom: 14px;
+      font-family: "General Sans", sans-serif;
+    }
+
+    /* Immersive hero card */
+    .hero-card { position: relative; border-radius: 20px; overflow: hidden; height: 255px; }
+    .hero-card-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 78% 35%; display: block; }
+    .hero-card-overlay {
+      position: absolute; inset: 0;
+      background:
+        linear-gradient(172deg, rgba(14,10,6,0) 0%, rgba(14,10,6,0) 25%, rgba(14,10,6,.22) 62%, rgba(14,10,6,.55) 100%),
+        linear-gradient(90deg, rgba(14,10,6,.14) 0%, rgba(14,10,6,.02) 40%, rgba(14,10,6,0) 100%);
+    }
+    .hero-card-inner {
+      position: absolute; inset: 0; z-index: 2; padding: 28px 14px 16px;
+      display: flex; flex-direction: column; justify-content: space-between;
+    }
+    .hero-card-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; }
+    .hero-card-title {
+      font-family: "General Sans", sans-serif; font-size: 21px; font-weight: 400;
+      color: #ffffff; letter-spacing: -.3px; line-height: 1.1; margin-bottom: 5px;
+    }
+    .hero-card-desc {
+      font-family: "General Sans", sans-serif; font-size: 13px; font-weight: 300;
+      color: rgba(255,255,255,.95); line-height: 1.4; max-width: 210px;
+    }
+    .communer-avatars { display: flex; align-items: center; }
+    .communer-av {
+      width: 28px; height: 28px; border-radius: 50%;
+      background: #444; border: none;
+      overflow: hidden;
+      margin-left: -7px;
+      flex-shrink: 0;
+      position: relative;
+      z-index: 1;
+    }
+    .communer-av:first-child { margin-left: 0; }
+    .communer-av img { width: 100%; height: 100%; object-fit: cover; object-position: center top; display: block; }
+
+    .communer-more {
+      width: 28px; height: 28px; border-radius: 50%;
+      background: rgba(255,255,255,.22);
+      backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,.30);
+      display: grid; place-items: center;
+      font-family: "General Sans", sans-serif; font-size: 8px; font-weight: 600;
+      color: rgba(255,255,255,.95); margin-left: -7px; position: relative; z-index: 2;
+    }
+    .communer-count {
+      font-family: "General Sans", sans-serif; font-size: 10px; font-weight: 400;
+      color: rgba(255,255,255,.46); margin-top: 6px; text-align: right;
+    }
+
+    .topf-dots-wrap { display: block; width: fit-content; }
+    .topf-dots { margin-top: 0; margin-bottom: 5px; line-height: 0; }
+    .topf-dots svg { display: block; overflow: visible; }
+
+    .topf-percent {
+      font-family: "KurdisRegular", "Kurdis", sans-serif; font-size: 36px; font-weight: 400;
+      color: #ffffff; letter-spacing: 0; line-height: .92; margin-bottom: 7px;
+      transform: scaleY(.9); transform-origin: left bottom; display: inline-block;
+    }
+    .topf-inline-cta {
+      display: inline-flex; align-items: center; gap: 5px;
+      background: rgba(255,255,255,.92); border: none; border-radius: 999px; cursor: pointer;
+      padding: 8px 14px 8px 16px;
+      font-family: "General Sans", sans-serif; font-size: 12.5px; font-weight: 500;
+      color: #171a16; letter-spacing: -.1px; transition: background .15s ease;
+    }
+    .topf-inline-cta:active { background: rgba(255,255,255,.76); }
+    .topf-inline-cta svg { width: 14px; height: 14px; stroke: #171a16; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+    .topf-meta-row {
+      display: flex; justify-content: space-between; align-items: center;
+      margin: 4px 0 10px;
+    }
+    .topf-meta-inline { display: inline-flex; align-items: baseline; gap: 3px; }
+    .topf-meta-value {
+      font-family: "General Sans", sans-serif; font-size: 8.5px; font-weight: 400;
+      color: rgba(255,255,255,.78); letter-spacing: 0;
+    }
+    .topf-meta-label {
+      font-family: "General Sans", sans-serif; font-size: 8.5px; font-weight: 300;
+      color: rgba(255,255,255,.40);
+    }
+
+    /* Community-Karte card */
+    .topf-card-cta {
+      position: relative;
+      display: grid;
+      grid-template-columns: 44px minmax(0, 1fr) auto;
+      gap: 12px;
+      align-items: center;
+      min-height: 90px;
+      padding: 18px 18px;
+      margin-top: 20px; margin-bottom: 6px;
+      background: linear-gradient(180deg, rgba(255,255,255,.94), rgba(247,248,245,.78)), rgba(232,235,230,.85);
+      border: 1px solid rgba(23,26,22,.08);
+      border-radius: 24px;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.85), inset 0 -1px 0 rgba(20,22,20,.05), 0 8px 24px rgba(30,32,30,.07);
+      cursor: pointer; transition: transform .18s ease;
+    }
+    .topf-card-cta:active { transform: scale(.97); }
+    .topf-card-icon {
+      width: 44px; height: 44px; border-radius: 50%;
+      display: grid; place-items: center;
+      background: linear-gradient(180deg, rgba(255,255,255,.80), rgba(255,255,255,.22)), rgba(232,233,232,.74);
+      border: 1px solid rgba(20,22,20,.04);
+      box-shadow: inset 0 0 0 1px rgba(20,22,20,.025), 0 4px 12px rgba(30,32,30,.04);
+    }
+    .topf-card-icon svg { width: 19px; height: 19px; stroke: #171a16; fill: none; stroke-width: 1.75; stroke-linecap: round; stroke-linejoin: round; }
+    .topf-card-text { min-width: 0; }
+    .topf-card-title { font-family: "General Sans", sans-serif; font-size: 14px; font-weight: 500; color: #171a16; letter-spacing: -.05px; line-height: 18px; }
+    .topf-card-sub { margin-top: 4px; font-family: "General Sans", sans-serif; font-size: 13.5px; font-weight: 400; color: rgba(24,24,24,.62); line-height: 17px; letter-spacing: .16px; }
+    .topf-card-arrow {
+      flex: 0 0 auto; width: 44px; height: 44px; border-radius: 50%;
+      background: linear-gradient(180deg, rgba(255,255,255,.92), rgba(240,241,238,.75));
+      border: 1px solid rgba(23,26,22,.08); box-shadow: 0 4px 12px rgba(30,32,30,.08); display: grid; place-items: center;
+    }
+    .topf-card-arrow svg { width: 16px; height: 16px; stroke: #171a16; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+
+    /* ── Kollektiver Meilenstein ── */
+    .milestone-wrap { padding: 28px 26px 8px; }
+    .milestone-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+    .milestone-section-label { font-family: "General Sans", sans-serif; font-size: 11.2px; font-weight: 600; letter-spacing: 1.2px; text-transform: uppercase; color: rgba(23,26,22,.45); }
+    .milestone-card {
+      border-radius: 18px; padding: 22px 20px 18px;
+      background: linear-gradient(180deg, rgba(255,255,255,.94), rgba(247,248,245,.78)), rgba(232,235,230,.85);
+      border: 1px solid rgba(23,26,22,.08);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.85), inset 0 -1px 0 rgba(20,22,20,.05), 0 8px 24px rgba(30,32,30,.07);
+    }
+    .ms-top-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+    .ms-bolt-bubble { width: 44px; height: 44px; flex-shrink: 0; border-radius: 50%; background: linear-gradient(180deg, rgba(255,255,255,.80), rgba(255,255,255,.22)), rgba(232,233,232,.74); box-shadow: inset 0 0 0 1px rgba(20,22,20,.04), 0 4px 12px rgba(30,32,30,.04); display: grid; place-items: center; }
+    .ms-bolt-bubble svg { width: 18px; height: 18px; stroke: rgba(23,26,22,.78); stroke-width: 1.65; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+    .ms-value { font-family: "Kurdis", sans-serif; font-size: 44px; font-weight: 400; color: #171a16; letter-spacing: -.5px; line-height: 1; margin-bottom: 5px; }
+    .ms-unit { font-family: "General Sans", sans-serif; font-size: 18px; font-weight: 300; color: rgba(23,26,22,.45); margin-left: 4px; }
+    .ms-sub { font-size: 12px; font-weight: 300; color: rgba(23,26,22,.5); }
+    .ms-divider { height: 1px; background: rgba(23,26,22,.07); margin-bottom: 12px; }
+    .ms-bottom-row { display: flex; align-items: center; justify-content: space-between; }
+    .ms-bottom-text { font-size: 11px; font-weight: 300; color: rgba(23,26,22,.52); }
+    .ms-avatars { display: flex; }
+    .ms-av { width: 22px; height: 22px; border-radius: 50%; overflow: hidden; border: 1.5px solid #fff; margin-left: -6px; }
+    .ms-av:first-child { margin-left: 0; }
+    .ms-av img { width: 100%; height: 100%; object-fit: cover; }
+    .ms-av-more { width: 22px; height: 22px; border-radius: 50%; background: rgba(23,26,22,.08); border: 1.5px solid #fff; margin-left: -6px; font-size: 7px; font-weight: 600; color: rgba(23,26,22,.6); display: grid; place-items: center; }
+
+    /* ── Aktuelles aus dem Quartier ── */
+    .feed-section { padding: 16px 26px 0; }
+    .feed-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+    .feed-section-label {
+      font-family: "General Sans", sans-serif; font-size: 11.2px; font-weight: 600;
+      letter-spacing: 1.2px; text-transform: uppercase; color: rgba(23,26,22,.45);
+    }
+    .feed-show-all {
+      font-family: "General Sans", sans-serif; font-size: 13px; font-weight: 400;
+      color: rgba(23,26,22,.55); text-decoration: none; display: flex; align-items: center; gap: 3px;
+    }
+
+    /* Editorial magazine card */
+    .feed-card {
+      display: flex; overflow: hidden; height: 148px;
+      background: linear-gradient(180deg, rgba(255,255,255,.94), rgba(247,248,245,.78)), rgba(232,235,230,.85);
+      border: 1px solid rgba(23,26,22,.08); border-radius: 22px;
+      margin-bottom: 13px;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.85), inset 0 -1px 0 rgba(20,22,20,.05), 0 8px 24px rgba(30,32,30,.07);
+      cursor: pointer; transition: transform .18s ease;
+    }
+    .feed-card:last-child { margin-bottom: 0; }
+    .feed-card:active { transform: scale(.985); }
+
+    .feed-thumb {
+      flex: 0 0 48%; min-height: 0; overflow: hidden;
+      border-radius: 0 14px 14px 0;
+    }
+    .feed-thumb img { width: 100%; height: 100%; object-fit: cover; object-position: center; display: block; }
+
+    .feed-body {
+      flex: 1; padding: 16px 15px 15px; min-width: 0;
+      display: flex; flex-direction: column; justify-content: space-between;
+    }
+    .feed-institution {
+      font-family: "General Sans", sans-serif; font-size: 9.5px; font-weight: 600;
+      letter-spacing: 1.8px; text-transform: uppercase; color: rgba(23,26,22,.55); margin-bottom: 1px;
+    }
+    .feed-time {
+      font-family: "General Sans", sans-serif; font-size: 11px; font-weight: 300;
+      color: rgba(23,26,22,.52); margin-bottom: 9px;
+    }
+    .feed-text {
+      font-family: "General Sans", sans-serif; font-size: 15px; font-weight: 500;
+      color: #171a16; line-height: 1.2; letter-spacing: -.1px;
+      display: -webkit-box; -webkit-line-clamp: 3; line-clamp: 3;
+      -webkit-box-orient: vertical; overflow: hidden; margin-bottom: 6px;
+    }
+    .feed-excerpt {
+      font-family: "General Sans", sans-serif; font-size: 12.5px; font-weight: 300;
+      color: rgba(23,26,22,.65); line-height: 1.4; margin-bottom: 10px;
+      display: -webkit-box; -webkit-line-clamp: 2; line-clamp: 2;
+      -webkit-box-orient: vertical; overflow: hidden;
+    }
+    .feed-footer { display: flex; align-items: center; justify-content: space-between; }
+    .feed-actions { display: flex; align-items: center; gap: 12px; }
+    .feed-like-btn, .feed-comment-btn {
+      display: flex; align-items: center; gap: 4px;
+      background: none; border: none; padding: 0; cursor: pointer;
+      font-family: "General Sans", sans-serif; font-size: 12px;
+      color: rgba(23,26,22,.55); transition: color .15s ease;
+    }
+    .feed-like-btn svg, .feed-comment-btn svg { width: 13px; height: 13px; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; transition: fill .15s ease, stroke .15s ease; }
+    .feed-like-btn.liked { color: #c0514a; }
+    .feed-like-btn.liked svg { fill: #c0514a; stroke: #c0514a; }
+    .feed-avs { display: flex; align-items: center; }
+    .feed-av { width: 20px; height: 20px; border-radius: 50%; overflow: hidden; border: 1.5px solid rgba(248,249,246,.95); margin-left: -5px; }
+    .feed-av:first-child { margin-left: 0; }
+    .feed-av img { width: 100%; height: 100%; object-fit: cover; object-position: center top; display: block; }
+    .feed-av-more {
+      width: 20px; height: 20px; border-radius: 50%;
+      background: rgba(255,255,255,.22); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,.30);
+      margin-left: -5px; font-family: "General Sans", sans-serif; font-size: 7px; font-weight: 600;
+      color: #171a16; display: grid; place-items: center;
+    }
+
+    /* ── Comment Sheet ── */
+    .comment-modal {
+      position: absolute; inset: 0; z-index: 52;
+      pointer-events: none; border-radius: 32px; overflow: hidden;
+    }
+    .comment-modal.is-open { pointer-events: auto; }
+
+    .comment-backdrop {
+      position: absolute; inset: 0;
+      background: rgba(23,26,22,.24);
+      backdrop-filter: none; -webkit-backdrop-filter: none;
+      opacity: 0; transition: opacity .28s ease;
+    }
+    .comment-modal.is-open .comment-backdrop {
+      opacity: 1;
+      backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px);
+    }
+
+    .comment-sheet {
+      position: absolute;
+      left: 0; right: 0; bottom: 0;
+      max-height: 68%;
+      z-index: 1;
+      background: #f7f8f5;
+      border-radius: 24px 24px 0 0;
+      transform: translateY(110%);
+      transition: transform .36s cubic-bezier(.32,.72,.24,1);
+      display: flex; flex-direction: column;
+      overflow: hidden;
+    }
+    .comment-modal.is-open .comment-sheet { transform: translateY(0); }
+
+    .comment-drag { flex: 0 0 auto; display: flex; justify-content: center; padding: 10px 0 6px; }
+    .comment-handle { width: 36px; height: 4px; border-radius: 2px; background: rgba(23,26,22,.15); }
+
+    .comment-header {
+      flex: 0 0 auto; display: flex; align-items: center; justify-content: space-between;
+      padding: 2px 20px 12px; border-bottom: 1px solid rgba(23,26,22,.07);
+    }
+    .comment-title { font-family: "General Sans", sans-serif; font-size: 15.5px; font-weight: 600; color: #171a16; letter-spacing: -.2px; }
+    .comment-count-badge { font-weight: 300; color: rgba(23,26,22,.38); margin-left: 7px; font-size: 15px; }
+    .comment-sort-btn { background: none; border: none; padding: 0; cursor: pointer; font-family: "General Sans", sans-serif; font-size: 13px; font-weight: 400; color: rgba(23,26,22,.48); display: flex; align-items: center; gap: 3px; }
+    .comment-sort-btn svg { width: 12px; height: 12px; stroke: currentColor; fill: none; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+
+    .comment-list { flex: 1; overflow-y: auto; padding: 14px 18px 8px; scrollbar-width: none; }
+    .comment-list::-webkit-scrollbar { display: none; }
+
+    .org-post { display: flex; gap: 10px; padding-bottom: 14px; margin-bottom: 14px; border-bottom: 1px solid rgba(23,26,22,.08); }
+    .org-post-av { flex: 0 0 40px; width: 40px; height: 40px; border-radius: 50%; overflow: hidden; object-fit: cover; object-position: center top; }
+    .org-badge { display: inline-flex; align-items: center; padding: 2px 7px; border-radius: 999px; background: rgba(23,26,22,.09); border: 1px solid rgba(23,26,22,.12); font-family: "General Sans", sans-serif; font-size: 10px; font-weight: 500; color: #171a16; letter-spacing: .1px; margin-left: 4px; }
+    .org-post-time { font-family: "General Sans", sans-serif; font-size: 11px; font-weight: 300; color: rgba(23,26,22,.42); margin-bottom: 5px; }
+    .org-post-text { font-family: "General Sans", sans-serif; font-size: 13.5px; font-weight: 300; color: #171a16; line-height: 1.45; margin-bottom: 8px; }
+    .org-post-actions { display: flex; align-items: center; gap: 14px; }
+    .org-action-btn { background: none; border: none; padding: 0; cursor: pointer; font-family: "General Sans", sans-serif; font-size: 12px; color: rgba(23,26,22,.48); display: flex; align-items: center; gap: 4px; }
+    .org-action-btn svg { width: 13px; height: 13px; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; transition: fill .14s, stroke .14s; }
+    .org-action-btn.liked { color: #c0514a; }
+    .org-action-btn.liked svg { fill: #c0514a; stroke: #c0514a; }
+    .org-reply-btn { background: none; border: none; padding: 0; cursor: pointer; font-family: "General Sans", sans-serif; font-size: 12px; color: rgba(23,26,22,.48); margin-left: 2px; }
+
+    .comment-item { display: flex; gap: 10px; margin-bottom: 18px; }
+    .comment-av { flex: 0 0 36px; width: 36px; height: 36px; border-radius: 50%; overflow: hidden; object-fit: cover; object-position: center top; }
+    .comment-body-wrap { flex: 1; min-width: 0; }
+    .comment-meta { display: flex; align-items: center; gap: 6px; margin-bottom: 3px; }
+    .comment-name { font-family: "General Sans", sans-serif; font-size: 13px; font-weight: 600; color: #171a16; letter-spacing: -.1px; }
+    .comment-time { font-family: "General Sans", sans-serif; font-size: 11.5px; font-weight: 300; color: rgba(23,26,22,.38); }
+    .comment-more-btn { margin-left: auto; background: none; border: none; padding: 0; cursor: pointer; color: rgba(23,26,22,.30); font-size: 14px; line-height: 1; letter-spacing: 1px; }
+    .comment-delete-btn { margin-left: auto; background: none; border: none; padding: 2px 5px; cursor: pointer; color: rgba(23,26,22,.22); font-size: 13px; line-height: 1; border-radius: 4px; transition: color .15s, background .15s; }
+    .comment-delete-btn:hover { color: rgba(200,50,40,.75); background: rgba(200,50,40,.07); }
+    .comment-text { font-family: "General Sans", sans-serif; font-size: 13.5px; font-weight: 300; color: #171a16; line-height: 1.4; margin-bottom: 6px; }
+    .comment-actions { display: flex; align-items: center; gap: 14px; }
+    .comment-like-btn, .comment-reply-btn { background: none; border: none; padding: 0; cursor: pointer; font-family: "General Sans", sans-serif; font-size: 12px; font-weight: 400; color: rgba(23,26,22,.42); display: flex; align-items: center; gap: 4px; }
+    .comment-like-btn svg { width: 13px; height: 13px; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; transition: fill .14s ease, stroke .14s ease; }
+    .comment-like-btn.liked { color: #c0514a; }
+    .comment-like-btn.liked svg { fill: #c0514a; stroke: #c0514a; }
+    .comment-reply-row { display: flex; gap: 8px; margin-top: 10px; }
+    .comment-av-sm { flex: 0 0 28px; width: 28px; height: 28px; }
+
+    .comment-input-bar {
+      flex: 0 0 auto; display: flex; align-items: center; gap: 10px;
+      padding: 10px 16px 14px; border-top: 1px solid rgba(23,26,22,.07); background: #f7f8f5;
+    }
+    .comment-input-av { flex: 0 0 34px; width: 34px; height: 34px; border-radius: 50%; overflow: hidden; background: #101110; display: grid; place-items: center; }
+    .comment-input-av img { width: 90%; height: 90%; object-fit: contain; }
+    .comment-input-field { flex: 1; background: rgba(23,26,22,.06); border: 1px solid rgba(23,26,22,.07); border-radius: 999px; padding: 9px 14px; font-family: "General Sans", sans-serif; font-size: 13.5px; font-weight: 300; color: #171a16; outline: none; }
+    .comment-input-field::placeholder { color: rgba(23,26,22,.34); }
+    .comment-send-btn { flex: 0 0 auto; width: 36px; height: 36px; border-radius: 50%; background: #171a16; border: none; cursor: pointer; display: grid; place-items: center; transition: transform .14s ease; }
+    .comment-send-btn:active { transform: scale(.92); }
+    .comment-send-btn svg { width: 14px; height: 14px; stroke: #fff; fill: none; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+
+    /* ── Beteiligen Modal ── */
+    .beteiligen-modal {
+      position: absolute; inset: 0; z-index: 55;
+      pointer-events: none; border-radius: 32px; overflow: hidden;
+    }
+    .beteiligen-modal.is-open { pointer-events: auto; }
+
+    .beteiligen-backdrop {
+      position: absolute; inset: 0; z-index: 0;
+      background: rgba(23,26,22,.22);
+      backdrop-filter: blur(3px); -webkit-backdrop-filter: blur(3px);
+      opacity: 0; transition: opacity .28s ease;
+    }
+    .beteiligen-modal.is-open .beteiligen-backdrop { opacity: 1; }
+
+    .beteiligen-sheet {
+      position: absolute;
+      left: 0; right: 0; bottom: 0;
+      max-height: 90%;
+      z-index: 1;
+      background: #ffffff;
+      border-radius: 28px 28px 0 0;
+      transform: translateY(100%);
+      transition: transform .36s cubic-bezier(.32,.72,.24,1);
+      overflow: hidden;
+      display: flex; flex-direction: column;
+    }
+    .beteiligen-modal.is-open .beteiligen-sheet { transform: translateY(0); }
+
+    .bt-handle-row { display: flex; justify-content: center; padding: 12px 0 6px; flex-shrink: 0; }
+    .bt-handle { width: 36px; height: 4px; border-radius: 2px; background: rgba(23,26,22,.15); }
+
+    .bt-header { display: flex; align-items: center; justify-content: flex-end; padding: 6px 20px 16px; flex-shrink: 0; }
+    .bt-icon-btn {
+      width: 44px; height: 44px; border-radius: 50%; cursor: pointer;
+      background: linear-gradient(180deg, rgba(255,255,255,.97), rgba(247,248,245,.92));
+      border: 1px solid rgba(23,26,22,.09);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.9), 0 2px 8px rgba(30,32,30,.06);
+      display: grid; place-items: center;
+    }
+    .bt-icon-btn svg { width: 16px; height: 16px; stroke: #171a16; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+    .bt-hero { position: relative; margin: 0 26px; border-radius: 18px; overflow: hidden; height: 210px; flex-shrink: 0; }
+    .bt-hero img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .bt-hero::after { content: ""; position: absolute; inset: 0; background: linear-gradient(to bottom, transparent 40%, rgba(0,0,0,.52)); pointer-events: none; }
+    .bt-hero-location { position: absolute; bottom: 13px; left: 14px; z-index: 1; display: flex; align-items: center; gap: 5px; font-family: "General Sans", sans-serif; font-size: 12.5px; font-weight: 400; color: rgba(255,255,255,.92); background: rgba(255,255,255,.18); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,.25); border-radius: 999px; padding: 5px 10px 5px 8px; }
+    .bt-hero-location svg { width: 11px; height: 11px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .bt-hero-link { position: absolute; bottom: 12px; right: 12px; z-index: 1; width: 34px; height: 34px; border-radius: 50%; background: rgba(255,255,255,.18); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,.25); display: grid; place-items: center; text-decoration: none; }
+    .bt-hero-link svg { width: 14px; height: 14px; stroke: rgba(255,255,255,.95); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+    .bt-scroll { overflow-y: auto; scrollbar-width: none; padding: 18px 20px 28px; }
+    .bt-scroll::-webkit-scrollbar { display: none; }
+
+    .bt-eyebrow { text-align: center; font-family: "General Sans", sans-serif; font-size: 10.5px; font-weight: 600; letter-spacing: 2.5px; text-transform: uppercase; color: rgba(23,26,22,.45); margin-bottom: 6px; }
+    .bt-title { text-align: center; font-family: "General Sans", sans-serif; font-size: 21px; font-weight: 400; color: #171a16; letter-spacing: -.3px; line-height: 1.1; margin: 0 0 20px; }
+
+    .bt-stepper { position: relative; display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; padding-top: 6px; overflow: visible; }
+    .bt-step-btn { width: 48px; height: 48px; border-radius: 50%; border: 1px solid rgba(23,26,22,.10); background: rgba(23,26,22,.04); display: grid; place-items: center; cursor: pointer; font-size: 26px; font-weight: 300; color: #171a16; line-height: 0; font-family: "General Sans", sans-serif; transition: background .14s ease; }
+    .bt-step-btn:active { background: rgba(23,26,22,.10); }
+    .bt-stepper-value-wrap { position: absolute; inset: 0; display: grid; place-items: center; pointer-events: none; }
+    .stepper-value { pointer-events: auto; font-family: "KurdisRegular", "Kurdis", sans-serif; font-size: 36px; font-weight: 400; color: #171a16; letter-spacing: 0; line-height: 1.2; transform: scaleY(.9); transform-origin: center center; border: none; background: none; outline: none; width: 180px; height: 56px; box-sizing: border-box; text-align: center; padding: 7px 0 5px; -moz-appearance: textfield; appearance: textfield; }
+    .stepper-value::-webkit-outer-spin-button, .stepper-value::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+    .stepper-unit { position: absolute; left: calc(50% + 68px); top: 50%; transform: translateY(-50%); font-family: "General Sans", sans-serif; font-size: 15px; font-weight: 300; color: rgba(23,26,22,.45); }
+
+    .beteiligen-pills { display: flex; flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; gap: 6px; margin-bottom: 14px; padding-bottom: 2px; }
+    .beteiligen-pills::-webkit-scrollbar { display: none; }
+    .beteiligen-pills::after { content: ''; display: block; min-width: 1px; flex-shrink: 0; }
+    .beteiligen-pill { flex: 1 1 0; min-width: 0; padding: 9px 6px; border-radius: 12px; border: 1px solid rgba(23,26,22,.10); background: rgba(23,26,22,.03); font-family: "General Sans", sans-serif; font-size: 10.5px; font-weight: 400; color: rgba(23,26,22,.55); cursor: pointer; text-align: center; transition: all .14s ease; white-space: nowrap; }
+    .beteiligen-pill.active { background: #171a16; color: #fff; border-color: #171a16; }
+
+    .bt-impact { display: flex; flex-direction: row; align-items: center; justify-content: space-between; gap: 12px; background: linear-gradient(180deg, rgba(255,255,255,.98), rgba(248,249,246,.85)); border: 1px solid rgba(23,26,22,.07); border-radius: 16px; padding: 14px 16px; margin-bottom: 16px; box-shadow: inset 0 1px 0 rgba(255,255,255,.9), 0 2px 10px rgba(30,32,30,.05); }
+    .bt-impact-text { display: flex; flex-direction: column; gap: 4px; flex: 1; min-width: 0; }
+    .bt-impact-icon { width: 36px; height: 36px; border-radius: 50%; background: rgba(23,26,22,.07); flex-shrink: 0; display: grid; place-items: center; margin-top: 2px; }
+    .bt-impact-icon svg { width: 15px; height: 15px; stroke: rgba(23,26,22,.6); fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+    .bt-impact-body { flex: 1; min-width: 0; }
+    .bt-impact-title { font-family: "General Sans", sans-serif; font-size: 13.5px; font-weight: 600; color: #171a16; margin-bottom: 3px; }
+    .bt-impact-desc { font-family: "General Sans", sans-serif; font-size: 12px; font-weight: 400; color: rgba(23,26,22,.72); line-height: 1.4; min-height: calc(12px * 1.4 * 2); display: -webkit-box; -webkit-line-clamp: 2; line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    .bt-impact-leaf { flex-shrink: 0; width: 38px; height: 38px; border-radius: 50%; background: linear-gradient(180deg, rgba(255,255,255,.80), rgba(255,255,255,.22)), rgba(232,233,232,.74); box-shadow: inset 0 0 0 1px rgba(20,22,20,.06), 0 3px 10px rgba(30,32,30,.06); display: grid; place-items: center; align-self: center; }
+    .bt-impact-leaf svg { width: 17px; height: 17px; stroke: rgba(23,26,22,.52); fill: none; stroke-width: 1.65; stroke-linecap: round; stroke-linejoin: round; }
+    .bt-impact-chevron { width: 16px; height: 16px; flex-shrink: 0; stroke: rgba(23,26,22,.32); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; margin-top: 3px; }
+
+    .beteiligen-cta { width: 100%; padding: 17px 24px; background: #171a16; border: none; border-radius: 999px; font-family: "General Sans", sans-serif; font-size: 15.5px; font-weight: 500; color: #fff; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: opacity .16s ease; margin-bottom: 12px; }
+    .beteiligen-cta:active { opacity: .85; transform: scale(.98); }
+    .beteiligen-legal { text-align: center; font-family: "General Sans", sans-serif; font-size: 11.5px; font-weight: 300; color: rgba(23,26,22,.38); display: flex; align-items: center; justify-content: center; gap: 5px; }
+    .beteiligen-legal svg { width: 11px; height: 11px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; }
+
+    /* ── Loading overlay ── */
+    @keyframes lo-spin { to { transform: rotate(360deg); } }
+    @keyframes lo-check-pop { from { opacity: 0; transform: scale(.7); } to { opacity: 1; transform: scale(1); } }
+    .loading-overlay { position: absolute; inset: 0; z-index: 100; background: rgba(20,20,20,.45); backdrop-filter: blur(22px) saturate(140%); -webkit-backdrop-filter: blur(22px) saturate(140%); display: none; align-items: center; justify-content: center; flex-direction: column; gap: 18px; opacity: 0; transition: opacity .3s ease; }
+    .loading-overlay.show { display: flex; opacity: 1; }
+    .comm-loader { width: 64px; height: 64px; border-radius: 50%; border: 4px solid rgba(255,255,255,.28); border-top-color: rgba(255,255,255,.96); animation: lo-spin .82s linear infinite; }
+    .comm-check { width: 64px; height: 64px; border-radius: 50%; background: #fff; color: #111; display: none; place-items: center; font-size: 34px; font-weight: 900; line-height: 1; }
+    .loading-overlay.done .comm-loader { display: none; }
+    .loading-overlay.done .comm-check { display: grid; animation: lo-check-pop .34s cubic-bezier(.34,1.56,.64,1); }
+    .loading-text { font-size: 14px; font-weight: 800; color: #fff; letter-spacing: -.14px; text-align: center; padding: 0 24px; }
+
+    /* ── Animations ── */
+    @keyframes float-up { 0% { transform: translateY(20px); opacity: 0; } 100% { transform: translateY(0); opacity: 1; } }
+    @keyframes soft-fade { 0% { opacity: 0; } 100% { opacity: 1; } }
+    @keyframes navButtonPop { 0% { transform: scale(1); } 50% { transform: scale(.975); } 100% { transform: scale(1); } }
+    @keyframes navIconPop { 0% { transform: translate(var(--nav-icon-x, 0), var(--nav-icon-y, 0)) scale(1); } 50% { transform: translate(var(--nav-icon-x, 0), var(--nav-icon-y, 0)) scale(.94); } 100% { transform: translate(var(--nav-icon-x, 0), var(--nav-icon-y, 0)) scale(1); } }
+    .reveal-up { animation: float-up .72s cubic-bezier(.22,1,.36,1) backwards; }
+    .reveal-delay-1 { animation-delay: .06s; }
+    .reveal-delay-2 { animation-delay: .18s; }
+    .reveal-delay-3 { animation-delay: .30s; }
+    .reveal-soft { animation: soft-fade .25s ease backwards; }
+
+    /* ── Tab bar — 1:1 from Homepage ── */
+    .tabbar {
+      position: absolute;
+      left: 54px; right: 54px; bottom: 38px;
+      z-index: 50;
+      height: 76px;
+      border-radius: 999px;
+      background:
+        radial-gradient(ellipse 42% 120% at 9% 50%, rgba(255,255,255,.075) 0%, rgba(255,255,255,.018) 42%, rgba(255,255,255,0) 70%),
+        radial-gradient(ellipse 36% 96% at 94% 50%, rgba(255,255,255,.045) 0%, rgba(255,255,255,0) 66%),
+        linear-gradient(180deg, rgba(20,21,21,.99), rgba(3,4,4,.99)),
+        #040505;
+      display: grid;
+      grid-template-columns: .98fr 1.02fr 1.02fr .98fr;
+      align-items: center;
+      padding: 6px;
+      border: 1px solid rgba(255,255,255,.105);
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.12),
+        inset 0 -1px 0 rgba(0,0,0,.64),
+        0 16px 32px rgba(0,0,0,.22),
+        0 2px 6px rgba(0,0,0,.18);
+      backdrop-filter: blur(28px) saturate(150%);
+      -webkit-backdrop-filter: blur(28px) saturate(150%);
+    }
+
+    .tab-indicator {
+      position: absolute;
+      top: 0; left: 0;
+      z-index: 0;
+      width: 58px; height: 58px;
+      border-radius: 50%;
+      background:
+        radial-gradient(ellipse 54% 42% at 82% 88%, rgba(80,96,126,.22) 0%, rgba(35,40,52,.16) 40%, rgba(255,255,255,0) 76%),
+        radial-gradient(ellipse 48% 38% at 24% 12%, rgba(255,255,255,.10) 0%, rgba(255,255,255,.032) 38%, rgba(255,255,255,0) 76%),
+        linear-gradient(180deg, rgba(42,43,45,.74), rgba(13,14,15,.92));
+      border: 1.5px solid rgba(255,255,255,.34);
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.18),
+        inset 0 -12px 22px rgba(0,0,0,.30),
+        0 8px 18px rgba(0,0,0,.22),
+        0 0 0 1px rgba(255,255,255,.035);
+      transform: translate(0, 0) scale(1);
+      transition: none;
+      pointer-events: none;
+      will-change: transform;
+      opacity: 0;
+    }
+
+    .tab {
+      position: relative; z-index: 1;
+      width: 58px; height: 58px;
+      border: 0; border-radius: 50%;
+      margin: auto;
+      display: grid; place-items: center;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.036), rgba(255,255,255,.008)),
+        rgba(255,255,255,.014);
+      border: 1px solid rgba(255,255,255,.028);
+      color: rgba(255,255,255,.90);
+      cursor: pointer;
+      transition: background .2s ease, color .2s ease, transform .2s ease;
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.032),
+        inset 0 -10px 16px rgba(0,0,0,.11),
+        0 6px 14px rgba(0,0,0,.13);
+    }
+    .tabbar.is-animating { animation: navButtonPop .22s ease-out; }
+    .tab.is-animating svg { animation: navIconPop .22s ease-out; }
+    .tab.active { background: transparent; color: #ffffff; box-shadow: none; }
+    .tab:active { transform: scale(.96); }
+    .tab svg { --nav-icon-x: 0; --nav-icon-y: 0; display: block; width: 23px; height: 23px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; transform: translate(var(--nav-icon-x), var(--nav-icon-y)); transform-box: fill-box; transform-origin: center; }
+    .tab .home-icon { --nav-icon-x: -.8px; --nav-icon-y: -1px; }
+    .tab .bars-icon { --nav-icon-x: -1px; --nav-icon-y: 0; width: 24px; height: 24px; fill: currentColor; stroke: none; }
+
+    /* ── Notification modal — identical to Homepage ── */
+    .notifications-modal {
+      position: absolute;
+      inset: 0;
+      z-index: 52;
+      pointer-events: none;
+      border-radius: 32px;
+      overflow: hidden;
+    }
+    .notifications-modal.is-open { pointer-events: auto; }
+
+    .modal-backdrop {
+      position: absolute; inset: 0; z-index: 48;
+      background: var(--overlay);
+      backdrop-filter: blur(3px); -webkit-backdrop-filter: blur(3px);
+      opacity: 0; pointer-events: none;
+      transition: opacity .22s ease;
+    }
+    .modal-sheet {
+      position: absolute;
+      left: 16px; right: 16px; bottom: 20px;
+      z-index: 49;
+      height: 540px; max-height: 640px;
+      display: flex; flex-direction: column;
+      overflow: hidden;
+      border-radius: 30px;
+      border: 1px solid rgba(23,26,22,.08);
+      background: linear-gradient(180deg, rgba(255,255,255,.96), rgba(255,255,255,.8)), var(--card-solid);
+      transform: translateY(104%);
+      transition: transform .32s cubic-bezier(.32,.72,.24,1);
+    }
+    .notifications-modal.is-open .modal-backdrop { opacity: 1; pointer-events: auto; }
+    .notifications-modal.is-open .modal-sheet { transform: translateY(0); }
+
+    .sheet-header {
+      position: sticky; top: 0; z-index: 10;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 20px 18px 14px;
+      border-bottom: 1px solid var(--border-faint);
+    }
+    .sheet-header::before {
+      content: ""; position: absolute; top: 8px; left: 50%;
+      width: 44px; height: 4px; border-radius: 999px;
+      background: rgba(23,26,22,.14); transform: translateX(-50%);
+    }
+    .sheet-title { font-family: "General Sans", "SF Pro Display", Arial, sans-serif; color: var(--text); font-size: 20px; font-weight: 600; letter-spacing: -.12px; }
+    .sheet-close { width: 32px; height: 32px; border: 0; border-radius: 16px; background: var(--border-faint); color: var(--text); display: grid; place-items: center; cursor: pointer; }
+    .sheet-close svg, .notif-icon svg, .notif-time svg { stroke: currentColor; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+    .sheet-body { flex: 1; overflow-y: auto; scrollbar-width: none; }
+    .sheet-body::-webkit-scrollbar { display: none; }
+    .notif-list { min-height: 100%; padding: 16px 16px 82px; display: flex; flex-direction: column; }
+    .notif-list.is-empty { align-items: center; justify-content: center; }
+    .notif-row { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 8px; padding: 12px; border: 1px solid var(--border-faint); border-radius: 22px; background: linear-gradient(180deg, rgba(255,255,255,.055), rgba(255,255,255,.018)), var(--card-solid); }
+    .notif-icon { width: 32px; height: 32px; flex: 0 0 auto; border-radius: 12px; background: var(--border-faint); display: grid; place-items: center; color: rgba(23,26,22,.82); }
+    .notif-text { font-family: "General Sans", "SF Pro Text", Arial, sans-serif; color: var(--text); font-size: 13.5px; font-weight: 300; line-height: 1.35; letter-spacing: .24px; }
+    .notif-text strong { font-weight: 700; letter-spacing: .18px; }
+    .notif-time { font-family: "General Sans", "SF Pro Text", Arial, sans-serif; display: flex; align-items: center; gap: 4px; margin-top: 4px; color: rgba(23,26,22,.42); font-size: 10px; font-weight: 300; letter-spacing: .18px; }
+    .notif-delete { flex: 0 0 auto; align-self: flex-start; margin-left: auto; padding: 5px; border: 0; background: none; color: rgba(23,26,22,.28); cursor: pointer; display: grid; place-items: center; transition: color .15s ease; line-height: 0; }
+    .notif-delete:hover { color: rgba(23,26,22,.62); }
+    .notif-delete svg { width: 11px; height: 11px; stroke: currentColor; fill: none; stroke-width: 2.4; stroke-linecap: round; }
+    .notif-empty { display: none; padding: 44px 20px 36px; text-align: center; }
+    .notif-empty.is-visible { display: block; }
+    .notif-empty-icon { width: 52px; height: 52px; margin: 0 auto 28px; border-radius: 50%; background: var(--border-faint); display: grid; place-items: center; color: rgba(23,26,22,.82); }
+    .notif-empty-icon svg { width: 22px; height: 22px; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+    .notif-empty-title { font-family: "General Sans", "SF Pro Display", Arial, sans-serif; color: var(--text); font-size: 17px; font-weight: 600; letter-spacing: -.08px; }
+    .notif-empty-copy { font-family: "General Sans", "SF Pro Text", Arial, sans-serif; margin-top: 7px; color: rgba(23,26,22,.58); font-size: 13.5px; font-weight: 300; line-height: 1.35; letter-spacing: .24px; }
+    .clear-btn { font-family: "General Sans", "SF Pro Text", Arial, sans-serif; position: absolute; left: 16px; right: 16px; bottom: 16px; z-index: 20; width: auto; margin: 0; padding: 12px; border: 0; border-radius: 16px; background: rgba(244,244,243,.96); color: rgba(23,26,22,.62); font-size: 12px; font-weight: 300; letter-spacing: .28px; cursor: pointer; backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); }
+    .clear-btn:active { transform: scale(.97); }
+  </style>
+</head>
+<body>
+<div class="phone">
+
+  <!-- Status bar -->
+  <div class="statusbar" aria-hidden="true">
+    <div class="time">13:13</div>
+    <div class="status-icons">
+      <div class="signal"><span></span><span></span><span></span><span></span></div>
+      <div class="wifi"></div>
+      <div class="battery"></div>
+    </div>
+  </div>
+
+  <div class="scroll-content">
+
+    <!-- Hero section scrolls with content -->
+    <div class="hero-section">
+
+      <!-- Header -->
+      <header class="app-header reveal-up reveal-delay-1">
+  <style>html,body{background:#e2e5df}</style>
+  <script>(function(){try{if(localStorage.getItem("commons_setting_dark-mode")==="true")document.documentElement.classList.add("dark-mode");}catch(e){}})();</script>
+  <link rel="stylesheet" href="dark-mode.css" />
+        <div class="header-copy">
+          <div class="header-title">Community</div>
+        </div>
+        <div class="app-actions">
+          <button class="app-icon-btn" type="button" id="notificationsButton" aria-label="Benachrichtigungen öffnen">
+            <svg viewBox="0 0 24 24"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 7h18s-3 0-3-7"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+            <span class="badge" aria-hidden="true"></span>
+          </button>
+          <a class="app-icon-btn" href="Einstellungen.html" aria-label="Einstellungen öffnen">
+            <svg viewBox="0 0 24 24"><circle cx="6" cy="12" r="1.9" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1.9" fill="currentColor" stroke="none"/><circle cx="18" cy="12" r="1.9" fill="currentColor" stroke="none"/></svg>
+          </a>
+        </div>
+      </header>
+
+      <!-- Stats pills -->
+      <div class="stats-bar reveal-up reveal-delay-2">
+        <div class="stat-pill">
+          <div class="stat-label">Mitglieder</div>
+          <div class="stat-value">242<span class="stat-unit">akt.</span></div>
+        </div>
+        <div class="stat-pill">
+          <div class="stat-label">Diese Woche</div>
+          <div class="stat-value">2.4<span class="stat-unit">MWh</span></div>
+        </div>
+        <div class="stat-pill">
+          <div class="stat-label">Projekte</div>
+          <div class="stat-value">8<span class="stat-unit">lokal</span></div>
+        </div>
+      </div>
+
+      <!-- Ziel der Woche -->
+      <div class="topf-wrap reveal-up reveal-delay-3">
+        <div class="topf-label">Ziel der Woche</div>
+
+        <!-- Immersive hero card -->
+        <div class="hero-card">
+          <img class="hero-card-bg" src="Icons/Bank.png" alt="Energy Bench Vienna">
+          <div class="hero-card-overlay"></div>
+          <div class="hero-card-inner">
+            <!-- Avatars: top-right absolute -->
+            <div class="communer-avatars" style="position:absolute;top:62px;right:14px;z-index:3;">
+              <span class="communer-av"><img src="Icons/Person 1.png" alt=""></span>
+              <span class="communer-av"><img src="Icons/Person 2.png" alt=""></span>
+              <span class="communer-av"><img src="Icons/person 34.png" alt=""></span>
+              <span class="communer-more">+29</span>
+            </div>
+            <!-- Top row: title only -->
+            <div class="hero-card-top">
+              <div>
+                <div class="hero-card-title">Energy Bench Vienna</div>
+                <div class="hero-card-desc">Solarbetriebene Community-Bänke fürs Grätzl.</div>
+              </div>
+            </div>
+            <!-- Bottom: metrics + CTA -->
+            <div style="padding-top: 8px;">
+              <div style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:2px;">
+                <div class="topf-percent">67%</div>
+              </div>
+              <div class="topf-dots-wrap">
+                <div class="topf-dots" id="topfDots"></div>
+                <div class="topf-meta-row" style="margin:4px 0 10px; width:100%;">
+                  <span class="topf-meta-inline"><span class="topf-meta-value">6.700 kWh</span> <span class="topf-meta-label">gesammelt</span></span>
+                  <span class="topf-meta-inline"><span class="topf-meta-value">3.300 kWh</span> <span class="topf-meta-label">fehlen noch</span></span>
+                </div>
+              </div>
+              <button class="topf-inline-cta" type="button">
+                Jetzt beteiligen
+                <svg viewBox="0 0 24 24"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Community-Karte -->
+        <div class="topf-card-cta" onclick="sessionStorage.setItem('cmap_from','community');smoothNavigate('CommunityMap.html')">
+          <div class="topf-card-icon">
+            <svg viewBox="0 0 24 24"><path d="M12 21C12 21 6 14.5 6 9a6 6 0 0 1 12 0c0 5.5-6 12-6 12Z"/><circle cx="12" cy="9" r="2" fill="#171a16" stroke="none"/></svg>
+          </div>
+          <div class="topf-card-text">
+            <div class="topf-card-title">Community-Karte</div>
+            <div class="topf-card-sub">Finde Einrichtungen in deiner Nähe</div>
+          </div>
+          <div class="topf-card-arrow">
+            <svg viewBox="0 0 24 24"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /hero-section -->
+
+    <!-- Aktuelles aus dem Quartier -->
+    <section class="feed-section reveal-up reveal-delay-3">
+      <div class="feed-header">
+        <span class="feed-section-label">Aktuelles aus dem Quartier</span>
+        <a href="Neuigkeiten.html" class="feed-show-all">Alle anzeigen <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg></a>
+      </div>
+
+      <div class="feed-card" data-feed-href="EventDetail_SolarRooftopParty.html">
+        <div class="feed-thumb">
+          <img src="Icons/solar rooftop party weiß.png" alt="" style="object-position: center center;">
+        </div>
+        <div class="feed-body">
+          <div>
+            <div class="feed-institution">Dachgarten Favoriten</div>
+            <div class="feed-time">Heute, 10:15 Uhr</div>
+            <div class="feed-text">Solar Rooftop Party</div>
+          </div>
+          <div class="feed-footer">
+            <div class="feed-actions">
+              <button class="feed-like-btn" type="button" data-count="24" aria-pressed="false">
+                <svg viewBox="0 0 24 24"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8Z"/></svg>
+                <span>24</span>
+              </button>
+              <button class="feed-comment-btn" type="button" data-count="4" data-post-id="post-party">
+                <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                <span>4</span>
+              </button>
+            </div>
+            <div class="feed-avs">
+              <div class="feed-av"><img src="Icons/Person 4.png" alt=""></div>
+              <div class="feed-av"><img src="Icons/person 5.png" alt=""></div>
+              <div class="feed-av"><img src="Icons/person 8.png" alt=""></div>
+              <div class="feed-av-more">+5</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="feed-card" data-feed-href="PostDetail_1000MWh.html">
+        <div class="feed-thumb">
+          <img src="Icons/Spenden.png" alt="">
+        </div>
+        <div class="feed-body">
+          <div>
+            <div class="feed-institution">Wien Commons</div>
+            <div class="feed-time">Heute, 09:42 Uhr</div>
+            <div class="feed-text">1.000 MWh gemeinsam gespart!</div>
+          </div>
+          <div class="feed-footer">
+            <div class="feed-actions">
+              <button class="feed-like-btn" type="button" data-count="7" aria-pressed="false">
+                <svg viewBox="0 0 24 24"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8Z"/></svg>
+                <span>7</span>
+              </button>
+              <button class="feed-comment-btn" type="button" data-count="4" data-post-id="post-mwh">
+                <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                <span>4</span>
+              </button>
+            </div>
+            <div class="feed-avs">
+              <div class="feed-av"><img src="Icons/person 6.png" alt=""></div>
+              <div class="feed-av"><img src="Icons/person 7.png" alt=""></div>
+              <div class="feed-av-more">+2</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- Kollektiver Meilenstein -->
+    <div class="milestone-wrap reveal-up">
+      <div class="milestone-header">
+        <div class="milestone-section-label">Kollektiver Meilenstein</div>
+      </div>
+      <div class="milestone-card">
+        <div class="ms-top-row">
+          <div>
+            <div class="ms-value">312<span class="ms-unit">MWh</span></div>
+            <div class="ms-sub">gemeinsam seit der Gründung gespendet</div>
+          </div>
+          <div class="ms-bolt-bubble"><svg viewBox="0 0 24 24"><path d="M13 2 4 14h7l-1 8 10-13h-7l0-7Z"/></svg></div>
+        </div>
+        <div class="ms-divider" style="margin-top:16px;"></div>
+        <div class="ms-bottom-row">
+          <div class="feed-actions">
+            <button class="feed-like-btn liked" type="button" data-count="1846" aria-pressed="true">
+              <svg viewBox="0 0 24 24"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8Z"/></svg>
+              <span>1.847</span>
+            </button>
+            <button class="feed-comment-btn" type="button" data-count="7" data-post-id="post-milestone">
+              <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+              <span>7</span>
+            </button>
+          </div>
+          <div class="ms-avatars">
+            <div class="ms-av"><img src="Icons/Person 4.png" alt=""></div>
+            <div class="ms-av"><img src="Icons/person 5.png" alt=""></div>
+            <div class="ms-av"><img src="Icons/person 8.png" alt=""></div>
+            <div class="feed-av-more">+239</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /scroll-content -->
+
+  <!-- Tab bar — identical to Homepage -->
+  <nav class="tabbar" aria-label="Navigation">
+    <span class="tab-indicator" aria-hidden="true"></span>
+    <button class="tab" aria-label="Homepage">
+      <svg class="home-icon" viewBox="0 0 24 24"><path d="M6.8 11.5c0-.45.2-.88.55-1.16l3.7-3.02a1.48 1.48 0 0 1 1.9 0l3.7 3.02c.35.28.55.71.55 1.16v5.58a2.02 2.02 0 0 1-2.02 2.02H8.82a2.02 2.02 0 0 1-2.02-2.02Z"/></svg>
+    </button>
+    <button class="tab active" aria-label="Community" aria-current="page">
+      <svg viewBox="0 0 24 24"><path d="M9.8 11.2a3.2 3.2 0 1 0 0-6.4 3.2 3.2 0 0 0 0 6.4Z"/><path d="M4.2 19.3c.6-3.1 2.5-4.8 5.6-4.8s5 1.7 5.6 4.8"/><path d="M16 11a2.7 2.7 0 1 0 0-5.4"/><path d="M16.8 14.7c1.9.5 3 2 3.5 4.4"/></svg>
+    </button>
+    <button class="tab" aria-label="Projekte">
+      <svg viewBox="0 0 24 24"><path d="M5.2 6.8h5.4l1.6 2h6.6a1.8 1.8 0 0 1 1.8 1.8v6.8a1.8 1.8 0 0 1-1.8 1.8H5.2a1.8 1.8 0 0 1-1.8-1.8V8.6a1.8 1.8 0 0 1 1.8-1.8Z"/></svg>
+    </button>
+    <button class="tab" aria-label="Dashboard">
+      <svg class="bars-icon" viewBox="0 0 24 24"><rect x="5" y="13" width="4" height="6" rx="1"/><rect x="11" y="9" width="4" height="10" rx="1"/><rect x="17" y="5" width="4" height="14" rx="1"/></svg>
+    </button>
+  </nav>
+
+  <!-- Beteiligen Modal -->
+  <section class="beteiligen-modal" id="beteiligenModal" aria-hidden="true">
+    <div class="beteiligen-backdrop" id="beteiligenBackdrop"></div>
+    <div class="beteiligen-sheet" role="dialog" aria-modal="true">
+      <div class="bt-handle-row"><div class="bt-handle"></div></div>
+      <div class="bt-header">
+        <button class="bt-icon-btn" id="beteiligenClose" type="button" aria-label="Schließen">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+        </button>
+      </div>
+      <div class="bt-hero">
+        <img src="Icons/Solar bench.jpg" alt="Energy Bench Vienna">
+        <div class="bt-hero-location">
+          <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 21C12 21 6 14.5 6 9a6 6 0 0 1 12 0c0 5.5-6 12-6 12Z"/><circle cx="12" cy="9" r="2" fill="currentColor" stroke="none"/></svg>
+          Wien, 2. Bezirk
+        </div>
+        <a href="SolarbankDetail.html" class="bt-hero-link" aria-label="Mehr erfahren">
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10v10M7 17 17 7"/></svg>
+        </a>
+      </div>
+      <div class="bt-scroll">
+        <div class="bt-eyebrow">Energy Bench Vienna</div>
+        <h2 class="bt-title">Gemeinsam Energie spenden</h2>
+        <div class="bt-stepper">
+          <button class="bt-step-btn" id="stepperMinus" type="button">−</button>
+          <div class="bt-stepper-value-wrap">
+            <input type="text" class="stepper-value" id="stepperValue" inputmode="numeric" value="100"><span class="stepper-unit">kWh</span>
+          </div>
+          <button class="bt-step-btn" id="stepperPlus" type="button">+</button>
+        </div>
+        <div class="beteiligen-pills" id="beteiligenPills">
+          <button class="beteiligen-pill" type="button" data-val="5">5 kWh</button>
+          <button class="beteiligen-pill active" type="button" data-val="10">10 kWh</button>
+          <button class="beteiligen-pill" type="button" data-val="25">25 kWh</button>
+          <button class="beteiligen-pill" type="button" data-val="50">50 kWh</button>
+          <button class="beteiligen-pill" type="button" data-val="100">100 kWh</button>
+        </div>
+        <div class="bt-impact">
+          <div class="bt-impact-text">
+            <div class="bt-impact-title">Deine Wirkung</div>
+            <div class="bt-impact-desc" id="impactDesc">10 kWh bringen uns dem Bau einer neuen Bench ein Stück näher.</div>
+          </div>
+          <div class="bt-impact-leaf">
+            <svg viewBox="0 0 24 24"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg>
+          </div>
+        </div>
+        <button class="beteiligen-cta" type="button" id="beteiligenCta">
+          <span id="beteiligenCtaText">10 kWh beitragen</span> →
+        </button>
+        <div class="beteiligen-legal">
+          <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          Sicher &amp; transparent
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Comment Sheet -->
+  <section class="comment-modal" id="commentModal" aria-hidden="true">
+    <div class="comment-backdrop" id="commentBackdrop"></div>
+    <div class="comment-sheet" role="dialog" aria-modal="true" aria-label="Kommentare">
+      <div class="comment-drag"><div class="comment-handle"></div></div>
+      <div class="comment-header">
+        <span class="comment-title">Kommentare <span class="comment-count-badge" id="commentCount">12</span></span>
+        <button class="comment-sort-btn" type="button">Neueste <svg viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></button>
+      </div>
+      <div class="comment-list" id="commentList"></div>
+      <div class="comment-input-bar">
+        <div class="comment-input-av"><img src="Icons/pb 10.png" alt=""></div>
+        <input type="text" class="comment-input-field" placeholder="Kommentar schreiben…" aria-label="Kommentar schreiben">
+        <button class="comment-send-btn" type="button" aria-label="Senden">
+          <svg viewBox="0 0 24 24"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Notifications modal — identical to Homepage -->
+  <section class="notifications-modal" id="notificationsModal" aria-hidden="true">
+    <div class="modal-backdrop" id="notificationsBackdrop"></div>
+    <div class="modal-sheet" role="dialog" aria-modal="true" aria-labelledby="notificationsTitle">
+      <div class="sheet-header">
+        <div class="sheet-title" id="notificationsTitle">Benachrichtigungen</div>
+        <button class="sheet-close" type="button" id="notificationsClose" aria-label="Benachrichtigungen schließen">
+          <svg width="14" height="14" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg>
+        </button>
+      </div>
+      <div class="sheet-body">
+        <div class="notif-list">
+          <div class="notif-empty" id="notificationsEmpty" aria-live="polite">
+            <div class="notif-empty-icon"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></div>
+            <div class="notif-empty-title">Keine Benachrichtigungen mehr</div>
+            <div class="notif-empty-copy">Alles aufgeräumt. Deine Energie wirkt weiter im Quartier.</div>
+          </div>
+          <button class="clear-btn" type="button">Alle löschen</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Loading overlay -->
+  <div class="loading-overlay" id="communityLoadingOverlay">
+    <div class="comm-loader" aria-hidden="true"></div>
+    <div class="comm-check">✓</div>
+    <div class="loading-text" id="communityLoadingText">Buche Beitrag…</div>
+  </div>
+
+</div>
+<script>
+  // Commons-Topf dot progress bar — animates from empty to filled on page load
+  (function() {
+    const container = document.getElementById('topfDots');
+    if (!container) return;
+    const total = 18;
+    const filled = Math.round(total * 0.67);
+    const r = 3.5, gap = 4, d = r * 2;
+    const step = d + gap;
+    const W = total * step - gap;
+    const H = d;
+    const NS = 'http://www.w3.org/2000/svg';
+
+    const svg = document.createElementNS(NS, 'svg');
+    svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+    svg.setAttribute('width', String(Math.round(W)));
+    svg.setAttribute('height', String(Math.round(H)));
+    svg.style.display = 'block';
+
+    // Layer 1 — empty dots
+    for (let i = 0; i < total; i++) {
+      const cx = r + i * step;
+      const c = document.createElementNS(NS, 'circle');
+      c.setAttribute('cx', cx); c.setAttribute('cy', r); c.setAttribute('r', r);
+      c.setAttribute('fill', 'rgba(255,255,255,0.22)');
+      svg.appendChild(c);
+    }
+
+    // Layer 2 — filled white dots
+    const gradCircles = [];
+    for (let i = 0; i < filled; i++) {
+      const cx = r + i * step;
+      const c = document.createElementNS(NS, 'circle');
+      c.setAttribute('cx', cx); c.setAttribute('cy', r); c.setAttribute('r', r);
+      c.setAttribute('fill', 'rgba(255,255,255,.92)');
+      c.style.opacity = '0'; c.style.transition = 'opacity 0.22s ease';
+      gradCircles.push(c); svg.appendChild(c);
+    }
+
+    const glossCircles = [];
+
+    container.appendChild(svg);
+
+    const startDelay = sessionStorage.getItem('cm_visited') ? 150 : 480;
+    gradCircles.forEach((c, i) => setTimeout(() => { c.style.opacity = '1'; }, startDelay + i * 52));
+    glossCircles.forEach((c, i) => setTimeout(() => { c.style.opacity = '1'; }, startDelay + i * 52));
+
+  })();
+
+  // Live clock
+  (function() {
+    const el = document.querySelector('.time');
+    if (!el) return;
+    const update = () => { const n = new Date(); el.textContent = n.getHours() + ':' + String(n.getMinutes()).padStart(2,'0'); };
+    update(); setInterval(update, 10000);
+  })();
+
+  // Reveal animation (once per session)
+  (function() {
+    if (sessionStorage.getItem('cm_visited')) {
+      document.querySelectorAll('.reveal-up').forEach(el => {
+        el.classList.remove('reveal-up','reveal-delay-1','reveal-delay-2','reveal-delay-3');
+        el.classList.add('reveal-soft');
+      });
+    } else {
+      sessionStorage.setItem('cm_visited', '1');
+    }
+  })();
+
+  // Tab bar — identical to Homepage
+  const tabs = document.querySelectorAll('.tab');
+  const tabbar = document.querySelector('.tabbar');
+  const tabIndicator = document.querySelector('.tab-indicator');
+  // ── Shared notifications (synced via localStorage) ──
+  (function() {
+    const NOTIF_KEY = 'commons_notifs_deleted';
+    const CLK = '<svg width="9" height="9" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>';
+    const DEL = '<svg viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg>';
+    const IC = {
+      heart:  '<path d="M19.5 12.6 12 20l-7.5-7.4a5 5 0 0 1 7.1-7.1l.4.4.4-.4a5 5 0 0 1 7.1 7.1Z"/>',
+      star:   '<path d="M12 2 14.7 8.6 22 9.2l-5.5 4.7 1.7 7.1L12 17.2 5.8 21l1.7-7.1L2 9.2l7.3-.6L12 2Z"/>',
+      bolt:   '<path d="M13 2 4 14h7l-1 8 10-13h-7l0-7Z"/>',
+      folder: '<path d="M5.2 6.8h5.4l1.6 2h6.6a1.8 1.8 0 0 1 1.8 1.8v6.8a1.8 1.8 0 0 1-1.8 1.8H5.2a1.8 1.8 0 0 1-1.8-1.8V8.6a1.8 1.8 0 0 1 1.8-1.8Z"/>',
+    };
+    const ALL = [
+      { id:1,  icon:'heart',              text:'<strong>Grundschule am Park:</strong> Danke – die Schattenbäume sind fast finanziert', time:'vor 12 Min' },
+      { id:2,  icon:'star',  lime:true,   text:'<strong>500 kWh</strong> im Commons-Topf: neues Quartiersziel freigeschaltet!', time:'vor 1 Std' },
+      { id:3,  icon:'heart',              text:'<strong>Kita Sonnenhof:</strong> Eure Überschüsse werden zu neuen Büchern', time:'vor 3 Std' },
+      { id:4,  icon:'bolt',               text:'<strong>Autopilot</strong> hat <strong>16 kWh</strong> an lokale Projekte gebucht', time:'heute' },
+      { id:5,  icon:'star',  lime:true,   text:'<strong>3 Einrichtungen</strong> sind heute aktiv unterstützt worden', time:'heute' },
+      { id:6,  icon:'bolt',               text:'<strong>Jugendzentrum West:</strong> 18 kWh wurden für den Nachmittagsbetrieb reserviert', time:'gestern' },
+      { id:7,  icon:'heart',              text:'<strong>Seniorentreff Mitte:</strong> Danke für euren Beitrag zum warmen Mittagstisch', time:'gestern' },
+      { id:8,  icon:'star',               text:'<strong>Quartiersziel</strong> erreicht: 72 % der Woche sind bereits gedeckt', time:'gestern' },
+      { id:9,  icon:'folder',             text:'<strong>Bibliothek Süd:</strong> Neues Projekt für Leselampen wurde hinzugefügt', time:'Mo' },
+      { id:10, icon:'bolt',               text:'<strong>24 kWh</strong> liegen noch als verfügbarer Überschuss bereit', time:'Mo' },
+    ];
+    function getDeleted() { try { return new Set(JSON.parse(sessionStorage.getItem(NOTIF_KEY))||[]); } catch { return new Set(); } }
+    function saveDeleted(s) { sessionStorage.setItem(NOTIF_KEY, JSON.stringify([...s])); }
+    const notifBtn  = document.getElementById('notificationsButton');
+    const modal     = document.getElementById('notificationsModal');
+    const closeBtn  = document.getElementById('notificationsClose');
+    const backdrop  = document.getElementById('notificationsBackdrop');
+    const list      = document.querySelector('.notif-list');
+    const emptyEl   = document.getElementById('notificationsEmpty');
+    const clearBtn  = document.querySelector('.clear-btn');
+    function render() {
+      list.querySelectorAll('.notif-row').forEach(r => r.remove());
+      const deleted = getDeleted();
+      const visible = ALL.filter(n => !deleted.has(n.id));
+      visible.forEach(n => {
+        const row = document.createElement('div');
+        row.className = 'notif-row';
+        row.dataset.nid = n.id;
+        row.innerHTML = `<div class="notif-icon${n.lime?' lime':''}" ><svg width="14" height="14" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">${IC[n.icon]}</svg></div><div><div class="notif-text">${n.text}</div><div class="notif-time">${CLK} ${n.time}</div></div><button class="notif-delete" type="button" aria-label="Löschen">${DEL}</button>`;
+        list.insertBefore(row, emptyEl);
+      });
+      const empty = visible.length === 0;
+      list.classList.toggle('is-empty', empty);
+      emptyEl.classList.toggle('is-visible', empty);
+      if (clearBtn) clearBtn.style.display = empty ? 'none' : '';
+      if (notifBtn) { const b = notifBtn.querySelector('.badge'); if (b) b.style.display = empty ? 'none' : ''; }
+    }
+    function open()  { modal.classList.add('is-open');    modal.setAttribute('aria-hidden','false'); }
+    function close() { modal.classList.remove('is-open'); modal.setAttribute('aria-hidden','true');  }
+    notifBtn.addEventListener('click', open);
+    closeBtn.addEventListener('click', close);
+    backdrop.addEventListener('click', close);
+    if (clearBtn) clearBtn.addEventListener('click', () => { saveDeleted(new Set(ALL.map(n=>n.id))); render(); close(); });
+    list.addEventListener('click', e => {
+      const btn = e.target.closest('.notif-delete');
+      if (!btn) return;
+      const id = parseInt(btn.closest('.notif-row').dataset.nid);
+      const del = getDeleted(); del.add(id); saveDeleted(del);
+      render();
+    });
+    render();
+  })();
+
+  function moveTabIndicator(tab, animate = true) {
+    if (!tab || !tabIndicator || !tabbar) return;
+    if (!animate) { tabIndicator.style.transition = 'none'; }
+    const tabRect = tab.getBoundingClientRect();
+    const tabbarRect = tabbar.getBoundingClientRect();
+    tabIndicator.style.transform = `translate(${tabRect.left - tabbarRect.left}px, ${tabRect.top - tabbarRect.top}px) scale(1)`;
+    if (!animate) { tabIndicator.offsetHeight; tabIndicator.style.transition = ''; }
+  }
+
+  function navigateTo(url) {
+    if (window.smoothNavigate) { window.smoothNavigate(url); return; }
+    window.setTimeout(() => { window.location.href = url; }, 130);
+  }
+
+  tabs.forEach((tab) => {
+    tab.addEventListener('click', () => {
+      tabs.forEach((item) => { item.classList.remove('active', 'is-animating'); item.removeAttribute('aria-current'); });
+      tabbar.classList.remove('is-animating');
+      moveTabIndicator(tab, false);
+      tab.classList.add('active', 'is-animating');
+      tabbar.offsetHeight;
+      tabbar.classList.add('is-animating');
+      tab.setAttribute('aria-current', 'page');
+      if (tab.getAttribute('aria-label') === 'Homepage') { navigateTo('Homepage.html'); return; }
+      if (tab.getAttribute('aria-label') === 'Projekte')  { navigateTo('Projekte.html');  return; }
+      if (tab.getAttribute('aria-label') === 'Dashboard') { navigateTo('Analytics.html'); return; }
+      window.setTimeout(() => {
+        tab.classList.remove('is-animating');
+        tabbar.classList.remove('is-animating');
+      }, 260);
+    });
+  });
+
+  window.addEventListener('resize', () => { moveTabIndicator(document.querySelector('.tab.active'), false); });
+
+  moveTabIndicator(document.querySelector('.tab.active'), false);
+  requestAnimationFrame(() => { if (tabIndicator) tabIndicator.style.opacity = '1'; });
+
+  // Beteiligen Modal
+  const beteiligenModal = document.getElementById('beteiligenModal');
+  const beteiligenClose = document.getElementById('beteiligenClose');
+  const stepperMinus = document.getElementById('stepperMinus');
+  const stepperPlus = document.getElementById('stepperPlus');
+  const stepperValueEl = document.getElementById('stepperValue');
+  const beteiligenCtaText = document.getElementById('beteiligenCtaText');
+  const impactDesc = document.getElementById('impactDesc');
+  const pills = document.querySelectorAll('.beteiligen-pill');
+
+  const steps = [5, 10, 25, 50, 100];
+  let currentVal = 10;
+
+  const impactTexts = {
+    5:   '5 kWh – jeder Schritt zählt beim Bau der nächsten Bench.',
+    10:  '10 kWh bringen uns dem Bau einer neuen Bench ein Stück näher.',
+    25:  '25 kWh – du hilfst aktiv beim Bau einer Energy Bench in Wien.',
+    50:  '50 kWh finanzieren einen guten Teil der nächsten Bench.',
+    100: '100 kWh – du ermöglichst den Bau einer ganzen neuen Bench.'
+  };
+
+  function formatVal(v) { return v.toLocaleString('de'); }
+
+  function updateBeteiligen(val) {
+    currentVal = val;
+    stepperValueEl.value = formatVal(val);
+    beteiligenCtaText.textContent = formatVal(val) + ' kWh beitragen';
+    impactDesc.textContent = impactTexts[val] || val + ' kWh — dein Beitrag für die Energy Bench Vienna.';
+    pills.forEach(p => p.classList.toggle('active', parseInt(p.dataset.val) === val));
+  }
+
+  document.querySelector('.topf-inline-cta').addEventListener('click', () => {
+    beteiligenModal.classList.add('is-open');
+    beteiligenModal.setAttribute('aria-hidden', 'false');
+  });
+  function closeBeteiligen() { beteiligenModal.classList.remove('is-open'); beteiligenModal.setAttribute('aria-hidden', 'true'); }
+  beteiligenClose.addEventListener('click', closeBeteiligen);
+  document.getElementById('beteiligenBackdrop').addEventListener('click', closeBeteiligen);
+
+  stepperMinus.addEventListener('click', () => {
+    const below = steps.filter(s => s < currentVal);
+    if (below.length) updateBeteiligen(below[below.length - 1]);
+  });
+  stepperPlus.addEventListener('click', () => {
+    const above = steps.filter(s => s > currentVal);
+    if (above.length) updateBeteiligen(above[0]);
+  });
+  pills.forEach(p => p.addEventListener('click', () => updateBeteiligen(parseInt(p.dataset.val))));
+
+  stepperValueEl.addEventListener('focus', () => {
+    stepperValueEl.value = currentVal;
+    stepperValueEl.select();
+  });
+  stepperValueEl.addEventListener('input', () => {
+    const raw = parseInt(stepperValueEl.value.replace(/\D/g, ''), 10);
+    if (!isNaN(raw) && raw > 0) {
+      currentVal = raw;
+      beteiligenCtaText.textContent = formatVal(raw) + ' kWh beitragen';
+      impactDesc.textContent = impactTexts[raw] || raw.toLocaleString('de') + ' kWh – deine Wirkung für die Energy Bench Vienna.';
+      pills.forEach(p => p.classList.toggle('active', parseInt(p.dataset.val) === raw));
+    }
+  });
+  stepperValueEl.addEventListener('blur', () => {
+    const raw = parseInt(stepperValueEl.value.replace(/\D/g, ''), 10);
+    if (!isNaN(raw) && raw > 0) {
+      currentVal = Math.min(raw, 99999);
+      stepperValueEl.value = formatVal(currentVal);
+      beteiligenCtaText.textContent = formatVal(currentVal) + ' kWh beitragen';
+      impactDesc.textContent = impactTexts[currentVal] || currentVal.toLocaleString('de') + ' kWh – deine Wirkung für die Energy Bench Vienna.';
+      pills.forEach(p => p.classList.toggle('active', parseInt(p.dataset.val) === currentVal));
+    } else {
+      stepperValueEl.value = formatVal(currentVal);
+    }
+  });
+  stepperValueEl.addEventListener('keydown', e => { if (e.key === 'Enter') stepperValueEl.blur(); });
+
+  // ── Ladeanimation beim Beitragen ──
+  document.getElementById('beteiligenCta')?.addEventListener('click', () => {
+    const overlay = document.getElementById('communityLoadingOverlay');
+    const text = document.getElementById('communityLoadingText');
+    const label = beteiligenCtaText ? beteiligenCtaText.textContent.replace(' →','').trim() : 'Beitrag';
+    if (!overlay) return;
+    overlay.classList.remove('done');
+    if (text) text.textContent = `Buche ${label}…`;
+    overlay.classList.add('show');
+    setTimeout(() => {
+      overlay.classList.add('done');
+      if (text) text.textContent = 'Beitrag gebucht';
+    }, 950);
+    setTimeout(() => { overlay.classList.remove('show', 'done'); }, 1900);
+  });
+
+
+  // ── Comment system ──
+  const commentModal  = document.getElementById('commentModal');
+  const commentCountEl = document.getElementById('commentCount');
+  const commentList   = document.getElementById('commentList');
+  const commentInput  = document.querySelector('.comment-input-field');
+  const commentSendBtn = document.querySelector('.comment-send-btn');
+  const USER_AVATAR = localStorage.getItem('commons_user_avatar') || 'Icons/pb 10.png';
+  const USER_NAME   = localStorage.getItem('commons_user_name')   || 'Nici';
+  let currentPostId = null;
+
+  // Sync profile pic
+  const commentInputAv = document.querySelector('.comment-input-av img');
+  if (commentInputAv) commentInputAv.src = USER_AVATAR;
+
+  // Default comments per post
+  const DEFAULT_COMMENTS = {
+    'post-party': [
+      { id:'p1', avatar:'Icons/Person 4.png', name:'Lea Müller', time:'vor 1 Std.', text:'Was für eine tolle Idee! Musik auf dem Dach mit echtem Solarstrom – das ist Energiewende zum Anfassen! 🎉', likes:12, liked:false,
+        replies:[{ id:'r1', avatar:'Icons/person 5.png', name:'Thomas Berger', time:'vor 45 Min.', text:'Ich war letztes Jahr dabei – unvergesslich! Bin auf jeden Fall wieder dabei. 🙌', likes:8, liked:true }] },
+      { id:'p2', avatar:'Icons/person 8.png', name:'Sophie Wagner', time:'vor 2 Std.', text:'Gibt es noch Tickets? Würde so gerne dabei sein! 🎟️', likes:7, liked:false, replies:[] },
+      { id:'p3', avatar:'Icons/person 7.png', name:'Markus Hofmann', time:'vor 3 Std.', text:'Dachgarten Favoriten macht immer tolle Events – mit Solarstrom noch besser! ☀️', likes:15, liked:false, replies:[] }
+    ],
+    'post-mwh': [
+      { id:'m1', avatar:'Icons/Person 4.png', name:'Lea Müller', time:'vor 30 Min.', text:'Unglaublich! 1.000 MWh und das haben wir GEMEINSAM geschafft! 💪', likes:18, liked:false, replies:[] },
+      { id:'m2', avatar:'Icons/person 8.png', name:'Sophie Wagner', time:'vor 1 Std.', text:'280 Tonnen CO₂ weniger. Ich bin so stolz, Teil dieser Community zu sein. 🌱', likes:11, liked:false, replies:[] },
+      { id:'m3', avatar:'Icons/person 7.png', name:'Markus Hofmann', time:'vor 2 Std.', text:'Weiter so Wien Commons! Das ist der richtige Weg für unsere Stadt. 🌍', likes:9, liked:false, replies:[] },
+      { id:'m4', avatar:'Icons/person 6.png', name:'Brigitte Fuchs', time:'vor 3 Std.', text:'Wenn das keine Motivation ist weiterzumachen! Danke an alle Beteiligten. 🏆', likes:24, liked:false, replies:[] }
+    ],
+    'post-milestone': [
+      { id:'ms1', avatar:'Icons/Person 4.png', name:'Lea Müller', time:'vor 2 Std.', text:'312 MWh. Das haben WIR gemacht. Jedes gespendete kWh hat gezählt und jetzt sehen wir was daraus wird. So unglaublich stolz auf diese Community. 🌞', likes:142, liked:true,
+        replies:[{ id:'msr1', avatar:'Icons/person 5.png', name:'Thomas Berger', time:'vor 1 Std.', text:'Genau das ist der Grund warum ich hier mitmache. Danke an alle!', likes:34, liked:false }] },
+      { id:'ms2', avatar:'Icons/person 8.png', name:'Sophie Wagner', time:'vor 3 Std.', text:'Ich erinnere mich noch an den ersten Monat. Damals haben wir kaum 10 MWh zusammengebracht. Und jetzt 312. Das zeigt was möglich ist wenn man zusammenhält.', likes:98, liked:false, replies:[] },
+      { id:'ms3', avatar:'Icons/person 6.png', name:'Brigitte Fuchs', time:'vor 4 Std.', text:'Meine Solarpanele laufen seit einem Jahr und ich dachte immer der Beitrag ist so klein. Aber genau das zeigt dieser Meilenstein. Zusammen macht es einen riesigen Unterschied. 💚', likes:76, liked:false, replies:[] },
+      { id:'ms4', avatar:'Icons/pb 29.png', name:'Karim Mansour', time:'vor 5 Std.', text:'312 MWh entspricht dem Stromverbrauch von über 80 Haushalten. Das ist kein kleines Projekt mehr. Das ist echte Energiewende von unten.', likes:64, liked:false, replies:[] },
+      { id:'ms5', avatar:'Icons/person 7.png', name:'Markus Hofmann', time:'vor 6 Std.', text:'Hab gerade meinen Eltern davon erzählt. Die konnten kaum glauben dass wir das als Nachbarschaft geschafft haben. Wien macht das einfach vor wie es geht. 🏙️', likes:55, liked:false, replies:[] },
+      { id:'ms6', avatar:'Icons/pb 38.png', name:'Nina Kowalski', time:'vor 8 Std.', text:'Nächstes Ziel 500 MWh! Wer ist dabei? Ich erhöhe meinen monatlichen Beitrag ab sofort.', likes:167, liked:false, replies:[] }
+    ]
+  };
+
+  function loadUserComments(postId) {
+    try { return JSON.parse(localStorage.getItem('uc_'+postId)) || []; } catch { return []; }
+  }
+  function saveUserComments(postId, arr) {
+    localStorage.setItem('uc_'+postId, JSON.stringify(arr));
+  }
+  function getLiked(postId) {
+    try { return new Set(JSON.parse(localStorage.getItem('lk_'+postId))||[]); } catch { return new Set(); }
+  }
+  function setLiked(postId, id, liked) {
+    const s = getLiked(postId);
+    liked ? s.add(id) : s.delete(id);
+    localStorage.setItem('lk_'+postId, JSON.stringify([...s]));
+  }
+  function getAll(postId) {
+    return [...loadUserComments(postId), ...(DEFAULT_COMMENTS[postId]||[])];
+  }
+
+  const HEART = `<svg viewBox="0 0 24 24"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8Z"/></svg>`;
+
+  function buildReplyEl(r, postId) {
+    const liked = postId ? getLiked(postId).has(r.id) : r.liked;
+    const d = document.createElement('div');
+    d.className = 'comment-reply-row';
+    d.innerHTML = `
+      <img class="comment-av comment-av-sm" src="${r.avatar}" alt="">
+      <div class="comment-body-wrap">
+        <div class="comment-meta"><span class="comment-name">${r.name}</span><span class="comment-time">${r.time}</span></div>
+        <div class="comment-text">${r.text}</div>
+        <div class="comment-actions">
+          <button class="comment-like-btn${liked?' liked':''}" type="button" data-count="${r.likes}">${HEART}<span>${liked?r.likes+1:r.likes}</span></button>
+        </div>
+      </div>`;
+    d.querySelector('.comment-like-btn').addEventListener('click', function() {
+      const isLiked = this.classList.toggle('liked');
+      this.querySelector('span').textContent = isLiked ? parseInt(this.dataset.count)+1 : this.dataset.count;
+      if (currentPostId) setLiked(currentPostId, r.id, isLiked);
+    });
+    return d;
+  }
+
+  function buildCommentEl(c, postId) {
+    const liked = postId ? getLiked(postId).has(c.id) : c.liked;
+    const isOwn = c.name === USER_NAME;
+    const item = document.createElement('div');
+    item.className = 'comment-item';
+    item.dataset.cid = c.id;
+    item.innerHTML = `
+      <img class="comment-av" src="${c.avatar}" alt="" style="${c.avatarFit==='contain'?'object-fit:contain;padding:3px;background:#f5f5f4;':''}">
+      <div class="comment-body-wrap">
+        <div class="comment-meta"><span class="comment-name">${c.name}</span><span class="comment-time">${c.time}</span>${isOwn?'<button class="comment-delete-btn" type="button" aria-label="Löschen">&times;</button>':'<button class="comment-more-btn" type="button">···</button>'}</div>
+        <div class="comment-text">${c.text}</div>
+        <div class="comment-actions">
+          <button class="comment-like-btn${liked?' liked':''}" type="button" data-count="${c.likes}">${HEART}<span>${liked?c.likes+1:c.likes}</span></button>
+          <button class="comment-reply-btn" type="button">Antworten</button>
+        </div>
+      </div>`;
+    item.querySelector('.comment-like-btn').addEventListener('click', function() {
+      const isLiked = this.classList.toggle('liked');
+      this.querySelector('span').textContent = isLiked ? parseInt(this.dataset.count)+1 : this.dataset.count;
+      if (currentPostId) setLiked(currentPostId, c.id, isLiked);
+    });
+    item.querySelector('.comment-reply-btn').addEventListener('click', () => showReplyInput(item, c));
+    if (isOwn) {
+      item.querySelector('.comment-delete-btn').addEventListener('click', () => {
+        item.style.transition = 'opacity .2s ease, transform .2s ease';
+        item.style.opacity = '0';
+        item.style.transform = 'translateX(10px)';
+        setTimeout(() => {
+          item.remove();
+          if (currentPostId) {
+            const arr = loadUserComments(currentPostId).filter(x => String(x.id) !== String(c.id));
+            saveUserComments(currentPostId, arr);
+          }
+          const n = parseInt(commentCountEl.textContent, 10);
+          if (!isNaN(n)) commentCountEl.textContent = Math.max(0, n - 1);
+        }, 210);
+      });
+    }
+    const bodyWrap = item.querySelector('.comment-body-wrap');
+    (c.replies||[]).forEach(r => bodyWrap.appendChild(buildReplyEl(r, postId)));
+    return item;
+  }
+
+  const ORG_POSTS = {
+    'post-party':     { avatar:'Icons/Person 1.png', name:'Lena Berger', role:'Organisatorin', time:'vor 45 Min.', text:'Rooftop-Solarfest am Samstag! Musik, Essen & die ersten kWh live erleben. 🎉', likes:24, comments:3 },
+    'post-mwh':       { avatar:'Icons/pb 35.png', name:'Wien Commons', role:'Offiziell',     time:'vor 1 Std.', text:'Wir haben gemeinsam 1.000 MWh Solarenergie erzeugt! Danke an alle 242 Mitglieder das habt ihr gemacht. 🌞', likes:47, comments:4 },
+    'post-milestone': { avatar:'Icons/pb 35.png', name:'Wien Commons', role:'Offiziell', time:'vor 1 Tag', text:'312 MWh gemeinsam gespendet seit der Gründung. Was ihr als Community aufgebaut habt ist außergewöhnlich. Danke an alle 242 Nachbar:innen die diesen Meilenstein möglich gemacht haben. 🌱⚡', likes:1847, comments:7 }
+  };
+
+  let sortMode = 'newest'; // 'newest' | 'popular'
+
+  function buildOrgPost(org, postId) {
+    const orgLiked = postId ? getLiked(postId).has('org') : false;
+    const div = document.createElement('div');
+    div.className = 'org-post';
+    div.innerHTML = `
+      <img class="org-post-av" src="${org.avatar}" alt="">
+      <div style="flex:1;min-width:0;">
+        <div class="comment-meta" style="margin-bottom:2px;">
+          <span class="comment-name">${org.name}</span>
+          <span class="org-badge">${org.role}</span>
+          <button class="comment-more-btn" type="button" style="margin-left:auto;">···</button>
+        </div>
+        <div class="org-post-time">${org.time}</div>
+        <div class="org-post-text">${org.text}</div>
+        <div class="org-post-actions">
+          <button class="org-action-btn org-like${orgLiked?' liked':''}" type="button" data-count="${org.likes}">
+            <svg viewBox="0 0 24 24"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8Z"/></svg>
+            <span>${orgLiked ? org.likes+1 : org.likes}</span>
+          </button>
+          <button class="org-action-btn" type="button">
+            <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            <span>${org.comments}</span>
+          </button>
+          <button class="org-reply-btn" type="button">Antworten</button>
+        </div>
+      </div>`;
+    div.querySelector('.org-like').addEventListener('click', function() {
+      const isLiked = this.classList.toggle('liked');
+      this.querySelector('span').textContent = isLiked ? org.likes+1 : org.likes;
+      if (postId) setLiked(postId, 'org', isLiked);
+    });
+    div.querySelector('.org-reply-btn').addEventListener('click', () => {
+      document.querySelectorAll('.reply-input-row').forEach(r => r.remove());
+      const body = div.querySelector('div[style]');
+      const row = document.createElement('div');
+      row.className = 'comment-reply-row reply-input-row';
+      row.style.marginTop = '8px';
+      row.innerHTML = `
+        <img class="comment-av comment-av-sm" src="${USER_AVATAR}" alt="" style="object-fit:contain;background:#101110;border-radius:50%;">
+        <div style="flex:1;display:flex;gap:6px;align-items:center;">
+          <input type="text" class="comment-input-field reply-field" placeholder="Antwort an ${org.name}…" style="flex:1;font-size:12px;padding:7px 12px;" aria-label="Antwort">
+          <button class="comment-send-btn reply-send" type="button" style="width:30px;height:30px;flex-shrink:0;" aria-label="Senden">
+            <svg viewBox="0 0 24 24"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg>
+          </button>
+        </div>`;
+      body.appendChild(row);
+      const rf = row.querySelector('.reply-field');
+      rf.focus();
+      function submit() {
+        const text = rf.value.trim(); if (!text) return;
+        row.remove();
+        const replyEl = document.createElement('div');
+        replyEl.className = 'comment-reply-row';
+        replyEl.innerHTML = `
+          <img class="comment-av comment-av-sm" src="${USER_AVATAR}" alt="" style="object-fit:contain;background:#101110;border-radius:50%;">
+          <div class="comment-body-wrap">
+            <div class="comment-meta"><span class="comment-name">${USER_NAME}</span><span class="comment-time">Jetzt</span></div>
+            <div class="comment-text">${text}</div>
+            <div class="comment-actions">
+              <button class="comment-like-btn" type="button" data-count="0">${HEART}<span>0</span></button>
+            </div>
+          </div>`;
+        replyEl.querySelector('.comment-like-btn').addEventListener('click', function() {
+          const isLiked = this.classList.toggle('liked');
+          this.querySelector('span').textContent = isLiked ? 1 : 0;
+        });
+        body.appendChild(replyEl);
+      }
+      row.querySelector('.reply-send').addEventListener('click', submit);
+      rf.addEventListener('keydown', e => { if (e.key==='Enter') submit(); });
+    });
+    return div;
+  }
+
+  function getSorted(postId) {
+    const all = getAll(postId);
+    if (sortMode === 'popular') return [...all].sort((a,b) => b.likes - a.likes);
+    return all; // newest already first
+  }
+
+  function renderComments(postId) {
+    commentList.innerHTML = '';
+    const org = ORG_POSTS[postId];
+    if (org) commentList.appendChild(buildOrgPost(org, postId));
+    getSorted(postId).forEach(c => commentList.appendChild(buildCommentEl(c, postId)));
+  }
+
+  // Sort button
+  const sortBtn = document.querySelector('.comment-sort-btn');
+  sortBtn.addEventListener('click', () => {
+    sortMode = sortMode === 'newest' ? 'popular' : 'newest';
+    sortBtn.innerHTML = (sortMode === 'newest' ? 'Neueste' : 'Beliebteste') + ' <svg viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg>';
+    if (currentPostId) renderComments(currentPostId);
+  });
+
+  function showReplyInput(commentItem, parentComment) {
+    document.querySelectorAll('.reply-input-row').forEach(r => r.remove());
+    const bodyWrap = commentItem.querySelector('.comment-body-wrap');
+    const row = document.createElement('div');
+    row.className = 'comment-reply-row reply-input-row';
+    row.style.marginTop = '8px';
+    row.innerHTML = `
+      <img class="comment-av comment-av-sm" src="${USER_AVATAR}" alt="" style="object-fit:contain;background:#101110;border-radius:50%;">
+      <div style="flex:1;display:flex;gap:6px;align-items:center;">
+        <input type="text" class="comment-input-field reply-field" placeholder="Antwort schreiben…" style="flex:1;font-size:12px;padding:7px 12px;" aria-label="Antwort">
+        <button class="comment-send-btn reply-send" type="button" style="width:30px;height:30px;flex-shrink:0;" aria-label="Senden">
+          <svg viewBox="0 0 24 24"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg>
+        </button>
+      </div>`;
+    bodyWrap.appendChild(row);
+    const rf = row.querySelector('.reply-field');
+    rf.focus();
+    function submitReply() {
+      const text = rf.value.trim(); if (!text) return;
+      const reply = { id:'u'+Date.now(), avatar: USER_AVATAR, name: USER_NAME, time:'Jetzt', text, likes:0, liked:false };
+      row.remove();
+      bodyWrap.appendChild(buildReplyEl(reply));
+      // persist reply into user comments
+      if (currentPostId && parentComment) {
+        const arr = loadUserComments(currentPostId);
+        const existing = arr.find(c => c.id === parentComment.id);
+        if (existing) { existing.replies = existing.replies||[]; existing.replies.push(reply); }
+        else { const copy = Object.assign({}, parentComment, {replies:[...(parentComment.replies||[]), reply]}); arr.unshift(copy); }
+        saveUserComments(currentPostId, arr);
+      }
+    }
+    row.querySelector('.reply-send').addEventListener('click', submitReply);
+    rf.addEventListener('keydown', e => { if (e.key==='Enter') submitReply(); });
+  }
+
+  function postComment() {
+    const text = commentInput.value.trim(); if (!text) return;
+    const c = { id:'u'+Date.now(), avatar: USER_AVATAR, name: USER_NAME, time:'Jetzt', text, likes:0, liked:false, replies:[] };
+    commentList.insertBefore(buildCommentEl(c), commentList.firstChild);
+    commentCountEl.textContent = parseInt(commentCountEl.textContent,10)+1;
+    commentInput.value = '';
+    commentList.scrollTop = 0;
+    if (currentPostId) {
+      const arr = loadUserComments(currentPostId);
+      arr.unshift(c);
+      saveUserComments(currentPostId, arr);
+    }
+  }
+
+  // Open/close
+  document.querySelectorAll('.feed-comment-btn').forEach(btn => {
+    btn.addEventListener('click', e => {
+      e.preventDefault();
+      e.stopPropagation();
+      currentPostId = btn.dataset.postId || null;
+      commentCountEl.textContent = btn.dataset.count || 0;
+      sortMode = 'newest';
+      sortBtn.innerHTML = 'Neueste <svg viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg>';
+      renderComments(currentPostId);
+      commentModal.classList.add('is-open');
+      commentModal.setAttribute('aria-hidden', 'false');
+    });
+  });
+
+  document.getElementById('commentBackdrop').addEventListener('click', () => {
+    commentModal.classList.remove('is-open');
+    commentModal.setAttribute('aria-hidden', 'true');
+    document.querySelectorAll('.reply-input-row').forEach(r => r.remove());
+  });
+
+  commentSendBtn.addEventListener('click', postComment);
+  commentInput.addEventListener('keydown', e => { if (e.key==='Enter') postComment(); });
+
+  // Navigate feed cards to detail pages
+  document.querySelectorAll('.feed-card[data-feed-href]').forEach(card => {
+    card.addEventListener('click', e => {
+      if (e.target.closest('button')) return;
+      if (window.smoothNavigate) { window.smoothNavigate(card.dataset.feedHref); return; }
+      window.location.href = card.dataset.feedHref;
+    });
+  });
+
+  // Feed like toggle
+  document.querySelectorAll('.feed-like-btn').forEach(btn => {
+    btn.addEventListener('click', e => {
+      e.preventDefault();
+      e.stopPropagation();
+      const span = btn.querySelector('span');
+      const isLiked = btn.classList.toggle('liked');
+      const baseCount = Number(btn.dataset.count);
+      span.textContent = (isLiked ? baseCount + 1 : baseCount).toLocaleString('de-DE');
+      btn.setAttribute('aria-pressed', String(isLiked));
+    });
+  });
+</script>
+<script src="page-transition.js"></script>
+</body>
+</html>

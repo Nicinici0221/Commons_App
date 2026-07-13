@@ -1,0 +1,3033 @@
+﻿<!doctype html>
+<html lang="de">
+<head>
+  <style>html,body{background:#e2e5df}</style>
+  <script>(function(){try{if(localStorage.getItem("commons_setting_dark-mode")==="true")document.documentElement.classList.add("dark-mode");}catch(e){}})();</script>
+  <link rel="stylesheet" href="dark-mode.css" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#FF7B00" />
+  <link rel="manifest" href="../manifest.json" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-title" content="HfG Erbe" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <link rel="apple-touch-icon" href="../assets/icons/icon-512.png" />
+  <link rel="stylesheet" href="../assets/css/mobile-app.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <title>Community-Karte – Wien Commons</title>
+  <script>
+    (function() {
+      try {
+        const seen = sessionStorage.getItem('cmap_visited');
+        document.documentElement.classList.add(seen ? 'cmap-return' : 'cmap-first');
+        if (!seen) sessionStorage.setItem('cmap_visited', '1');
+      } catch (e) {
+        document.documentElement.classList.add('cmap-first');
+      }
+    })();
+  </script>
+  <script src="page-transition-head.js"></script>
+  <script>
+    if (document.documentElement.classList.contains('cmap-first')) {
+      document.documentElement.classList.remove('wc-route-return');
+    }
+  </script>
+  <link rel="stylesheet" href="page-transitions.css" />
+  <style>
+    @font-face { font-family: "Kurdis"; src: url("Kurdis Family Delivderables/WOFF2/Kurdis-Wide.woff2") format("woff2"), url("Kurdis Family Delivderables/WOFF/Kurdis-Wide.woff") format("woff"), url("Kurdis Family Delivderables/TTF/Kurdis-Wide.ttf") format("truetype"); font-weight: 400; font-style: normal; font-display: swap; }
+    @font-face { font-family: "KurdisRegular"; src: url("Kurdis Family Delivderables/WOFF2/Kurdis-Regular.woff2") format("woff2"), url("Kurdis Family Delivderables/WOFF/Kurdis-Regular.woff") format("woff"), url("Kurdis Family Delivderables/TTF/Kurdis-Regular.ttf") format("truetype"); font-weight: 400; font-style: normal; font-display: swap; }
+    @font-face { font-family: "General Sans"; src: url("GeneralSans_Complete/GeneralSans_Complete/Fonts/WEB/fonts/GeneralSans-Variable.woff2") format("woff2"); font-weight: 100 900; font-style: normal; font-display: swap; }
+    @font-face { font-family: "HelvenaLight"; src: url("helvena-grotesk-modern-bold-brand-identity-font-2026-04-07-06-20-11-utc/Helvena Font File/WOFF2/Helvena-Light.woff2") format("woff2"), url("helvena-grotesk-modern-bold-brand-identity-font-2026-04-07-06-20-11-utc/Helvena Font File/WOFF/Helvena-Light.woff") format("woff"), url("helvena-grotesk-modern-bold-brand-identity-font-2026-04-07-06-20-11-utc/Helvena Font File/TTF/Helvena-Light.ttf") format("truetype"); font-weight: 300; font-style: normal; font-display: swap; }
+
+    :root {
+      --bg: #f7f7f6;
+      --text: #171a16;
+      --green: #34D041;
+    }
+
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; margin: 0; padding: 0; }
+
+    html, body {
+      width: 100%; min-height: 100%;
+      background: #e2e5df;
+      font-family: "General Sans", "SF Pro Display", -apple-system, BlinkMacSystemFont, sans-serif;
+      color: var(--text);
+      -webkit-font-smoothing: antialiased;
+    }
+    body { display: grid; place-items: center; padding: 20px; }
+
+    @keyframes soft-fade { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes float-up { 0% { translate: 0 20px; opacity: 0; } 100% { translate: 0 0; opacity: 1; } }
+    .reveal-up { animation: float-up .72s cubic-bezier(.22,1,.36,1) backwards; }
+    .reveal-soft { animation: soft-fade .25s ease backwards; }
+    .cmap-return .reveal-up { animation: soft-fade .34s ease backwards; animation-delay: 0s !important; }
+    .reveal-delay-1 { animation-delay: .06s; }
+    .reveal-delay-2 { animation-delay: .18s; }
+    .reveal-delay-3 { animation-delay: .30s; }
+    .reveal-delay-4 { animation-delay: .40s; }
+    html.cmap-first .reveal-up { animation: float-up .72s cubic-bezier(.22,1,.36,1) backwards !important; }
+    html.cmap-first .reveal-delay-1 { animation-delay: .06s !important; }
+    html.cmap-first .reveal-delay-2 { animation-delay: .18s !important; }
+    html.cmap-first .reveal-delay-3 { animation-delay: .30s !important; }
+    html.cmap-first .reveal-delay-4 { animation-delay: .40s !important; }
+    @keyframes markerPulse { 0% { transform: scale(1); opacity: .62; } 55% { opacity: .32; } 100% { transform: scale(2.6); opacity: 0; } }
+    @keyframes commonsFlow { to { stroke-dashoffset: -34; } }
+    @keyframes radarBreathe { 50% { transform: translate(-50%,-50%) scale(1.12); opacity: .62; } }
+    @keyframes lo-spin { to { transform: rotate(360deg); } }
+    @keyframes lo-check-pop { from { opacity: 0; transform: scale(.7); } to { opacity: 1; transform: scale(1); } }
+
+    /* Phone */
+    .phone {
+      position: relative;
+      width: min(440px, calc(100vw - 40px));
+      aspect-ratio: 440 / 956;
+      overflow: hidden;
+      background: var(--bg);
+      border-radius: 32px;
+      box-shadow: 0 28px 80px rgba(35,42,36,.18);
+      animation: soft-fade .3s ease both;
+    }
+    .phone::before {
+      content: "";
+      position: absolute;
+      top: 16px; left: 50%;
+      width: 128px; height: 31px;
+      border-radius: 18px;
+      transform: translateX(-50%);
+      background: #0a1020;
+      z-index: 40;
+    }
+
+    /* Status bar */
+    .statusbar { position: absolute; top: 25px; left: 0; right: 0; height: 20px; z-index: 30; pointer-events: none; }
+    .time { position: absolute; left: 45px; top: -1px; color: var(--text); font-size: 17px; font-weight: 600; letter-spacing: -.15px; }
+    .status-icons { position: absolute; right: 43px; top: 0; display: flex; align-items: center; gap: 6px; color: var(--text); }
+    .signal { display: flex; align-items: flex-end; gap: 2px; height: 12px; }
+    .signal span { width: 3px; background: currentColor; border-radius: 2px; }
+    .signal span:nth-child(1) { height: 4px; opacity: .7; }
+    .signal span:nth-child(2) { height: 6px; opacity: .8; }
+    .signal span:nth-child(3) { height: 9px; opacity: .9; }
+    .signal span:nth-child(4) { height: 12px; }
+    .wifi { width: 17px; height: 12px; position: relative; }
+    .wifi::before, .wifi::after { content: ""; position: absolute; left: 50%; border: 2px solid currentColor; border-bottom: 0; border-left-color: transparent; border-right-color: transparent; transform: translateX(-50%); }
+    .wifi::before { top: 1px; width: 16px; height: 8px; border-radius: 16px 16px 0 0; opacity: .9; }
+    .wifi::after { top: 6px; width: 8px; height: 5px; border-radius: 10px 10px 0 0; }
+    .battery { width: 23px; height: 12px; border: 1.7px solid currentColor; border-radius: 4px; position: relative; }
+    .battery::before { content: ""; position: absolute; right: -4px; top: 3px; width: 2px; height: 5px; border-radius: 2px; background: currentColor; }
+    .battery::after { content: ""; position: absolute; inset: 2px 3px 2px 2px; border-radius: 2px; background: currentColor; }
+
+    /* Top bar */
+    .topbar {
+      position: absolute;
+      top: 78px; left: 24px; right: 24px;
+      z-index: 25;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .icon-button {
+      width: 48px; height: 48px;
+      border-radius: 50%;
+      border: 1px solid rgba(23,26,22,.08);
+      background: linear-gradient(180deg, rgba(255,255,255,.92), rgba(240,241,238,.75));
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.85), 0 4px 12px rgba(30,32,30,.06);
+      display: grid; place-items: center;
+      text-decoration: none;
+      cursor: pointer;
+      color: var(--text);
+      transition: transform .16s ease;
+    }
+    .icon-button:active { transform: scale(.96); }
+    .icon-button svg { width: 20px; height: 20px; stroke: currentColor; fill: none; stroke-width: 1.55; stroke-linecap: round; stroke-linejoin: round; }
+    .page-title {
+      font-family: "HelvenaLight", sans-serif;
+      font-size: 36px; font-weight: 300;
+      color: var(--text);
+      letter-spacing: -.7px;
+      line-height: 1.08;
+      transform: scaleY(.93);
+      transform-origin: left top;
+      margin-bottom: 16px;
+    }
+
+    /* Main scroll */
+    .app {
+      position: absolute;
+      top: 144px; left: 0; right: 0; bottom: 0;
+      padding: 0 24px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      overflow: hidden;
+    }
+
+    /* ── MAP CARD ── */
+    .map-card {
+      --source-extra: 64px;
+      --sheet-lift: 0px;
+      --sheet-max-height: 340px;
+      --safeAreaOffset: env(safe-area-inset-bottom, 0px);
+      --cardPaddingBottom: 26px;
+      --buttonMarginBottom: 0px;
+      --contentGap: 10px;
+      --sheetTransitionDuration: .55s;
+      --sheetTransitionEasing: cubic-bezier(.65,0,.35,1);
+      --sheetFadeDuration: .34s;
+      --sheet-bottom-gap: 16px;
+      --sheet-content-pad-top: 15px;
+      --sheet-content-pad-x: 16px;
+      --sheet-content-pad-bottom: calc(var(--cardPaddingBottom) + var(--buttonMarginBottom) + var(--safeAreaOffset));
+      --sheet-button-wrapper-gap: var(--contentGap);
+      --sheet-cta-height: 44px;
+      --sheet-top-clearance: 12px;
+      --home-card-height: 320px;
+      --institution-card-height: 326px;
+      --institution-card-expanded-height: 414px;
+      --expanded-bottom-peek: 0px;
+      position: relative;
+      z-index: 5;
+      flex: 1;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+      background: linear-gradient(180deg, rgba(255,255,255,.94), rgba(247,248,245,.78)), rgba(232,235,230,.85);
+      border: 1px solid rgba(23,26,22,.08);
+      border-radius: 26px;
+      padding: 10px;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.85), 0 8px 24px rgba(30,32,30,.07);
+      transition: margin-bottom var(--sheetTransitionDuration) var(--sheetTransitionEasing), box-shadow .4s ease;
+    }
+    .map-card.expanded { box-shadow: inset 0 1px 0 rgba(255,255,255,.85), 0 14px 36px rgba(30,32,30,.12); }
+    .map-card.source-mode { z-index: 9; }
+    .map {
+      position: relative;
+      width: 100%;
+      flex: 1;
+      min-height: 0;
+      border-radius: 18px;
+      overflow: hidden;
+      background: #dcdcd8;
+      user-select: none;
+      transition: height var(--sheetTransitionDuration) var(--sheetTransitionEasing);
+    }
+    .map.is-fixed-height { aspect-ratio: auto; }
+    #mapboxMap { position: absolute; inset: 0; z-index: 1; }
+    .leaflet-container { background: #dcdcd8; }
+    .leaflet-tile { filter: grayscale(1); }
+    .leaflet-control-attribution { font-size: 8px !important; }
+    .leaflet-attribution-flag { display: none !important; }
+
+    .phone.map-fullscreen .app {
+      top: 0;
+      padding: 0;
+      gap: 0;
+      z-index: 60;
+    }
+    .phone.map-fullscreen .page-title,
+    .phone.map-fullscreen .grid,
+    .phone.map-fullscreen .emergency { display: none; }
+    .phone.map-fullscreen .map-card {
+      position: absolute;
+      inset: 0;
+      margin-bottom: 0 !important;
+      padding: 0;
+      border: 0;
+      border-radius: 0;
+      background: transparent;
+      box-shadow: none;
+    }
+    .phone.map-fullscreen .map,
+    .phone.map-fullscreen .map.is-fixed-height {
+      height: 100% !important;
+      border-radius: 0;
+    }
+    .phone.map-fullscreen .map-card:not(.source-mode) .destination { display: none; }
+      .phone.map-fullscreen .map-card.source-mode .destination {
+        display: block;
+        left: 20px;
+        right: 20px;
+        bottom: var(--sheet-bottom-gap);
+        z-index: 28;
+      }
+      .phone.map-fullscreen .map-card.source-mode .destination:not(:has(.destination-source.home-active)) {
+        min-height: var(--institution-card-height);
+        border-radius: 20px;
+        padding: 0;
+      }
+      .phone.map-fullscreen .map-card.source-mode .destination:has(.destination-source.institution-active) {
+        min-height: var(--institution-card-height);
+      }
+      .phone.map-fullscreen .map-card.source-mode .destination:has(.destination-source.institution-active .message-panel.expanded) {
+        min-height: var(--institution-card-expanded-height);
+      }
+      .phone.map-fullscreen .map-card.source-mode .destination:has(.destination-source.home-active) {
+        min-height: var(--home-card-height);
+        bottom: var(--sheet-bottom-gap);
+        padding: 0;
+      }
+      .phone.map-fullscreen .map-card.home-source.source-mode .destination {
+        min-height: var(--home-card-height);
+        bottom: var(--sheet-bottom-gap);
+        padding: 0;
+      }
+      .phone.map-fullscreen .map-card.source-mode .destination-source {
+        padding: var(--sheet-content-pad-top) var(--sheet-content-pad-x) var(--sheet-content-pad-bottom);
+      }
+      .phone.map-fullscreen .map-card.source-mode .destination-source.home-active {
+        padding: 0;
+      }
+    .phone.map-fullscreen .source-title { font-size: 14.5px; margin-bottom: 4px; padding-right: 28px; }
+    .phone.map-fullscreen .source-copy {
+      max-width: 270px;
+      font-size: 12px;
+      line-height: 1.4;
+      margin-bottom: 10px;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+      .phone.map-fullscreen .donation-goal { margin-top: 12px; }
+      .phone.map-fullscreen .goal-summary { margin-bottom: 3px; }
+      .phone.map-fullscreen .goal-eyebrow { font-size: 11px; margin-bottom: 5px; }
+      .phone.map-fullscreen .goal-value { font-size: 36px; margin-bottom: 5px; }
+      .phone.map-fullscreen .goal-meta-row { margin: 6px 0 12px; }
+      .phone.map-fullscreen .goal-meta-value,
+      .phone.map-fullscreen .goal-meta-label { font-size: 10px; }
+      .phone.map-fullscreen .surplus-summary {
+        font-size: 9.5px;
+        gap: 8px;
+        margin-top: 8px;
+        margin-bottom: 0;
+    }
+    .phone.map-fullscreen .donate-energy-btn { height: var(--sheet-cta-height); }
+    .phone.map-fullscreen .source-close {
+      top: 10px;
+      right: 10px;
+      width: 24px;
+      height: 24px;
+    }
+    .phone.map-fullscreen .source-close svg { width: 9.5px; height: 9.5px; }
+    .phone.map-fullscreen .home-impact-head { padding: 24px 48px 0 15px; gap: 8px; }
+    .phone.map-fullscreen .home-impact-icon { width: 28px; height: 28px; }
+    .phone.map-fullscreen .home-impact-icon svg { width: 15px; height: 15px; }
+    .phone.map-fullscreen .home-impact-title { font-size: 14px; }
+    .phone.map-fullscreen .home-impact-main { padding: 14px 16px 8px; }
+    .phone.map-fullscreen .home-impact-number { font-size: 36px; }
+    .phone.map-fullscreen .home-impact-unit { font-size: 15px; }
+    .phone.map-fullscreen .home-impact-line { margin-top: 2px; font-size: 13.5px; }
+    .phone.map-fullscreen .home-impact-copy {
+      max-width: 250px;
+      margin-top: 8px;
+      font-size: 10.5px;
+      line-height: 1.25;
+    }
+    .phone.map-fullscreen .home-impact-sheet { padding: 11px 14px var(--sheet-content-pad-bottom); }
+    .phone.map-fullscreen .home-impact-section-title { font-size: 11px; margin-bottom: 7px; }
+    .phone.map-fullscreen .home-impact-chips { gap: 6px; }
+    .phone.map-fullscreen .home-impact-chip {
+      min-height: 34px;
+      border-radius: 12px;
+      gap: 5px;
+      padding: 5px 7px;
+    }
+    .phone.map-fullscreen .home-impact-chip-icon { width: 22px; height: 22px; border-radius: 8px; }
+    .phone.map-fullscreen .home-impact-chip-icon svg { width: 13px; height: 13px; }
+    .phone.map-fullscreen .home-impact-chip span { font-size: 9.2px; line-height: 1.08; }
+    .phone.map-fullscreen .home-impact-chip.more { font-size: 10.5px; }
+    .phone.map-fullscreen .home-impact-divider { margin: 8px 0 7px; }
+    .phone.map-fullscreen .home-impact-footer { gap: 6px; }
+    .phone.map-fullscreen .home-impact-status,
+    .phone.map-fullscreen .home-impact-thanks {
+      min-height: 32px;
+      border-radius: 13px;
+      padding: 6px 8px;
+    }
+    .phone.map-fullscreen .home-impact-status .home-impact-chip-icon,
+    .phone.map-fullscreen .home-impact-thanks .home-impact-chip-icon { width: 22px; height: 22px; }
+    .phone.map-fullscreen .home-impact-status-title { font-size: 10px; }
+    .phone.map-fullscreen .home-impact-status-sub { font-size: 8.8px; }
+    .phone.map-fullscreen .home-impact-thanks-text { font-size: 9.8px; }
+    .phone.map-fullscreen .map-hint {
+      top: 58px;
+      min-height: 38px;
+      display: flex;
+      align-items: center;
+      padding: 0 16px;
+    }
+
+    /* Hint pill */
+    .map-hint {
+      position: absolute;
+      top: 12px; left: 50%;
+      transform: translateX(-50%);
+      background: rgba(255,255,255,.32);
+      backdrop-filter: blur(22px) saturate(190%);
+      -webkit-backdrop-filter: blur(22px) saturate(190%);
+      border: 1px solid rgba(255,255,255,.52);
+      border-top-color: rgba(255,255,255,.68);
+      border-bottom-color: rgba(255,255,255,.32);
+      border-radius: 999px;
+      padding: 9px 18px;
+      font-size: 10.5px; font-weight: 600;
+      letter-spacing: 1.1px;
+      color: rgba(34,34,34,.88);
+      box-shadow: 0 10px 24px rgba(0,0,0,.08), 0 2px 8px rgba(255,255,255,.22) inset, 0 -1px 3px rgba(255,255,255,.14) inset;
+      z-index: 5;
+      user-select: none; pointer-events: none;
+      white-space: nowrap;
+      transition: opacity .3s ease, transform .3s ease;
+    }
+    .map-card.source-mode .map-hint { opacity: 0; transform: translate(-50%, -12px); }
+
+    /* Floating close */
+    .map-floating-close {
+      position: absolute;
+      top: 14px; right: 14px;
+      width: 38px; height: 38px;
+      border-radius: 50%;
+      border: 1px solid rgba(255,255,255,.58);
+      background: rgba(255,255,255,.42);
+      color: rgba(23,26,22,.86);
+      backdrop-filter: blur(18px) saturate(180%);
+      -webkit-backdrop-filter: blur(18px) saturate(180%);
+      box-shadow: 0 8px 20px rgba(0,0,0,.09), inset 0 1px 0 rgba(255,255,255,.64);
+      z-index: 20;
+      cursor: pointer;
+      opacity: 0; pointer-events: none;
+      display: flex; align-items: center; justify-content: center;
+      transition: opacity .22s ease, transform .18s ease, background .18s ease;
+    }
+    .map-floating-close svg { width: 11px; height: 11px; stroke-width: 1.8; stroke: currentColor; fill: none; stroke-linecap: round; }
+    .map-floating-close:active { transform: scale(.94); background: rgba(255,255,255,.62); }
+    .map-card.expanded .map-floating-close,
+    .map-card.source-mode .map-floating-close { opacity: 1; pointer-events: auto; }
+
+    .map-tools {
+      position: absolute;
+      top: 14px; left: 14px;
+      z-index: 24;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .phone.map-fullscreen .map-tools { top: 58px; left: 18px; }
+    .phone.map-fullscreen .map-floating-close { top: 58px; right: 18px; }
+    .map-tool-button {
+      width: 38px; height: 38px;
+      border-radius: 50%;
+      border: 1px solid rgba(255,255,255,.58);
+      background: rgba(255,255,255,.42);
+      color: rgba(23,26,22,.86);
+      backdrop-filter: blur(18px) saturate(180%);
+      -webkit-backdrop-filter: blur(18px) saturate(180%);
+      box-shadow: 0 8px 20px rgba(0,0,0,.09), inset 0 1px 0 rgba(255,255,255,.64);
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 0;
+      cursor: pointer;
+      transition: transform .18s ease, background .18s ease, color .18s ease;
+    }
+    .map-tool-button svg {
+      position: absolute;
+      inset: 0;
+      width: 18px;
+      height: 18px;
+      margin: auto;
+      display: block;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 1.8;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    .map-tool-button .home-icon { transform: none; }
+    .map-tool-button:active { transform: scale(.94); }
+    .map-tool-button.is-active {
+      background: linear-gradient(180deg, rgba(214,214,212,.98), rgba(196,196,194,.95));
+      color: #171a16;
+      border-color: rgba(23,26,22,.12);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.6), 0 8px 24px rgba(30,32,30,.10);
+    }
+
+    /* Category filter bar */
+    .map-filter-bar {
+      position: absolute;
+      bottom: 24px; left: 0; right: 0;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+      padding: 0 16px;
+      z-index: 5;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity .25s ease;
+    }
+    .phone.map-fullscreen .map-card:not(.source-mode) .map-filter-bar { opacity: 1; pointer-events: auto; }
+    .map-filter-chip {
+      display: flex; align-items: center; justify-content: center;
+      width: 100%; min-height: 34px;
+      padding: 7px 10px;
+      border-radius: 11px;
+      border: 1px solid rgba(255,255,255,.76);
+      background: linear-gradient(180deg, rgba(255,255,255,.76), rgba(245,246,243,.48));
+      backdrop-filter: blur(16px) saturate(145%);
+      -webkit-backdrop-filter: blur(16px) saturate(145%);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.9), 0 4px 12px rgba(30,32,30,.10);
+      font-family: "General Sans", sans-serif;
+      font-size: 10.8px; font-weight: 600;
+      color: rgba(23,26,22,.74);
+      white-space: nowrap; cursor: pointer;
+      transition: transform .18s ease, border-color .18s ease, box-shadow .18s ease;
+    }
+    .map-filter-chip.active {
+      background: #050605;
+      border-color: #050605;
+      color: #ffffff;
+      transform: translateY(-1px);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.12), 0 6px 16px rgba(0,0,0,.20);
+    }
+
+    /* Home marker */
+    .marker {
+      position: relative;
+      width: 30px; height: 30px;
+      border-radius: 50%;
+      background: #1A1A1A;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 2px 5px rgba(0,0,0,.18);
+      z-index: 7; cursor: pointer; pointer-events: auto;
+    }
+    .marker:focus-visible { outline: 3px solid rgba(52,208,65,.36); outline-offset: 4px; }
+    .marker::after { content: ""; position: absolute; inset: -42px -34px -14px; border-radius: 28px; }
+    .marker::before {
+      content: "Du";
+      position: absolute; left: 50%; top: calc(100% + 6px);
+      transform: translateX(-50%);
+      color: rgba(20,20,20,.9); font-size: 10px; font-weight: 500;
+      line-height: 1; letter-spacing: -.04px; text-align: center;
+      z-index: 8; pointer-events: none; white-space: nowrap;
+      padding: 4px 8px; border-radius: 999px;
+      background: rgba(255,255,255,.30);
+      border: 1px solid rgba(255,255,255,.5);
+      border-top-color: rgba(255,255,255,.68);
+      border-bottom-color: rgba(255,255,255,.28);
+      box-shadow: 0 10px 24px rgba(0,0,0,.09), 0 2px 8px rgba(255,255,255,.22) inset, 0 -1px 3px rgba(255,255,255,.12) inset;
+      backdrop-filter: blur(18px) saturate(185%);
+      -webkit-backdrop-filter: blur(18px) saturate(185%);
+    }
+    .marker-rings { position: absolute; inset: 0; border-radius: 50%; pointer-events: none; z-index: -1; opacity: 0; }
+    .marker-rings span { position: absolute; inset: 0; border-radius: inherit; border: 2.5px solid rgba(26,26,26,.55); background: rgba(26,26,26,.10); transform: scale(1); opacity: 0; }
+    .marker.active .marker-rings { opacity: 1; }
+    .marker.active .marker-rings span { animation: markerPulse 3.8s ease-out infinite; }
+    .marker.active .marker-rings span:nth-child(2) { animation-delay: 1.25s; }
+    .marker.active .marker-rings span:nth-child(3) { animation-delay: 2.5s; }
+    .marker svg { width: 13px; height: 13px; color: #fff; position: relative; z-index: 2; }
+
+    /* Destination card (glass) */
+    .destination {
+      position: absolute;
+      left: 12px; right: 12px; bottom: 12px;
+      z-index: 6;
+      min-height: 68px;
+      background: rgba(255,255,255,.38);
+      backdrop-filter: blur(24px) saturate(180%);
+      -webkit-backdrop-filter: blur(24px) saturate(180%);
+      border: 1px solid rgba(255,255,255,.60);
+      border-top-color: rgba(255,255,255,.76);
+      border-bottom-color: rgba(255,255,255,.32);
+      box-shadow: 0 8px 24px rgba(0,0,0,.10), inset 0 1px 0 rgba(255,255,255,.72);
+      color: #1A1A1A;
+      border-radius: 22px;
+      padding: 10px 13px;
+      overflow: hidden;
+      transition: min-height var(--sheetTransitionDuration) var(--sheetTransitionEasing), border-radius var(--sheetTransitionDuration) var(--sheetTransitionEasing), padding var(--sheetTransitionDuration) var(--sheetTransitionEasing), box-shadow .35s ease;
+    }
+    .map-card.source-mode .destination { min-height: calc(110px + var(--source-extra)); border-radius: 22px; padding: 18px; box-shadow: 0 14px 36px rgba(0,0,0,.12), inset 0 1px 0 rgba(255,255,255,.72); }
+    .map-card.source-mode .destination:has(.destination-source.institution-active) { min-height: calc(178px + var(--source-extra)); }
+    .map-card.source-mode .destination:has(.destination-source.institution-active .message-panel.expanded) { min-height: calc(268px + var(--source-extra)); }
+    .map-card.institution-source.source-mode .destination { min-height: calc(208px + var(--source-extra)); }
+    .map-card.institution-source.source-mode .destination:has(.message-panel.expanded) { min-height: calc(300px + var(--source-extra)); }
+    .map-card.institution-source.source-mode .destination {
+      background: linear-gradient(142deg, rgba(255,255,255,.88) 0%, rgba(239,240,238,.76) 56%, rgba(223,225,222,.86) 100%);
+      border: 1px solid rgba(255,255,255,.78);
+      box-shadow: 0 18px 44px rgba(0,0,0,.13), inset 0 1px 0 rgba(255,255,255,.9);
+    }
+    .phone:not(.map-fullscreen) .map-card.institution-source.source-mode .destination {
+      min-height: min(var(--institution-card-height), var(--sheet-max-height));
+      height: auto;
+      max-height: min(var(--sheet-max-height), calc(100% - var(--sheet-lift, 0px) - var(--sheet-bottom-gap) - var(--sheet-top-clearance)));
+      bottom: calc(var(--sheet-bottom-gap) + var(--sheet-lift, 0px));
+      padding: 0;
+    }
+    .phone:not(.map-fullscreen) .map-card.institution-source.source-mode .destination:has(.message-panel.expanded) {
+      min-height: min(var(--institution-card-expanded-height), var(--sheet-max-height));
+      height: auto;
+      max-height: min(var(--sheet-max-height), calc(100% - var(--sheet-lift, 0px) - var(--sheet-bottom-gap) - var(--sheet-top-clearance)));
+    }
+    .phone:not(.map-fullscreen) .map-card.institution-source.source-mode .destination-source {
+      position: absolute;
+      inset: 0;
+      width: auto;
+      height: 100%;
+      max-height: 100%;
+      padding: var(--sheet-content-pad-top) var(--sheet-content-pad-x) var(--sheet-content-pad-bottom);
+    }
+    .map-card.home-source.source-mode .destination {
+      min-height: var(--home-card-height);
+      bottom: var(--sheet-bottom-gap);
+      border-radius: 22px;
+      padding: 0;
+      background: rgba(255,255,255,.52);
+      box-shadow: 0 18px 44px rgba(0,0,0,.13), inset 0 1px 0 rgba(255,255,255,.86);
+    }
+    .phone:not(.map-fullscreen) .map-card.home-source.source-mode .destination {
+      min-height: var(--home-card-height);
+      bottom: var(--sheet-bottom-gap);
+    }
+    .destination-source:not(.institution-active) .donation-goal { display: none; }
+    .destination-route, .destination-source { transition: opacity var(--sheetFadeDuration) ease, transform var(--sheetTransitionDuration) var(--sheetTransitionEasing); }
+    .destination-route { opacity: 1; transform: translateY(0) scale(1); }
+    .map-card.source-mode .destination-route { opacity: 0; transform: translateY(-10px) scale(.96); pointer-events: none; }
+    .destination .name { font-family: "General Sans", sans-serif; font-size: 16px; font-weight: 600; margin-bottom: 4px; letter-spacing: -.15px; color: #171a16; }
+    .destination .address { font-family: "General Sans", sans-serif; font-size: 12px; font-weight: 400; color: rgba(23,26,22,.72); line-height: 1.4; margin-bottom: 0; }
+    .dest-dots { line-height: 0; }
+    .destination-source {
+      --source-accent: #34D041;
+      position: absolute; inset: 0;
+      opacity: 0; transform: translateY(18px);
+      pointer-events: none;
+      padding: 18px;
+      display: flex; flex-direction: column; justify-content: flex-start;
+    }
+    .map-card.source-mode .destination-source { opacity: 1; transform: translateY(0); pointer-events: auto; }
+    .source-close {
+      position: absolute; top: 12px; right: 12px;
+      width: 28px; height: 28px; padding: 0;
+      border: 1px solid rgba(255,255,255,.58); border-radius: 999px;
+      background: rgba(255,255,255,.42); color: rgba(23,26,22,.86);
+      backdrop-filter: blur(18px) saturate(180%);
+      -webkit-backdrop-filter: blur(18px) saturate(180%);
+      box-shadow: 0 8px 20px rgba(0,0,0,.09), inset 0 1px 0 rgba(255,255,255,.64);
+      display: grid; place-items: center; cursor: pointer;
+      opacity: 0; transform: scale(.88);
+      transition: opacity .25s ease, transform .35s ease, background .25s ease;
+    }
+    .source-close svg { width: 11.5px; height: 11.5px; display: block; stroke-width: 2; stroke: currentColor; fill: none; stroke-linecap: round; }
+    .source-close:active { background: rgba(255,255,255,.62); }
+    .map-card.source-mode .source-close { opacity: 1; transform: scale(1); }
+    .source-title { font-family: "General Sans", sans-serif; font-size: 16px; line-height: 1.15; font-weight: 600; letter-spacing: -.15px; color: #171a16; margin-bottom: 4px; }
+    .source-copy { font-family: "General Sans", sans-serif; margin-top: 0; color: rgba(23,26,22,.72); font-size: 12px; line-height: 1.4; font-weight: 400; letter-spacing: 0; margin-bottom: 16px; white-space: pre-line; }
+    .source-power { display: flex; align-items: baseline; gap: 6px; }
+    .source-number { font-family: "KurdisRegular", "Kurdis", sans-serif; color: #171a16; font-size: 36px; line-height: .92; font-weight: 400; letter-spacing: 0; transform: scaleY(.9); transform-origin: left bottom; display: inline-block; }
+    .source-unit { font-family: "General Sans", sans-serif; color: rgba(23,26,22,.45); font-size: 15px; font-weight: 300; letter-spacing: 0; }
+    .donation-goal { margin-top: 18px; }
+    .goal-summary { margin-bottom: 4px; font-family: "General Sans", sans-serif; }
+    .goal-eyebrow { display: block; margin-bottom: 14px; color: rgba(23,26,22,.68); font-family: "General Sans", sans-serif; font-size: 12.5px; line-height: 1; font-weight: 600; letter-spacing: 1.2px; text-transform: uppercase; }
+    .goal-value { display: inline-block; color: #171a16; font-family: "KurdisRegular", "Kurdis", sans-serif; font-size: 36px; line-height: .92; font-weight: 400; letter-spacing: 0; margin-bottom: 5px; transform: scaleY(.9); transform-origin: left bottom; }
+    .goal-dots-wrap { display: block; width: 100%; }
+    .goal-dots { width: 100%; margin-top: 0; margin-bottom: 8px; line-height: 0; }
+    .goal-dots svg { display: block; width: 100%; overflow: visible; }
+    .goal-meta-row { display: flex; justify-content: space-between; align-items: center; margin: 7px 0 14px; width: 100%; }
+    .goal-meta-inline { display: inline-flex; align-items: baseline; gap: 4px; }
+    .goal-meta-value { font-family: "General Sans", sans-serif; font-size: 10.5px; font-weight: 500; color: rgba(23,26,22,.72); letter-spacing: 0; }
+    .goal-meta-label { font-family: "General Sans", sans-serif; font-size: 10.5px; font-weight: 300; color: rgba(23,26,22,.62); letter-spacing: 0; }
+    .donation-goal-top, .surplus-summary { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 7px; color: rgba(23,26,22,.52); font-family: "General Sans", sans-serif; font-size: 11px; font-weight: 400; letter-spacing: .1px; }
+    .surplus-dots { margin-top: 10px; line-height: 0; }
+    .map-card.source-mode .destination:has(.destination-source.home-active) { min-height: calc(120px + var(--source-extra)); border-radius: 22px; padding: 0; background: rgba(255,255,255,.52); box-shadow: 0 18px 44px rgba(0,0,0,.13), inset 0 1px 0 rgba(255,255,255,.86); }
+    .destination-source.home-active { padding: 0; }
+    .destination-source.home-active > :not(.home-impact-card):not(.source-close) { display: none; }
+    .destination-source.home-active .source-close { display: grid; z-index: 5; }
+    .home-impact-card { display: none; position: absolute; inset: 0; overflow: hidden; border-radius: 22px; background: linear-gradient(142deg, rgba(255,255,255,.88) 0%, rgba(239,240,238,.76) 56%, rgba(223,225,222,.86) 100%); border: 1px solid rgba(255,255,255,.78); box-shadow: inset 0 1px 0 rgba(255,255,255,.9); color: #1A1A1A; }
+    .home-impact-card::-webkit-scrollbar { display: none; }
+    .destination-source.home-active .home-impact-card { display: flex; flex-direction: column; }
+    .home-impact-card::before { content: ""; position: absolute; left: 28%; right: -20%; bottom: 82px; height: 92px; border-radius: 55% 0 0 0; background: linear-gradient(150deg, transparent 16%, rgba(255,255,255,.26) 46%, rgba(180,183,178,.12) 100%); transform: skewY(-9deg); pointer-events: none; }
+    .home-impact-head { position: relative; z-index: 1; display: flex; align-items: center; gap: 9px; padding: 14px 48px 0 16px; }
+    .home-impact-icon { width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; background: rgba(255,255,255,.42); border: 1px solid rgba(255,255,255,.82); box-shadow: inset 0 1px 0 rgba(255,255,255,.8); flex: 0 0 auto; }
+    .home-impact-icon svg { width: 16px; height: 16px; stroke: #1A1A1A; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+    .home-impact-title { font-size: 15px; line-height: 1.08; font-weight: 500; letter-spacing: -.18px; }
+    .home-impact-title strong { font-weight: 800; }
+    .home-impact-heart { margin-left: 4px; color: rgba(23,26,22,.74); font-size: 12px; vertical-align: 1px; }
+    .home-impact-main { position: relative; z-index: 1; padding: 14px 16px 8px; }
+    .home-impact-energy { display: flex; align-items: baseline; gap: 6px; }
+    .home-impact-number { font-family: "KurdisRegular", "Kurdis", sans-serif; font-size: 36px; line-height: .92; font-weight: 400; letter-spacing: 0; transform: scaleY(.9); transform-origin: left bottom; }
+    .home-impact-unit { font-family: "General Sans", sans-serif; font-size: 15px; font-weight: 300; color: rgba(23,26,22,.45); letter-spacing: 0; }
+    .home-impact-line { margin-top: 4px; font-size: 15px; line-height: 1.06; font-weight: 500; letter-spacing: -.16px; }
+    .home-impact-copy { max-width: 230px; margin-top: 9px; color: rgba(23,26,22,.62); font-size: 11.5px; line-height: 1.32; font-weight: 400; letter-spacing: 0; }
+    .home-impact-sheet { position: relative; z-index: 2; margin-top: auto; padding: 12px var(--sheet-content-pad-x) var(--sheet-content-pad-bottom); border-radius: 22px 22px 0 0; background: rgba(255,255,255,.86); box-shadow: 0 -8px 22px rgba(255,255,255,.38), inset 0 1px 0 rgba(255,255,255,.82); }
+    .home-impact-section-title { font-size: 12px; line-height: 1.1; font-weight: 800; letter-spacing: -.12px; margin-bottom: 9px; }
+    .home-impact-chips { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 7px; }
+    .home-impact-chip { min-width: 0; min-height: 40px; border-radius: 14px; background: linear-gradient(180deg, rgba(246,246,245,.88), rgba(235,235,233,.72)); border: 1px solid rgba(23,26,22,.07); box-shadow: inset 0 1px 0 rgba(255,255,255,.72), 0 6px 16px rgba(0,0,0,.04); display: flex; align-items: center; gap: 6px; padding: 6px 8px; color: #1A1A1A; }
+    .home-impact-chip-icon { width: 26px; height: 26px; border-radius: 10px; display: grid; place-items: center; background: rgba(23,26,22,.08); flex: 0 0 auto; }
+    .home-impact-chip-icon svg { width: 15px; height: 15px; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+    .home-impact-chip span { min-width: 0; font-size: 10px; line-height: 1.12; font-weight: 700; letter-spacing: -.08px; }
+    .home-impact-chip.more { justify-content: center; color: rgba(23,26,22,.62); font-size: 12px; font-weight: 700; letter-spacing: -.1px; }
+    .home-impact-divider { height: 1px; background: rgba(23,26,22,.08); margin: 10px 0 8px; }
+    .home-impact-footer { display: grid; grid-template-columns: 1fr; gap: 7px; }
+    .home-impact-status, .home-impact-thanks { min-height: 38px; border-radius: 15px; background: linear-gradient(180deg, rgba(246,246,245,.88), rgba(235,235,233,.72)); border: 1px solid rgba(23,26,22,.06); box-shadow: inset 0 1px 0 rgba(255,255,255,.72); display: flex; align-items: center; gap: 8px; padding: 7px 9px; min-width: 0; }
+    .home-impact-status .home-impact-chip-icon, .home-impact-thanks .home-impact-chip-icon { width: 26px; height: 26px; }
+    .home-impact-status-text { min-width: 0; }
+    .home-impact-status-title { font-size: 11px; font-weight: 800; line-height: 1.14; letter-spacing: -.1px; white-space: nowrap; }
+    .home-impact-status-sub { margin-top: 2px; color: rgba(23,26,22,.62); font-size: 9.5px; line-height: 1.1; white-space: nowrap; }
+    .home-impact-thanks { display: none; justify-content: space-between; }
+    .home-impact-thanks-text { font-size: 10.5px; line-height: 1.12; font-weight: 800; letter-spacing: -.08px; }
+    .home-impact-arrow { width: 8px; height: 8px; border-right: 1.8px solid rgba(23,26,22,.70); border-top: 1.8px solid rgba(23,26,22,.70); transform: rotate(45deg); flex: 0 0 auto; }
+    @media (max-width: 420px) {
+      .home-impact-head { padding: 13px 48px 0 15px; gap: 8px; }
+      .home-impact-title { font-size: 14px; }
+      .home-impact-main { padding: 15px 15px 9px; }
+      .home-impact-number { font-size: 36px; }
+      .home-impact-unit { font-size: 15px; }
+      .home-impact-line { font-size: 14px; }
+      .home-impact-copy { font-size: 11px; }
+      .home-impact-sheet { padding: 12px 15px var(--sheet-content-pad-bottom); }
+    }
+    .phone:not(.map-fullscreen) .map-card.home-source.source-mode .destination {
+      min-height: var(--home-card-height);
+    }
+    .source-content { position: relative; z-index: 1; min-height: 0; }
+    .phone.map-fullscreen .map-card.source-mode .destination-source.institution-active,
+    .phone:not(.map-fullscreen) .map-card.institution-source.source-mode .destination-source.institution-active {
+      padding: 0;
+    }
+    .destination-source.institution-active {
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .destination-source.institution-active::-webkit-scrollbar { display: none; }
+    .destination-source.institution-active .source-content {
+      flex: 1 1 auto;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+      padding: var(--sheet-content-pad-top) var(--sheet-content-pad-x) 0;
+      box-sizing: border-box;
+    }
+    .destination-source.institution-active .source-copy { margin-bottom: 6px; }
+    .institution-action-sheet { display: none; }
+    .destination-source.institution-active .institution-action-sheet {
+      display: flex;
+      flex: 1 1 auto;
+      min-height: 0;
+      flex-direction: column;
+      margin: 8px calc(-1 * var(--sheet-content-pad-x)) 0;
+      padding: 18px var(--sheet-content-pad-x) calc(var(--sheet-content-pad-bottom) - 4px);
+      border-radius: 22px 22px 0 0;
+      background: rgba(255,255,255,.86);
+      box-shadow: 0 -8px 22px rgba(255,255,255,.38), inset 0 1px 0 rgba(255,255,255,.82);
+    }
+    .destination-source.institution-active .donation-goal { margin-top: 0; flex: 0 0 auto; }
+    .destination-source.institution-active .goal-eyebrow { margin-bottom: 8px; }
+    .destination-source.institution-active .goal-meta-row { margin: 5px 0 0; }
+    .destination-source.institution-active .surplus-dots { display: none; }
+    .destination-source.institution-active .surplus-summary { display: none; }
+    .message-panel { margin-top: 10px; display: none; }
+    .destination-source.institution-active .message-panel {
+      display: block;
+      margin-top: auto;
+      padding-top: var(--contentGap);
+    }
+    .destination-source.institution-active .source-power { display: none; }
+    .message-options { display: flex; flex-wrap: nowrap; gap: 6px; width: 100%; max-height: 0; opacity: 0; margin-bottom: 0; overflow: hidden; transition: max-height .4s cubic-bezier(.4,0,.2,1), opacity .25s ease, margin-bottom .4s cubic-bezier(.4,0,.2,1); }
+    .message-panel.expanded .message-options { max-height: 34px; opacity: 1; margin-bottom: 7px; }
+    .message-chip { flex: 1 1 0; min-width: 0; border: 1px solid rgba(23,26,22,.14); background: rgba(23,26,22,.06); color: rgba(23,26,22,.78); border-radius: 999px; padding: 5px 4px; font-size: 9.3px; font-weight: 600; cursor: pointer; white-space: nowrap; text-align: center; }
+    .message-chip:active { transform: scale(.96); }
+    .message-input { display: block; width: 100%; max-height: 0; min-height: 0; opacity: 0; resize: none; border: 1px solid transparent; outline: none; border-radius: 12px; background: rgba(23,26,22,.06); color: #1A1A1A; padding: 0 10px; font: inherit; font-size: 11.5px; line-height: 1.25; overflow: hidden; box-sizing: border-box; transition: max-height .4s cubic-bezier(.4,0,.2,1), min-height .4s cubic-bezier(.4,0,.2,1), opacity .25s ease, padding .4s cubic-bezier(.4,0,.2,1), border-color .4s ease; }
+    .message-panel.expanded .message-input { max-height: 46px; min-height: 38px; margin-bottom: 6px; opacity: 1; padding: 7px 10px; border-color: rgba(23,26,22,.14); }
+    .message-input::placeholder { color: rgba(23,26,22,.36); }
+    .donate-energy-btn { width: 100%; height: var(--sheet-cta-height); flex: 0 0 auto; margin-bottom: var(--buttonMarginBottom); border: none; border-radius: 999px; background: #1A1A1A; color: #fff; font-size: 12.5px; font-weight: 800; letter-spacing: -.12px; cursor: pointer; transition: transform .18s ease, opacity .18s ease; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 8px 18px rgba(23,26,22,.16); }
+    .donate-energy-btn span { color: color-mix(in srgb, var(--source-accent) 88%, white 12%); font-size: 15px; line-height: 1; }
+    .donate-energy-btn:active { transform: scale(.985); opacity: .92; }
+
+    /* Close buttons inside destination */
+    .poi-close { position: absolute; top: 10px; right: 10px; width: 24px; height: 24px; border-radius: 999px; border: 1px solid rgba(255,255,255,.58); background: rgba(255,255,255,.42); color: rgba(23,26,22,.86); backdrop-filter: blur(18px) saturate(180%); -webkit-backdrop-filter: blur(18px) saturate(180%); box-shadow: 0 8px 20px rgba(0,0,0,.09), inset 0 1px 0 rgba(255,255,255,.64); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: transform .2s ease, background .18s ease; }
+    .poi-close svg { width: 10px; height: 10px; stroke-width: 1.8; stroke: currentColor; fill: none; stroke-linecap: round; }
+    .poi-close:hover { transform: scale(1.05); }
+
+    /* Commons flow */
+    .commons-flow-layer { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 3; opacity: 0; transition: opacity .35s ease; }
+    .commons-flow-layer path { fill: none; stroke: rgba(52,208,65,.58); stroke-width: 2.2; stroke-linecap: round; stroke-dasharray: 7 10; animation: commonsFlow 3.4s linear infinite; }
+    .commons-flow-layer .route-muted { stroke: rgba(26,26,26,.20); stroke-width: 1.4; stroke-dasharray: none; animation: none; filter: none; }
+    .map[data-mode="flow"] .commons-flow-layer, .map[data-mode="routes"] .commons-flow-layer, .map[data-mode="priority"] .commons-flow-layer { opacity: 0; }
+    .map[data-mode="routes"] .commons-flow-layer path { stroke: rgba(26,26,26,.34); stroke-dasharray: none; animation: none; filter: none; }
+    .map[data-mode="routes"] .commons-flow-layer .route-muted { stroke: rgba(26,26,26,.16); }
+    .map[data-mode="priority"] .commons-flow-layer path:not(.priority-route) { opacity: .08; animation: none; }
+    .map[data-mode="priority"] .commons-flow-layer .priority-route { stroke: rgba(52,208,65,.72); }
+
+    /* Commons hub */
+    .commons-hub { position: absolute; left: var(--x); top: var(--y); width: 38px; height: 38px; border-radius: 50%; display: grid; place-items: center; color: #111; background: #fff; border: 2px solid rgba(52,208,65,.58); box-shadow: 0 10px 24px rgba(0,0,0,.14); transform: translate(-50%,-50%); pointer-events: none; z-index: 6; }
+    .commons-hub svg { width: 18px; height: 18px; stroke-width: 1.75; }
+    .commons-hub::after { content: attr(data-label); position: absolute; left: 50%; top: calc(100% + 6px); transform: translateX(-50%); padding: 4px 8px; border-radius: 999px; background: rgba(255,255,255,.62); border: 1px solid rgba(255,255,255,.76); color: rgba(26,26,26,.84); font-size: 8.5px; font-weight: 700; line-height: 1; white-space: nowrap; backdrop-filter: blur(14px) saturate(170%); -webkit-backdrop-filter: blur(14px) saturate(170%); box-shadow: 0 6px 14px rgba(0,0,0,.08); }
+
+    /* Radar */
+    .radar-zone { position: absolute; left: var(--x); top: var(--y); width: 112px; height: 112px; border-radius: 50%; transform: translate(-50%,-50%) scale(.6); background: radial-gradient(circle, rgba(52,208,65,.16), rgba(52,208,65,.03) 54%, transparent 70%); opacity: 0; pointer-events: none; z-index: 2; transition: opacity .35s ease, transform .45s ease; }
+    .map[data-mode="radar"] .radar-zone { opacity: 0; transform: translate(-50%,-50%) scale(.6); animation: none; }
+
+    /* POI */
+    .poi { --poi-color: #3A4A5A; position: relative; width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; line-height: 0; color: #fff; background: transparent; box-shadow: 0 8px 18px rgba(0,0,0,.18); transform: scale(1); opacity: 1; pointer-events: auto; cursor: pointer; z-index: 5; transition: opacity .32s ease, transform .32s ease, filter .32s ease, box-shadow .32s ease; }
+    .poi::before { content: ""; position: absolute; inset: 0; border-radius: 50%; background: var(--poi-color); z-index: 1; transition: opacity .32s ease, filter .32s ease, background .32s ease; }
+    .poi:focus-visible { outline: 3px solid color-mix(in srgb, var(--poi-color) 42%, transparent); outline-offset: 5px; }
+    .poi svg { position: relative; z-index: 2; width: 16px; height: 16px; flex-shrink: 0; stroke-width: 1.65; stroke: currentColor; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+    .poi-rings { position: absolute; inset: 0; border-radius: 50%; pointer-events: none; z-index: -1; opacity: 0; }
+    .poi-rings span { position: absolute; inset: 0; border-radius: inherit; border: 2.5px solid color-mix(in srgb, var(--poi-color) 82%, transparent); background: color-mix(in srgb, var(--poi-color) 28%, transparent); transform: scale(1); opacity: 0; }
+    .poi.active .poi-rings { opacity: 1; }
+    .poi.active .poi-rings span { animation: markerPulse 3.8s ease-out infinite; }
+    .poi.active .poi-rings span:nth-child(2) { animation-delay: 1.25s; }
+    .poi.active .poi-rings span:nth-child(3) { animation-delay: 2.5s; }
+    .poi::after { content: attr(data-label); position: absolute; left: 50%; bottom: calc(100% + 6px); transform: translateX(-50%); padding: 4px 8px; border-radius: 999px; background: rgba(255,255,255,.56); border: 1px solid rgba(255,255,255,.72); color: rgba(26,26,26,.78); font-size: 10.5px; font-weight: 600; line-height: 1; white-space: nowrap; backdrop-filter: blur(14px) saturate(170%); -webkit-backdrop-filter: blur(14px) saturate(170%); box-shadow: 0 6px 14px rgba(0,0,0,.08); }
+    .poi.kindergarten { --poi-color: #BD8762; }
+    .poi.school { --poi-color: #2D344D; }
+    .poi.youth { --poi-color: #645573; }
+    .poi.hospital { --poi-color: #4F5B61; }
+    .poi.library { --poi-color: #815D63; }
+    .poi.pool { --poi-color: #2D344D; }
+    .poi.care { --poi-color: #BD8762; }
+    .poi.social { --poi-color: #645573; }
+    .poi.priority-muted {
+      --poi-color: #B8B8B8;
+      box-shadow: 0 6px 14px rgba(0,0,0,.08);
+    }
+    .poi.priority-muted::before {
+      opacity: .62;
+      filter: grayscale(1) saturate(0);
+    }
+    .poi.priority-muted > :not(.poi-rings) {
+      filter: grayscale(1) saturate(0) !important;
+    }
+    .poi.priority-match {
+      transform: scale(1.08);
+      filter: saturate(1.15);
+    }
+
+    .map-attr { position: absolute; bottom: 4px; right: 8px; z-index: 2; font-size: 9px; color: #6b6b6b; font-weight: 500; }
+    .map-attr-left { position: absolute; bottom: 4px; left: 8px; z-index: 2; font-size: 9px; color: #6b6b6b; font-weight: 600; }
+
+    /* ── Institution section ── */
+    .inst-section { display: flex; flex-direction: column; gap: 7px; position: relative; z-index: 1; }
+    .inst-title { font-family: "General Sans", sans-serif; font-size: 13px; font-weight: 600; color: #171a16; letter-spacing: -.08px; }
+    .inst-sub { font-family: "General Sans", sans-serif; font-size: 10px; font-weight: 400; color: rgba(23,26,22,.46); letter-spacing: .1px; margin-top: 2px; }
+
+    /* ── Grid tiles ── */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+    .tile {
+      position: relative;
+      aspect-ratio: 1 / 0.95;
+      border-radius: 16px;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 5px;
+      cursor: pointer;
+      transition: transform .15s ease, background .2s ease, color .2s ease, border-color .2s ease, box-shadow .2s ease;
+      background: linear-gradient(180deg, rgba(255,255,255,.94), rgba(247,248,245,.78)), rgba(232,235,230,.85);
+      border: 1px solid rgba(23,26,22,.10);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.85), 0 3px 10px rgba(30,32,30,.045);
+      color: #171a16;
+    }
+    .tile:active { transform: scale(.95); }
+    .tile.active { background: linear-gradient(180deg, rgba(238,238,237,.92), rgba(224,224,223,.86)); color: #171a16; border-color: rgba(23,26,22,.10); box-shadow: inset 0 1px 0 rgba(255,255,255,.7), 0 4px 12px rgba(30,32,30,.055); }
+    .tile .label { font-size: 10.5px; font-weight: 600; letter-spacing: -.02px; }
+    .tile svg { width: 20px; height: 20px; stroke: currentColor; fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+    .tile-check {
+      position: absolute; top: 8px; right: 8px;
+      width: 18px; height: 18px;
+      border-radius: 50%;
+      border: 1px solid rgba(23,26,22,.08);
+      background: linear-gradient(180deg, rgba(255,255,255,.92), rgba(240,241,238,.75));
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; transition: opacity .2s ease, transform .2s cubic-bezier(.34,1.56,.64,1);
+      transform: scale(.7);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.85), 0 4px 12px rgba(30,32,30,.06);
+    }
+    .tile-check svg { width: 10px; height: 10px; stroke: #050605; fill: none; stroke-linecap: round; stroke-linejoin: round; stroke-width: 2; }
+    .tile.active .tile-check { opacity: 1; transform: scale(1); }
+    .tile-priority { position: absolute; left: 0; right: 0; bottom: 23px; text-align: center; font-size: 8.5px; line-height: 1; font-weight: 400; letter-spacing: .1px; color: rgba(23,26,22,.34); }
+    .tile.active .tile-priority { color: rgba(23,26,22,.52); }
+
+    /* ── Auto Donate card ── */
+    .emergency {
+      background: linear-gradient(180deg, rgba(255,255,255,.94), rgba(247,248,245,.78)), rgba(232,235,230,.85);
+      border: 1px solid rgba(23,26,22,.08);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.85), 0 8px 24px rgba(30,32,30,.07);
+      border-radius: 22px;
+      padding: 16px 18px;
+      display: flex; align-items: center; gap: 14px;
+    }
+    .emergency.auto-donate-on .emergency-icon { color: #1A1A1A; }
+    .emergency-icon { width: 38px; height: 38px; border-radius: 50%; border: 1px solid rgba(23,26,22,.08); background: linear-gradient(180deg, rgba(255,255,255,.92), rgba(240,241,238,.75)); box-shadow: inset 0 1px 0 rgba(255,255,255,.85), 0 4px 12px rgba(30,32,30,.06); display: flex; align-items: center; justify-content: center; color: #1A1A1A; flex-shrink: 0; transition: background .25s ease, color .25s ease; }
+    .emergency-icon svg { width: 19px; height: 19px; stroke: currentColor; fill: none; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+    .emergency-text { flex: 1; }
+    .emergency-text .title { font-size: 14.5px; font-weight: 600; color: #1A1A1A; letter-spacing: -.15px; }
+    .emergency-text .sub { font-size: 11.5px; color: rgba(23,26,22,.52); margin-top: 2px; }
+    .toggle {
+      position: relative;
+      width: 43px;
+      height: 26px;
+      border-radius: 999px;
+      border: 1px solid rgba(24,24,24,.10);
+      background: #050605;
+      box-shadow: inset 0 1px 2px rgba(24,24,24,.08);
+      padding: 0;
+      cursor: pointer;
+      appearance: none;
+      flex: 0 0 auto;
+      transition: background .2s ease, border-color .2s ease;
+    }
+    .toggle::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 2px;
+      transform: translateY(-50%);
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: #050605;
+      box-shadow: 0 1px 3px rgba(0,0,0,.20);
+      transition: transform .2s ease;
+    }
+    .toggle.is-off {
+      background: #ffffff;
+      border-color: rgba(24,24,24,.10);
+      box-shadow: inset 0 1px 2px rgba(24,24,24,.05);
+    }
+    .toggle.is-off::after {
+      background: #050605;
+    }
+    .toggle:not(.is-off) {
+      border-color: #050605;
+    }
+    .toggle:not(.is-off)::after {
+      transform: translate(17px, -50%);
+      background: #ffffff;
+    }
+
+
+    /* Loading overlay */
+    .loading-overlay { position: absolute; inset: 0; z-index: 100; background: rgba(20,20,20,.45); backdrop-filter: blur(22px) saturate(140%); -webkit-backdrop-filter: blur(22px) saturate(140%); display: none; align-items: center; justify-content: center; flex-direction: column; gap: 18px; opacity: 0; transition: opacity .3s ease; }
+    .loading-overlay.show { display: flex; opacity: 1; }
+    .loader {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      border: 4px solid rgba(255,255,255,.28);
+      border-top-color: rgba(255,255,255,.96);
+      animation: lo-spin .82s linear infinite;
+    }
+    .loader span { display: none; }
+    .check { width: 64px; height: 64px; border-radius: 50%; background: #fff; color: #111; display: none; place-items: center; font-size: 34px; font-weight: 900; line-height: 1; }
+    .loading-overlay.done .loader { display: none; }
+    .loading-overlay.done .check { display: grid; animation: lo-check-pop .34s cubic-bezier(.34,1.56,.64,1); }
+    .loading-text { font-size: 14px; font-weight: 800; color: #fff; letter-spacing: -.14px; text-align: center; padding: 0 24px; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .marker.active .marker-rings span, .poi.active .poi-rings span { animation: none; transform: scale(1.75); opacity: .18; }
+    }
+  
+.goal-dots circle.active-dot {
+  fill: #1A1A1A;
+}
+.goal-dots circle.inactive-dot {
+  fill: rgba(26,26,26,.16);
+}
+
+
+/* --- Refinement: tighter progress dots + synchronized message expansion --- */
+.goal-dots {
+  margin-bottom: 7px;
+}
+
+.goal-dots svg {
+  max-width: 188px;
+}
+
+.goal-dots circle {
+  r: 3.6px;
+}
+
+/* Keep the sheet movement and inner expansion on the same timing curve. */
+.map-card,
+.destination,
+.destination-source,
+.institution-action-sheet,
+.message-panel,
+.message-options,
+.message-input {
+  transition-timing-function: var(--sheetTransitionEasing) !important;
+}
+
+.message-panel {
+  will-change: contents;
+}
+
+.destination-source.institution-active .message-panel {
+  margin-top: auto;
+  padding-top: 10px;
+  transition: padding-top var(--sheetTransitionDuration) var(--sheetTransitionEasing);
+}
+
+/* Prevent the CTA area from being pushed in a delayed/staggered way. */
+.message-options,
+.message-input {
+  transition-duration: var(--sheetTransitionDuration) !important;
+}
+
+/* More stable expanded layout: sheet height and message content animate together. */
+.message-panel.expanded .message-options {
+  max-height: 34px;
+  opacity: 1;
+  margin-bottom: 7px;
+}
+
+.message-panel.expanded .message-input {
+  max-height: 46px;
+  min-height: 38px;
+  opacity: 1;
+}
+
+
+/* --- Dense full-width progress dots --- */
+.goal-dots {
+  width: 100%;
+  margin-top: 2px;
+  margin-bottom: 10px;
+}
+
+.goal-dots svg {
+  width: 100%;
+  max-width: 100%;
+  overflow: visible;
+}
+
+.goal-dots circle {
+  transform-origin: center;
+}
+
+/* smoother visual rhythm */
+.goal-dots .inactive-dot {
+  opacity: .22;
+}
+
+.goal-dots .active-dot {
+  opacity: 1;
+}
+
+
+.goal-dots-wrap {
+  width: 100%;
+}
+
+.goal-dots svg {
+  width: 100%;
+  display: block;
+}
+
+/* Reference-style institution sheet, matched to existing app typography. */
+.map-card {
+  --institution-card-height: 354px;
+  --institution-card-expanded-height: 354px;
+}
+.phone:not(.map-fullscreen) .map-card.institution-source.source-mode .destination,
+.phone.map-fullscreen .map-card.source-mode .destination:has(.destination-source.institution-active) {
+  border-radius: 30px;
+  background:
+    radial-gradient(ellipse 90% 78% at 12% 8%, rgba(255,255,255,.88), rgba(255,255,255,0) 60%),
+    linear-gradient(142deg, rgba(255,255,255,.92) 0%, rgba(244,245,242,.82) 56%, rgba(224,226,222,.88) 100%);
+  border: 1px solid rgba(255,255,255,.82);
+  box-shadow: 0 18px 46px rgba(0,0,0,.14), inset 0 1px 0 rgba(255,255,255,.94);
+}
+.destination-source.institution-active .source-content {
+  padding: 22px 16px 14px;
+  gap: 0;
+}
+.map-card.institution-source.source-mode .source-close {
+  top: 16px;
+  right: 16px;
+  width: 40px;
+  height: 40px;
+}
+.institution-head {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding-right: 44px;
+}
+.institution-icon,
+.institution-mini-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(180deg, rgba(255,255,255,.94), rgba(240,241,238,.76));
+  border: 1px solid rgba(23,26,22,.06);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.92), 0 5px 14px rgba(30,32,30,.07);
+  flex: 0 0 auto;
+}
+.institution-icon { color: #171a16; }
+.institution-mini-icon { color: rgba(23,26,22,.52); }
+.institution-icon svg,
+.institution-mini-icon svg {
+  width: 19px;
+  height: 19px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.institution-title-block {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.destination-source.institution-active .source-title {
+  margin: 0;
+  max-width: 220px;
+  font-family: "General Sans", sans-serif;
+  font-size: 16px;
+  line-height: 1.15;
+  font-weight: 600;
+  letter-spacing: -.15px;
+  color: #171a16;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.destination-source.institution-active .source-copy {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  max-width: 220px;
+  color: rgba(23,26,22,.62);
+  font-family: "General Sans", sans-serif;
+  font-size: 12px;
+  line-height: 1.35;
+  font-weight: 400;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.destination-source.institution-active .source-copy::before {
+  content: "♡";
+  color: rgba(23,26,22,.62);
+  font-size: 13px;
+  line-height: 1;
+}
+.institution-info-card {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 1px minmax(0, 1fr);
+  align-items: center;
+  gap: 12px;
+  min-height: 76px;
+  margin-top: 24px;
+  padding: 12px 14px;
+  border-radius: 22px;
+  background: rgba(255,255,255,.58);
+  border: 1px solid rgba(255,255,255,.82);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.92), 0 8px 22px rgba(30,32,30,.06);
+  backdrop-filter: blur(22px) saturate(170%);
+  -webkit-backdrop-filter: blur(22px) saturate(170%);
+}
+.institution-info-item {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.institution-info-copy {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  font-family: "General Sans", sans-serif;
+}
+.institution-info-copy strong {
+  color: #171a16;
+  font-size: 12px;
+  line-height: 1.15;
+  font-weight: 600;
+  letter-spacing: -.08px;
+  white-space: nowrap;
+}
+.institution-info-copy span {
+  color: rgba(23,26,22,.62);
+  font-size: 11px;
+  line-height: 1.2;
+  font-weight: 400;
+}
+.institution-info-copy b { color: #171a16; font-weight: 800; }
+.institution-info-divider {
+  width: 1px;
+  height: 46px;
+  background: rgba(23,26,22,.11);
+}
+.destination-source.institution-active .institution-action-sheet {
+  flex: 0 0 auto;
+  margin: 22px 0 0;
+  padding: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+.destination-source.institution-active .donation-goal {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: start;
+  gap: 10px 12px;
+  margin: 0;
+}
+.destination-source.institution-active .goal-summary {
+  grid-column: 1;
+  grid-row: 1;
+  margin: 0;
+  min-width: 0;
+}
+.destination-source.institution-active .goal-eyebrow {
+  margin-bottom: 7px;
+  color: rgba(23,26,22,.68);
+  font-family: "General Sans", sans-serif;
+  font-size: 12.5px;
+  line-height: 1;
+  font-weight: 600;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+}
+.destination-source.institution-active .goal-value {
+  margin: 0;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 6px;
+  white-space: nowrap;
+  color: #171a16;
+  font-family: "KurdisRegular", "Kurdis", sans-serif;
+  font-size: 36px;
+  line-height: .92;
+  font-weight: 400;
+  letter-spacing: 0;
+  transform: scaleY(.9);
+  transform-origin: left bottom;
+}
+.destination-source.institution-active .goal-number { display: inline-block; }
+.destination-source.institution-active .goal-unit {
+  color: rgba(23,26,22,.64);
+  font-family: "General Sans", sans-serif;
+  font-size: 13px;
+  line-height: 1;
+  font-weight: 500;
+  transform: scaleY(1.1);
+}
+.destination-source.institution-active .goal-dots-wrap { display: contents; }
+.destination-source.institution-active .goal-meta-row {
+  grid-column: 2;
+  grid-row: 1;
+  display: flex;
+  align-items: flex-end;
+  flex-direction: column;
+  gap: 5px;
+  margin: 1px 0 0;
+  width: auto;
+  text-align: right;
+}
+.destination-source.institution-active .goal-collected-meta { display: none; }
+.destination-source.institution-active .goal-meta-value {
+  color: rgba(23,26,22,.72);
+  font-family: "General Sans", sans-serif;
+  font-size: 10.5px;
+  line-height: 1;
+  font-weight: 500;
+  letter-spacing: 0;
+}
+.destination-source.institution-active .goal-meta-label {
+  color: rgba(23,26,22,.62);
+  font-family: "General Sans", sans-serif;
+  font-size: 10.5px;
+  line-height: 1;
+  font-weight: 300;
+}
+.destination-source.institution-active .goal-dots {
+  grid-column: 1 / -1;
+  grid-row: 2;
+  width: 100%;
+  margin: 3px 0 0;
+}
+.destination-source.institution-active .message-panel {
+  display: none;
+}
+
+/* Match institution sheet rhythm to the "Dein Zuhause hilft heute" card. */
+.map-card {
+  --institution-card-height: 340px;
+  --institution-card-expanded-height: 340px;
+}
+.destination-source.institution-active .source-content {
+  padding: 14px 16px 12px;
+}
+.institution-head {
+  gap: 9px;
+  padding-right: 48px;
+}
+.institution-icon,
+.institution-mini-icon {
+  width: 30px;
+  height: 30px;
+}
+.institution-icon svg,
+.institution-mini-icon svg {
+  width: 16px;
+  height: 16px;
+}
+.institution-title-block {
+  gap: 4px;
+}
+.destination-source.institution-active .source-title {
+  max-width: 230px;
+  font-size: 15px;
+  line-height: 1.08;
+  font-weight: 500;
+  letter-spacing: -.18px;
+}
+.destination-source.institution-active .source-title strong {
+  font-weight: 800;
+}
+.destination-source.institution-active .source-copy {
+  max-width: 230px;
+  font-size: 11.5px;
+  line-height: 1.32;
+  font-weight: 400;
+}
+.institution-info-card {
+  min-height: 64px;
+  margin-top: 14px;
+  padding: 10px 12px;
+  border-radius: 22px;
+}
+.institution-info-item {
+  gap: 8px;
+}
+.institution-info-copy {
+  gap: 3px;
+}
+.institution-info-copy strong {
+  font-size: 11px;
+  line-height: 1.14;
+  font-weight: 800;
+  letter-spacing: -.1px;
+}
+.institution-info-copy span {
+  font-size: 9.5px;
+  line-height: 1.1;
+  font-weight: 400;
+}
+.institution-info-divider {
+  height: 38px;
+}
+.destination-source.institution-active .institution-action-sheet {
+  margin: 14px 0 0;
+}
+.destination-source.institution-active .donation-goal {
+  gap: 8px 12px;
+}
+.destination-source.institution-active .goal-eyebrow {
+  margin-bottom: 6px;
+  font-size: 12.5px;
+}
+.destination-source.institution-active .goal-value {
+  font-size: 36px;
+}
+.destination-source.institution-active .goal-unit {
+  font-size: 15px;
+  font-weight: 300;
+  color: rgba(23,26,22,.45);
+}
+.destination-source.institution-active .goal-dots {
+  margin: 2px 0 0;
+}
+
+/* Full-width dots plus stacked compact actions, matched to the home impact card. */
+.map-card {
+  --institution-card-height: 320px;
+  --institution-card-expanded-height: 320px;
+}
+.phone:not(.map-fullscreen) .map-card.institution-source.source-mode .destination,
+.phone.map-fullscreen .map-card.source-mode .destination:has(.destination-source.institution-active) {
+  border-radius: 22px;
+  background: linear-gradient(142deg, rgba(255,255,255,.88) 0%, rgba(239,240,238,.76) 56%, rgba(223,225,222,.86) 100%);
+  border: 1px solid rgba(255,255,255,.78);
+  box-shadow: 0 18px 44px rgba(0,0,0,.13), inset 0 1px 0 rgba(255,255,255,.9);
+}
+.map-card.institution-source.source-mode .source-close {
+  top: 15px;
+  right: 12px;
+  width: 28px;
+  height: 28px;
+  z-index: 5;
+  display: grid;
+}
+.map-card.institution-source.source-mode .source-close svg {
+  width: 11.5px;
+  height: 11.5px;
+  stroke-width: 2;
+}
+.phone.map-fullscreen .map-card.institution-source.source-mode .source-close {
+  top: 10px;
+  right: 10px;
+  width: 24px;
+  height: 24px;
+}
+.phone.map-fullscreen .map-card.institution-source.source-mode .source-close svg {
+  width: 9.5px;
+  height: 9.5px;
+}
+.destination-source.institution-active .source-content {
+  padding: 18px 16px 16px;
+}
+.destination-source.institution-active .source-copy {
+  display: none;
+}
+.institution-info-card {
+  min-height: 58px;
+  margin-top: 18px;
+  padding: 10px 12px;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0;
+}
+.phone:not(.map-fullscreen) .destination-source.institution-active .institution-info-card {
+  grid-template-columns: minmax(0, 1fr);
+}
+.phone:not(.map-fullscreen) .destination-source.institution-active .institution-info-item {
+  gap: 9px;
+}
+.phone:not(.map-fullscreen) .destination-source.institution-active .institution-info-copy strong {
+  white-space: normal;
+  line-height: 1.1;
+}
+.destination-source.institution-active .institution-info-card .institution-mini-icon {
+  width: 28px;
+  height: 28px;
+}
+.destination-source.institution-active .institution-info-card .institution-mini-icon svg {
+  width: 15px;
+  height: 15px;
+}
+.destination-source.institution-active .institution-info-copy strong {
+  font-size: 10.8px;
+}
+.destination-source.institution-active .institution-info-copy span {
+  font-size: 9.4px;
+  line-height: 1.12;
+}
+.destination-source.institution-active .institution-goal-item .institution-info-copy {
+  max-width: none;
+}
+.destination-source.institution-active #sourceGoalText {
+  color: #171a16;
+  font-size: 12px;
+  line-height: 1.12;
+  font-weight: 800;
+}
+.destination-source.institution-active .donation-goal {
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 7px 12px;
+  overflow: visible;
+}
+.destination-source.institution-active .institution-action-sheet {
+  margin-top: 18px;
+}
+.destination-source.institution-active .goal-dots-wrap {
+  grid-column: 1 / -1;
+  grid-row: 2;
+  display: block;
+  width: 100%;
+  min-width: 0;
+}
+.destination-source.institution-active .goal-summary {
+  overflow: visible;
+}
+.destination-source.institution-active .goal-value {
+  overflow: visible;
+  padding: 1px 0 4px;
+  line-height: .94;
+}
+.destination-source.institution-active .goal-number {
+  line-height: 1;
+}
+.destination-source.institution-active .goal-separator {
+  align-self: baseline;
+  width: auto;
+  height: auto;
+  margin: 0 1px;
+  border-radius: 0;
+  background: transparent;
+  color: rgba(23,26,22,.8);
+  font-family: "KurdisRegular", "Kurdis", sans-serif;
+  font-size: 1em;
+  line-height: .94;
+  font-weight: 400;
+  transform: scaleY(.9);
+}
+.destination-source.institution-active .goal-separator::before { content: "/"; }
+.destination-source.institution-active .goal-dots {
+  width: 100%;
+  min-width: 0;
+  margin: 5px 0 0;
+}
+.destination-source.institution-active .goal-dots svg {
+  width: 100%;
+  max-width: none;
+  height: 8px;
+}
+.destination-source.institution-active .goal-dots circle {
+  r: 3.25px;
+}
+.destination-source.institution-active .goal-meta-row {
+  margin: 7px 0 0;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-direction: row;
+  gap: 8px;
+  text-align: left;
+}
+.destination-source.institution-active .goal-collected-meta {
+  display: inline-flex;
+}
+.destination-source.institution-active .goal-meta-value,
+.destination-source.institution-active .goal-meta-label {
+  font-size: 10px;
+}
+.destination-source.institution-active .message-panel {
+  display: grid;
+  grid-template-columns: 1fr;
+  margin-top: 14px;
+  padding-top: 0;
+}
+.destination-source.institution-active .donate-energy-btn {
+  width: 100%;
+  margin: 0;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  font-family: "General Sans", sans-serif;
+  font-size: 11.5px;
+  line-height: 1;
+  font-weight: 800;
+  letter-spacing: -.08px;
+  cursor: pointer;
+}
+.destination-source.institution-active .donate-energy-btn {
+  height: 42px;
+}
+.destination-source.institution-active .donate-energy-btn {
+  border: none;
+  background: #1A1A1A;
+  color: #fff;
+  box-shadow: 0 8px 18px rgba(23,26,22,.16);
+}
+.destination-source.institution-active .donate-energy-btn::before {
+  content: "";
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  flex: 0 0 auto;
+}
+.destination-source.institution-active .donate-energy-btn::before {
+  background: rgba(255,255,255,.92);
+}
+.destination-source.institution-active .donate-energy-btn span {
+  display: none;
+}
+
+.energy-donation-modal {
+  position: absolute;
+  inset: 0;
+  z-index: 75;
+  pointer-events: none;
+  border-radius: 32px;
+  overflow: hidden;
+}
+.energy-donation-modal.is-open { pointer-events: auto; }
+.energy-donation-backdrop {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: rgba(23,26,22,.22);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+  opacity: 0;
+  transition: opacity .28s ease;
+}
+.energy-donation-modal.is-open .energy-donation-backdrop { opacity: 1; }
+.energy-donation-sheet {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+  max-height: 88%;
+  background: #fff;
+  border-radius: 28px 28px 0 0;
+  transform: translateY(100%);
+  transition: transform .36s cubic-bezier(.32,.72,.24,1);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+.energy-donation-modal.is-open .energy-donation-sheet { transform: translateY(0); }
+.ed-handle-row { display: flex; justify-content: center; padding: 12px 0 6px; flex-shrink: 0; }
+.ed-handle { width: 36px; height: 4px; border-radius: 2px; background: rgba(23,26,22,.15); }
+.ed-header {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 4px 20px 4px;
+  flex-shrink: 0;
+}
+.ed-icon-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  cursor: pointer;
+  background: linear-gradient(180deg, rgba(255,255,255,.97), rgba(247,248,245,.92));
+  border: 1px solid rgba(23,26,22,.09);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.9), 0 2px 8px rgba(30,32,30,.06);
+  display: grid;
+  place-items: center;
+}
+.ed-icon-btn svg { width: 16px; height: 16px; stroke: #171a16; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.ed-scroll { overflow-y: auto; scrollbar-width: none; padding: 4px 20px 28px; }
+.ed-scroll::-webkit-scrollbar { display: none; }
+.ed-eyebrow {
+  position: relative;
+  top: -4px;
+  text-align: center;
+  font-family: "General Sans", sans-serif;
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: rgba(23,26,22,.45);
+  margin-bottom: 6px;
+}
+.ed-title {
+  position: relative;
+  top: -4px;
+  text-align: center;
+  font-family: "General Sans", sans-serif;
+  font-size: 21px;
+  font-weight: 400;
+  color: #171a16;
+  letter-spacing: -.3px;
+  line-height: 1.1;
+  margin: 0 0 20px;
+}
+.ed-stepper { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+.ed-step-btn {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 1px solid rgba(23,26,22,.10);
+  background: rgba(23,26,22,.04);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  font-size: 26px;
+  font-weight: 300;
+  color: #171a16;
+  line-height: 0;
+  font-family: "General Sans", sans-serif;
+}
+.ed-step-btn:active { background: rgba(23,26,22,.10); }
+.ed-value {
+  font-family: "KurdisRegular", "Kurdis", sans-serif;
+  font-size: 36px;
+  font-weight: 400;
+  color: #171a16;
+  letter-spacing: 0;
+  line-height: .92;
+  transform: scaleY(.9);
+  transform-origin: center bottom;
+  border: none;
+  background: none;
+  outline: none;
+  width: 120px;
+  text-align: center;
+  padding: 0;
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+.ed-unit { font-family: "General Sans", sans-serif; font-size: 15px; font-weight: 300; color: rgba(23,26,22,.45); margin-left: 4px; }
+.ed-pills {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  scrollbar-width: none;
+  gap: 6px;
+  margin-bottom: 14px;
+  padding-bottom: 2px;
+}
+.ed-pills::-webkit-scrollbar { display: none; }
+.ed-pill {
+  flex: 1 1 0;
+  min-width: 0;
+  padding: 9px 6px;
+  border-radius: 12px;
+  border: 1px solid rgba(23,26,22,.10);
+  background: rgba(23,26,22,.03);
+  font-family: "General Sans", sans-serif;
+  font-size: 10.5px;
+  font-weight: 400;
+  color: rgba(23,26,22,.55);
+  cursor: pointer;
+  text-align: center;
+  white-space: nowrap;
+}
+.ed-pill.active { background: #171a16; color: #fff; border-color: #171a16; }
+.ed-impact,
+.ed-message-card {
+  background: linear-gradient(180deg, rgba(255,255,255,.98), rgba(248,249,246,.85));
+  border: 1px solid rgba(23,26,22,.07);
+  border-radius: 16px;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.9), 0 2px 10px rgba(30,32,30,.05);
+}
+.ed-impact {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 16px;
+  margin-bottom: 8px;
+}
+.ed-impact-title,
+.ed-message-title { font-family: "General Sans", sans-serif; font-size: 13.5px; font-weight: 600; color: #171a16; margin-bottom: 3px; }
+.ed-impact-desc { font-family: "General Sans", sans-serif; font-size: 12px; font-weight: 400; color: rgba(23,26,22,.72); line-height: 1.4; }
+.ed-impact-leaf {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: linear-gradient(180deg, rgba(255,255,255,.80), rgba(255,255,255,.22)), rgba(232,233,232,.74);
+  box-shadow: inset 0 0 0 1px rgba(20,22,20,.06), 0 3px 10px rgba(30,32,30,.06);
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+.ed-impact-leaf svg { width: 17px; height: 17px; stroke: rgba(23,26,22,.52); fill: none; stroke-width: 1.65; stroke-linecap: round; stroke-linejoin: round; }
+.ed-message-card { padding: 12px 14px; margin-bottom: 10px; }
+.ed-message-options { display: flex; gap: 6px; margin: 8px 0 7px; }
+.ed-message-chip {
+  flex: 1 1 0;
+  min-width: 0;
+  border: 1px solid rgba(23,26,22,.10);
+  background: rgba(23,26,22,.03);
+  color: rgba(23,26,22,.62);
+  border-radius: 999px;
+  padding: 7px 5px;
+  font-family: "General Sans", sans-serif;
+  font-size: 12px;
+  line-height: 1.12;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.ed-message-chip.active { background: #171a16; color: #fff; border-color: #171a16; }
+.ed-message-input {
+  display: block;
+  width: 100%;
+  min-height: 46px;
+  resize: none;
+  border: 1px solid rgba(23,26,22,.08);
+  outline: none;
+  border-radius: 13px;
+  background: rgba(23,26,22,.04);
+  color: #171a16;
+  padding: 8px 11px;
+  font-family: "General Sans", sans-serif;
+  font-size: 12px;
+  line-height: 1.32;
+}
+.ed-message-input::placeholder { color: rgba(23,26,22,.36); }
+.ed-cta {
+  width: 100%;
+  padding: 17px 24px;
+  background: #171a16;
+  border: none;
+  border-radius: 999px;
+  font-family: "General Sans", sans-serif;
+  font-size: 15.5px;
+  font-weight: 500;
+  color: #fff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.ed-cta:active { opacity: .85; transform: scale(.98); }
+.ed-legal {
+  text-align: center;
+  font-family: "General Sans", sans-serif;
+  font-size: 11.5px;
+  font-weight: 300;
+  color: rgba(23,26,22,.38);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+.ed-legal svg { width: 11px; height: 11px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; }
+</style>
+</head>
+<body>
+<div class="phone">
+
+  <!-- Status bar -->
+  <div class="statusbar" aria-hidden="true">
+    <div class="time">9:41</div>
+    <div class="status-icons">
+      <div class="signal"><span></span><span></span><span></span><span></span></div>
+      <div class="wifi"></div>
+      <div class="battery"></div>
+    </div>
+  </div>
+
+  <!-- Top bar -->
+  <div class="topbar reveal-up reveal-delay-1">
+    <a href="Community.html" onclick="var f=sessionStorage.getItem('cmap_from');sessionStorage.removeItem('cmap_from');if(f==='homepage'){if(window.smoothNavigate){event.preventDefault();smoothNavigate('Homepage.html');}else{location.href='Homepage.html';}}else{if(window.smoothNavigate){event.preventDefault();smoothNavigate('Community.html');}else{location.href='Community.html';}}" class="icon-button" aria-label="Zurück">
+      <svg viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg>
+    </a>
+    <a href="Homepage.html" class="icon-button" aria-label="Home">
+      <svg viewBox="0 0 24 24"><path d="M6.8 11.5c0-.45.2-.88.55-1.16l3.7-3.02a1.48 1.48 0 0 1 1.9 0l3.7 3.02c.35.28.55.71.55 1.16v5.58a2.02 2.02 0 0 1-2.02 2.02H8.82a2.02 2.02 0 0 1-2.02-2.02Z"/></svg>
+    </a>
+  </div>
+
+  <!-- App scroll area -->
+  <div class="app">
+
+    <h1 class="page-title reveal-up reveal-delay-2">Community-Karte</h1>
+
+    <!-- Map card -->
+    <section class="map-card reveal-up reveal-delay-3">
+      <div class="map" data-mode="sources">
+        <div id="mapboxMap"></div>
+
+        <button class="map-floating-close" id="mapFloatingClose" aria-label="Karte schließen">
+          <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-linecap="round">
+            <path d="M3 3L11 11"/><path d="M11 3L3 11"/>
+          </svg>
+        </button>
+
+        <div class="map-tools" aria-label="Kartenaktionen">
+          <button class="map-tool-button" id="centerHomeBtn" type="button" aria-label="Auf mein Haus zentrieren" title="Auf mein Haus zentrieren">
+            <svg class="home-icon" viewBox="0 0 24 24"><path d="M6.8 11.5c0-.45.2-.88.55-1.16l3.7-3.02a1.48 1.48 0 0 1 1.9 0l3.7 3.02c.35.28.55.71.55 1.16v5.58a2.02 2.02 0 0 1-2.02 2.02H8.82a2.02 2.02 0 0 1-2.02-2.02Z"/></svg>
+          </button>
+          <button class="map-tool-button" id="expandMapBtn" type="button" aria-label="Karte vergrößern" aria-pressed="false" title="Karte vergrößern">
+            <svg viewBox="0 0 24 24"><path d="M8 4H4v4"/><path d="M4 4l6 6"/><path d="M16 4h4v4"/><path d="M20 4l-6 6"/><path d="M8 20H4v-4"/><path d="M4 20l6-6"/><path d="M16 20h4v-4"/><path d="M20 20l-6-6"/></svg>
+          </button>
+        </div>
+
+        <div class="map-hint" id="mapHint">KARTE ANTIPPEN</div>
+
+        <div class="map-filter-bar" id="mapFilterBar" role="group" aria-label="Nach Kategorie filtern">
+          <button class="map-filter-chip" data-filter="sources" type="button" aria-pressed="false">Bildung</button>
+          <button class="map-filter-chip" data-filter="flow" type="button" aria-pressed="false">Gesundheit</button>
+          <button class="map-filter-chip" data-filter="priority" type="button" aria-pressed="false">Soziales</button>
+          <button class="map-filter-chip" data-filter="routes" type="button" aria-pressed="false">Jugend</button>
+          <button class="map-filter-chip" data-filter="radar" type="button" aria-pressed="false">Kultur</button>
+          <button class="map-filter-chip" data-filter="institutions" type="button" aria-pressed="false">Freizeit</button>
+        </div>
+
+        <div class="destination">
+          <div class="destination-route" aria-hidden="false">
+            <div class="name">Direkt senden</div>
+            <div class="address">Wähle eine Einrichtung</div>
+            <div class="dest-dots" id="destDots"></div>
+          </div>
+          <div class="destination-source" aria-hidden="true">
+            <button class="source-close poi-close" id="sourceClose" type="button" aria-label="Schließen">
+              <svg viewBox="0 0 14 14"><path d="M3.3 3.3 10.7 10.7"/><path d="M10.7 3.3 3.3 10.7"/></svg>
+            </button>
+            <div class="home-impact-card" aria-hidden="true">
+              <div class="home-impact-head">
+                <div class="home-impact-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24"><path d="M6.8 11.5c0-.45.2-.88.55-1.16l3.7-3.02a1.48 1.48 0 0 1 1.9 0l3.7 3.02c.35.28.55.71.55 1.16v5.58a2.02 2.02 0 0 1-2.02 2.02H8.82a2.02 2.02 0 0 1-2.02-2.02Z"/></svg>
+                </div>
+                <div class="home-impact-title">Dein Zuhause hilft <strong>heute</strong> <span class="home-impact-heart">&#9829;</span></div>
+              </div>
+              <div class="home-impact-main">
+                <div class="home-impact-energy">
+                  <span class="home-impact-number">3.2</span>
+                  <span class="home-impact-unit">kWh</span>
+                </div>
+                <div class="home-impact-line">werden gerade geteilt</div>
+                <div class="home-impact-copy">Deine Energie unterstützt aktiv Einrichtungen in deiner Umgebung.</div>
+              </div>
+              <div class="home-impact-sheet">
+                <div class="home-impact-section-title">Versorgt gerade:</div>
+                <div class="home-impact-chips">
+                  <div class="home-impact-chip">
+                    <div class="home-impact-chip-icon" aria-hidden="true">
+                      <svg viewBox="0 0 24 24"><path d="M3 9l9-4 9 4-9 4-9-4z"/><path d="M7 11v5c2 2 8 2 10 0v-5"/><path d="M21 9v5"/></svg>
+                    </div>
+                    <span>Uni Wien</span>
+                  </div>
+                  <div class="home-impact-chip">
+                    <div class="home-impact-chip-icon" aria-hidden="true">
+                      <svg viewBox="0 0 24 24"><path d="M4 20h16"/><path d="M6 20V7h12v13"/><path d="M12 10v6"/><path d="M9 13h6"/></svg>
+                    </div>
+                    <span>AKH Wien</span>
+                  </div>
+                  <div class="home-impact-chip">
+                    <div class="home-impact-chip-icon" aria-hidden="true">
+                      <svg viewBox="0 0 24 24"><path d="M6 10h12l-1.2 9H7.2L6 10z"/><path d="M9 10a3 3 0 0 1 6 0"/><path d="M10 14h4"/></svg>
+                    </div>
+                    <span>Sozialmarkt</span>
+                  </div>
+                  <div class="home-impact-chip more">+6 weitere</div>
+                </div>
+              </div>
+            </div>
+            <div class="source-content">
+              <div class="institution-head">
+                <div class="institution-icon" id="sourceIcon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24"><path d="M6 20h12"/><path d="M8 20V8l4-3 4 3v12"/><path d="M10 12h4"/></svg>
+                </div>
+                <div class="institution-title-block">
+                  <div class="source-title" id="sourceTitle">Dein Haus</div>
+              <div class="source-copy" id="sourceCopy">Dein Überschuss fließt in lokale öffentliche Einrichtungen.</div>
+                </div>
+              </div>
+              <div class="institution-info-card" aria-hidden="false">
+                <div class="institution-info-item institution-goal-item">
+                  <div class="institution-mini-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24"><path d="M13 2 4 14h7l-1 8 10-13h-7l0-7Z"/></svg>
+                  </div>
+                  <div class="institution-info-copy">
+                    <strong id="sourceGoalText">Ausgabe bleibt versorgt</strong>
+                  </div>
+                </div>
+              </div>
+              <div class="institution-action-sheet">
+                <div class="donation-goal" id="donationGoal" aria-hidden="true">
+                <div class="goal-summary">
+                  <span class="goal-eyebrow">Energiebedarf heute</span>
+                  <strong class="goal-value" id="goalLabel"><span class="goal-number">0</span><span class="goal-separator" aria-label="von"></span><span class="goal-number">0</span><span class="goal-unit">kWh</span></strong>
+                </div>
+                <div class="goal-dots-wrap">
+                  <div class="goal-dots" id="goalDots"></div>
+                  <div class="goal-meta-row">
+                    <span class="goal-meta-inline goal-collected-meta"><span class="goal-meta-value" id="goalCollected">0 kWh</span> <span class="goal-meta-label">gespendet</span></span>
+                    <span class="goal-meta-inline"><span class="goal-meta-value" id="goalStatus">0 kWh offen</span></span>
+                  </div>
+                </div>
+              </div>
+                <div class="message-panel" id="messagePanel">
+                  <button class="donate-energy-btn" id="donateEnergyBtn" type="button"><span aria-hidden="true">&#9825;</span>Jetzt Energie spenden</button>
+                </div>
+              </div>
+            </div>
+            <div class="source-power">
+              <span class="source-number" id="sourceNumber">3.2</span>
+              <span class="source-unit" id="sourceUnit">kW verfügbar</span>
+            </div>
+            <div class="surplus-summary">
+              <span>Verfügbarer Überschuss</span>
+              <span>3.2 kWh heute</span>
+            </div>
+            <div class="surplus-dots" id="surplusDots"></div>
+          </div>
+        </div>
+
+      </div><!-- /map -->
+    </section>
+
+    <!-- Mode tiles -->
+    <section class="grid reveal-up reveal-delay-4">
+      <div class="tile" role="button" data-mode="sources" aria-label="Energiequellen">
+        <div class="tile-check" aria-hidden="true"><svg viewBox="0 0 10 10"><path d="M2 5.2l2 2L8 3"/></svg></div>
+        <svg viewBox="0 0 32 32"><path d="M6 12l10-5 10 5-10 5-10-5z"/><path d="M10 15v5c3 3 9 3 12 0v-5"/><path d="M26 12v6"/></svg>
+        <div class="label">Bildung</div>
+        <div class="tile-priority">Priorisieren</div>
+      </div>
+      <div class="tile" role="button" data-mode="flow" aria-label="Energiefluss">
+        <div class="tile-check" aria-hidden="true"><svg viewBox="0 0 10 10"><path d="M2 5.2l2 2L8 3"/></svg></div>
+        <svg viewBox="0 0 32 32"><path d="M6 25h20"/><path d="M9 25V9h14v16"/><path d="M16 13v8"/><path d="M12 17h8"/></svg>
+        <div class="label">Gesundheit</div>
+        <div class="tile-priority">Priorisieren</div>
+      </div>
+      <div class="tile" role="button" data-mode="priority" aria-label="Priorisiert">
+        <div class="tile-check" aria-hidden="true"><svg viewBox="0 0 10 10"><path d="M2 5.2l2 2L8 3"/></svg></div>
+        <svg viewBox="0 0 32 32"><path d="M8 13h16l-1.5 12h-13L8 13z"/><path d="M12 13a4 4 0 0 1 8 0"/><path d="M13 19h6"/></svg>
+        <div class="label">Soziales</div>
+        <div class="tile-priority">Priorisieren</div>
+      </div>
+      <div class="tile" role="button" data-mode="routes" aria-label="Routen">
+        <div class="tile-check" aria-hidden="true"><svg viewBox="0 0 10 10"><path d="M2 5.2l2 2L8 3"/></svg></div>
+        <svg viewBox="0 0 32 32"><circle cx="12" cy="11" r="3"/><circle cx="22" cy="11" r="3"/><path d="M7 25v-2c0-4 3-7 6-7s6 3 6 7v2"/><path d="M18 25v-2c0-3.5 2.4-6.5 5-6.5 1.7 0 3.2 1.1 4 2.8"/></svg>
+        <div class="label">Jugend</div>
+        <div class="tile-priority">Priorisieren</div>
+      </div>
+      <div class="tile" role="button" data-mode="radar" aria-label="Radar">
+        <div class="tile-check" aria-hidden="true"><svg viewBox="0 0 10 10"><path d="M2 5.2l2 2L8 3"/></svg></div>
+        <svg viewBox="0 0 32 32"><path d="M9 25V8.5A3.5 3.5 0 0 1 12.5 5H25v20H12.5A3.5 3.5 0 0 0 9 28"/><path d="M13 11h8"/><path d="M13 16h6"/></svg>
+        <div class="label">Kultur</div>
+        <div class="tile-priority">Priorisieren</div>
+      </div>
+      <div class="tile" role="button" data-mode="institutions" aria-label="Einrichtungen">
+        <div class="tile-check" aria-hidden="true"><svg viewBox="0 0 10 10"><path d="M2 5.2l2 2L8 3"/></svg></div>
+        <svg viewBox="0 0 32 32"><path d="M7 23c2 0 2-1.5 4-1.5s2 1.5 4 1.5 2-1.5 4-1.5 2 1.5 4 1.5 2-1.5 4-1.5"/><path d="M7 27c2 0 2-1.5 4-1.5s2 1.5 4 1.5 2-1.5 4-1.5 2 1.5 4 1.5 2-1.5 4-1.5"/><path d="M13 19V9.5A4.5 4.5 0 0 1 17.5 5H21"/><path d="M13 13h8"/></svg>
+        <div class="label">Freizeit</div>
+        <div class="tile-priority">Priorisieren</div>
+      </div>
+    </section>
+
+    <!-- Auto Donate -->
+    <section class="emergency reveal-up reveal-delay-4">
+      <div class="emergency-icon">
+        <svg viewBox="0 0 24 24">
+          <path d="M12 2 L20 5 V12 C20 17 16 21 12 22 C8 21 4 17 4 12 V5 Z"/>
+          <line x1="12" y1="8" x2="12" y2="13"/>
+          <circle cx="12" cy="16" r="0.9" fill="currentColor" stroke="none"/>
+        </svg>
+      </div>
+      <div class="emergency-text">
+        <div class="title">Autopilot</div>
+        <div class="sub" id="donationStatus">Offline-Spenden pausiert</div>
+      </div>
+      <button class="toggle is-off" id="emergencyToggle" type="button" aria-label="Autopilot umschalten" aria-pressed="false"></button>
+    </section>
+
+  </div><!-- /.app -->
+
+  <!-- Energy donation overlay -->
+  <section class="energy-donation-modal" id="energyDonationModal" aria-hidden="true">
+    <div class="energy-donation-backdrop" id="energyDonationBackdrop"></div>
+    <div class="energy-donation-sheet" role="dialog" aria-modal="true" aria-labelledby="energyDonationTitle">
+      <div class="ed-handle-row"><div class="ed-handle"></div></div>
+      <div class="ed-header">
+        <button class="ed-icon-btn" id="energyDonationClose" type="button" aria-label="Schließen">
+          <svg viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg>
+        </button>
+      </div>
+      <div class="ed-scroll">
+        <div class="ed-eyebrow" id="energyDonationEyebrow">Direktspende</div>
+        <h2 class="ed-title" id="energyDonationTitle">Gemeinsam Energie spenden</h2>
+        <div class="ed-stepper">
+          <button class="ed-step-btn" id="energyDonationMinus" type="button">−</button>
+          <div>
+            <input type="text" class="ed-value" id="energyDonationValue" inputmode="decimal" value="1"><span class="ed-unit">kWh</span>
+          </div>
+          <button class="ed-step-btn" id="energyDonationPlus" type="button">+</button>
+        </div>
+        <div class="ed-pills" id="energyDonationPills">
+          <button class="ed-pill" type="button" data-val="0.5">0,5 kWh</button>
+          <button class="ed-pill active" type="button" data-val="1">1 kWh</button>
+          <button class="ed-pill" type="button" data-val="2">2 kWh</button>
+          <button class="ed-pill" type="button" data-val="5">5 kWh</button>
+        </div>
+        <div class="ed-impact">
+          <div>
+            <div class="ed-impact-title">Deine Wirkung</div>
+            <div class="ed-impact-desc" id="energyDonationImpact">1 kWh unterstützt diese Einrichtung heute direkt.</div>
+          </div>
+          <div class="ed-impact-leaf" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg>
+          </div>
+        </div>
+        <div class="ed-message-card">
+          <div class="ed-message-title">Nachricht senden</div>
+          <div class="ed-message-options">
+            <button class="ed-message-chip" type="button" data-message="Für heute">Für heute</button>
+            <button class="ed-message-chip" type="button" data-message="Für den Betrieb">Für den Betrieb</button>
+            <button class="ed-message-chip" type="button" data-message="Danke">Danke</button>
+          </div>
+          <textarea class="ed-message-input" id="donationMessage" rows="2" placeholder="Eigene Nachricht schreiben …"></textarea>
+        </div>
+        <button class="ed-cta" type="button" id="energyDonationCta">
+          <span id="energyDonationCtaText">1 kWh beitragen</span> →
+        </button>
+        <div class="ed-legal">
+          <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          Sicher &amp; transparent
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Loading overlay -->
+  <div class="loading-overlay" id="loadingOverlay">
+    <div class="loader" aria-hidden="true">
+      <span></span><span></span><span></span><span></span><span></span><span></span>
+      <span></span><span></span><span></span><span></span><span></span><span></span>
+      <span></span><span></span><span></span><span></span><span></span><span></span>
+    </div>
+    <div class="check">✓</div>
+    <div class="loading-text" id="loadingText">Buche Spende…</div>
+  </div>
+
+</div><!-- /.phone -->
+
+<script>
+  function tap() { if (navigator.vibrate) navigator.vibrate(8); }
+  const GOAL_DOT_COUNT = 28;
+  const SURPLUS_DOT_COUNT = 24;
+
+  function buildDots(container, fraction, total, animate) {
+    if (!container) return;
+    container.innerHTML = '';
+    if (!total) return;
+    const r = 3.25, minGap = 2.6, d = r * 2;
+    const compactW = total * d + (total - 1) * minGap;
+    const measuredW = Math.floor(container.getBoundingClientRect().width || container.clientWidth || 0);
+    const W = Math.max(compactW, measuredW || compactW);
+    const H = d + 1.2;
+    const step = total > 1 ? (W - d) / (total - 1) : 0;
+    const NS = 'http://www.w3.org/2000/svg';
+    const svg = document.createElementNS(NS, 'svg');
+    svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+    svg.setAttribute('width', '100%');
+    svg.setAttribute('height', String(Math.round(H)));
+    svg.style.display = 'block';
+    const filled = Math.round(total * Math.min(1, Math.max(0, fraction)));
+    const animatedCircles = [];
+    for (let i = 0; i < total; i++) {
+      const cx = r + i * step;
+      const c = document.createElementNS(NS, 'circle');
+      c.setAttribute('cx', cx); c.setAttribute('cy', H / 2); c.setAttribute('r', r);
+      if (i < filled) {
+        c.setAttribute('fill', 'rgba(23,26,22,.78)');
+      } else {
+        c.setAttribute('fill', 'rgba(23,26,22,.14)');
+      }
+      if (animate) {
+        c.style.opacity = '0';
+        c.style.transition = 'opacity 0.22s ease';
+        animatedCircles.push(c);
+      }
+      svg.appendChild(c);
+    }
+    container.appendChild(svg);
+    if (animate) animatedCircles.forEach((c, i) => setTimeout(() => { c.style.opacity = '1'; }, 80 + i * 42));
+  }
+
+  const modeCopy = {
+    sources: 'PRIORITÄT: BILDUNG',
+    flow: 'PRIORITÄT: GESUNDHEIT',
+    priority: 'PRIORITÄT: SOZIALES',
+    routes: 'PRIORITÄT: JUGEND',
+    radar: 'PRIORITÄT: KULTUR',
+    institutions: 'PRIORITÄT: FREIZEIT'
+  };
+  const priorityLabelByMode = {
+    sources: 'BILDUNG',
+    flow: 'GESUNDHEIT',
+    priority: 'SOZIALES',
+    routes: 'JUGEND',
+    radar: 'KULTUR',
+    institutions: 'FREIZEIT'
+  };
+  const priorityTypesByMode = {
+    sources: ['kindergarten', 'school'],
+    flow: ['hospital', 'care'],
+    priority: ['social'],
+    routes: ['youth'],
+    radar: ['library'],
+    institutions: ['pool']
+  };
+
+  const homeLatLng = [48.21, 16.34];
+  const homeZoom = 13;
+  const overviewZoom = 11;
+  const mapViewStateKey = 'wc_community_map_view';
+  let restoredMapView = null;
+  try {
+    const navigation = performance.getEntriesByType?.('navigation')?.[0];
+    const isHistoryReturn = sessionStorage.getItem('wc_restore_on_back') === '1' || navigation?.type === 'back_forward';
+    const savedMapView = isHistoryReturn ? JSON.parse(sessionStorage.getItem(mapViewStateKey) || 'null') : null;
+    if (savedMapView && Array.isArray(savedMapView.center) && Number.isFinite(savedMapView.zoom)) {
+      restoredMapView = savedMapView;
+    }
+  } catch (e) {}
+  const phone = document.querySelector('.phone');
+  const mapCard = document.querySelector('.map-card');
+  const mapEl = document.querySelector('.map');
+  const grid = document.querySelector('.grid');
+  const emergency = document.querySelector('.emergency');
+  const hint = document.getElementById('mapHint');
+  const destination = document.querySelector('.destination');
+  const sourceClose = document.getElementById('sourceClose');
+  const mapFloatingClose = document.getElementById('mapFloatingClose');
+  const centerHomeBtn = document.getElementById('centerHomeBtn');
+  const expandMapBtn = document.getElementById('expandMapBtn');
+  const sourceTitle = document.getElementById('sourceTitle');
+  const sourceCopy = document.getElementById('sourceCopy');
+  const sourceGoalText = document.getElementById('sourceGoalText');
+  const sourceNumber = document.getElementById('sourceNumber');
+  const sourceUnit = document.getElementById('sourceUnit');
+  const donationGoal = document.getElementById('donationGoal');
+  const goalLabel = document.getElementById('goalLabel');
+  const goalStatus = document.getElementById('goalStatus');
+  const goalCollected = document.getElementById('goalCollected');
+  const goalDotsEl = document.getElementById('goalDots');
+  const surplusDotsEl = document.getElementById('surplusDots');
+  const messagePanel = document.getElementById('messagePanel');
+  const donationMessage = document.getElementById('donationMessage');
+  const donateEnergyBtn = document.getElementById('donateEnergyBtn');
+  const energyDonationModal = document.getElementById('energyDonationModal');
+  const energyDonationBackdrop = document.getElementById('energyDonationBackdrop');
+  const energyDonationClose = document.getElementById('energyDonationClose');
+  const energyDonationMinus = document.getElementById('energyDonationMinus');
+  const energyDonationPlus = document.getElementById('energyDonationPlus');
+  const energyDonationValue = document.getElementById('energyDonationValue');
+  const energyDonationPills = document.querySelectorAll('.ed-pill');
+  const energyDonationCta = document.getElementById('energyDonationCta');
+  const energyDonationCtaText = document.getElementById('energyDonationCtaText');
+  const energyDonationImpact = document.getElementById('energyDonationImpact');
+  const energyDonationTitle = document.getElementById('energyDonationTitle');
+  const energyDonationEyebrow = document.getElementById('energyDonationEyebrow');
+  const energyDonationMessageChips = document.querySelectorAll('.ed-message-chip');
+  const destinationRoute = document.querySelector('.destination-route');
+  const destinationSource = document.querySelector('.destination-source');
+  const homeImpactCard = document.querySelector('.home-impact-card');
+  const emergencyToggle = document.getElementById('emergencyToggle');
+  const donationStatus = document.getElementById('donationStatus');
+  const emergencyCard = document.querySelector('.emergency');
+
+  let isExpanded = false;
+  let isAnimating = false;
+  let activePlace = null;
+  let selectedDonationKwh = 1;
+  let selectedPriorityModes = new Set();
+  let lastSelectedMode = null;
+  let homeMarker = null;
+  let poiMarkers = [];
+  let map;
+
+  /* ── Tiles ── */
+  const priorityTiles = document.querySelectorAll('.tile');
+  function applyPriorityFilter() {
+    const selectedTypes = new Set();
+    selectedPriorityModes.forEach(mode => (priorityTypesByMode[mode] || []).forEach(type => selectedTypes.add(type)));
+    const hasFilter = selectedTypes.size > 0;
+    priorityTiles.forEach(tile => {
+      const active = selectedPriorityModes.has(tile.dataset.mode);
+      tile.classList.toggle('active', active);
+      tile.setAttribute('aria-pressed', active ? 'true' : 'false');
+    });
+    poiMarkers.forEach(poi => {
+      const type = placeTypeFromKey(poi.dataset.info);
+      const match = hasFilter && selectedTypes.has(type);
+      poi.classList.toggle('priority-match', match);
+      poi.classList.toggle('priority-muted', hasFilter && !match);
+    });
+    if (hasFilter) {
+      const displayMode = (lastSelectedMode && selectedPriorityModes.has(lastSelectedMode)) ? lastSelectedMode : [...selectedPriorityModes][0];
+      hint.textContent = `PRIORITÄT: ${priorityLabelByMode[displayMode] || displayMode}`;
+      mapEl?.setAttribute('data-priorities', [...selectedPriorityModes].join(' '));
+    } else {
+      hint.textContent = 'EINRICHTUNG WÄHLEN';
+      mapEl?.removeAttribute('data-priorities');
+    }
+    mapEl?.setAttribute('data-mode', 'priority-filter');
+    document.querySelectorAll('.map-filter-chip').forEach(c => {
+      const active = selectedPriorityModes.has(c.dataset.filter);
+      c.classList.toggle('active', active);
+      c.setAttribute('aria-pressed', active ? 'true' : 'false');
+    });
+  }
+
+  priorityTiles.forEach(tile => {
+    if (tile.classList.contains('active') && tile.dataset.mode) selectedPriorityModes.add(tile.dataset.mode);
+    tile.addEventListener('click', () => {
+      tap();
+      const mode = tile.dataset.mode;
+      if (!mode) return;
+      if (selectedPriorityModes.has(mode)) selectedPriorityModes.delete(mode);
+      else { selectedPriorityModes.add(mode); lastSelectedMode = mode; }
+      applyPriorityFilter();
+    });
+  });
+
+  document.querySelectorAll('.map-filter-chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      tap();
+      const mode = chip.dataset.filter;
+      if (!mode) return;
+      if (selectedPriorityModes.has(mode)) selectedPriorityModes.delete(mode);
+      else { selectedPriorityModes.add(mode); lastSelectedMode = mode; }
+      applyPriorityFilter();
+    });
+  });
+
+  /* ── Auto Donate ── */
+  function syncAutoDonate() {
+    const active = emergencyToggle?.getAttribute('aria-pressed') === 'true';
+    emergencyToggle?.classList.toggle('is-off', !active);
+    emergencyCard?.classList.toggle('auto-donate-on', active);
+    if (donationStatus) donationStatus.textContent = active ? 'Überschuss wird auch offline gespendet' : 'Offline-Spenden pausiert';
+  }
+  /* init from onboarding / Einstellungen */
+  if (emergencyToggle) {
+    const saved = localStorage.getItem('commons_setting_autopilot') === 'true';
+    emergencyToggle.setAttribute('aria-pressed', String(saved));
+  }
+  emergencyToggle?.addEventListener('click', () => {
+    tap();
+    const active = emergencyToggle.getAttribute('aria-pressed') === 'true';
+    emergencyToggle.setAttribute('aria-pressed', String(!active));
+    localStorage.setItem('commons_setting_autopilot', String(!active));
+    syncAutoDonate();
+  });
+  syncAutoDonate();
+
+  /* ── Layout helpers ── */
+  function getAppGap() {
+    const app = document.querySelector('.app');
+    const gap = app ? parseFloat(getComputedStyle(app).gap) : 12;
+    return Number.isFinite(gap) ? gap : 12;
+  }
+  function getExpandedBottomPeek() {
+    const value = mapCard ? parseFloat(getComputedStyle(mapCard).getPropertyValue('--expanded-bottom-peek')) : 0;
+    return Number.isFinite(value) ? value : 0;
+  }
+  function getExpandedCoverHeight() {
+    const cover = (grid ? grid.offsetHeight : 0) + getAppGap();
+    return Math.max(0, cover - getExpandedBottomPeek());
+  }
+  function getSourceExtraHeight(placeKey = activePlace) {
+    const emergencyH = emergency ? emergency.offsetHeight : 64;
+    const homeExtra = placeKey === 'home' ? 200 : 0;
+    const institutionExtra = placeKey && placeKey !== 'home' ? 72 : 0;
+    const extra = Math.max(0, emergencyH + getAppGap() + 18 + homeExtra + institutionExtra);
+    mapCard.style.setProperty('--source-extra', extra + 'px');
+    return extra;
+  }
+  function getLayoutSourceExtra(placeKey = activePlace) {
+    getSourceExtraHeight(placeKey);
+    if (placeKey) return (emergency ? emergency.offsetHeight : 64) + getAppGap();
+    return 0;
+  }
+  function syncBottomSheetBounds() {
+    if (!mapCard || !mapEl || !phone) return;
+    const shouldLift = mapCard.classList.contains('source-mode') && !phone.classList.contains('map-fullscreen');
+    if (!shouldLift) {
+      mapCard.style.setProperty('--sheet-lift', '0px');
+      mapCard.style.setProperty('--sheet-max-height', '340px');
+      return;
+    }
+    const mapRect = mapEl.getBoundingClientRect();
+    const phoneRect = phone.getBoundingClientRect();
+    const visibleBottom = phoneRect.bottom - 16;
+    const lift = Math.max(0, Math.ceil(mapRect.bottom - visibleBottom - 12));
+    const sheetStyles = getComputedStyle(mapCard);
+    const sheetBottomGap = parseFloat(sheetStyles.getPropertyValue('--sheet-bottom-gap')) || 16;
+    const sheetTopClearance = parseFloat(sheetStyles.getPropertyValue('--sheet-top-clearance')) || 12;
+    mapCard.style.setProperty('--sheet-lift', `${lift}px`);
+    const maxHeight = Math.max(220, Math.floor(mapRect.height - lift - sheetBottomGap - sheetTopClearance));
+    mapCard.style.setProperty('--sheet-max-height', `${maxHeight}px`);
+  }
+  function scheduleBottomSheetBounds(delay = 0) {
+    const run = () => requestAnimationFrame(syncBottomSheetBounds);
+    if (delay) setTimeout(run, delay);
+    else run();
+  }
+  /* ── Place data ── */
+  const hintByType = {
+    kindergarten: 'KITA ANTIPPEN ZUM SCHLIESSEN',
+    school: 'SCHULE ANTIPPEN ZUM SCHLIESSEN',
+    youth: 'JUGENDZENTRUM ANTIPPEN ZUM SCHLIESSEN',
+    hospital: 'KLINIK ANTIPPEN ZUM SCHLIESSEN',
+    library: 'BÜCHEREI ANTIPPEN ZUM SCHLIESSEN',
+    pool: 'SCHWIMMBAD ANTIPPEN ZUM SCHLIESSEN',
+    care: 'PFLEGEHAUS ANTIPPEN ZUM SCHLIESSEN',
+    social: 'SOZIALMARKT ANTIPPEN ZUM SCHLIESSEN'
+  };
+
+  function remainingGoalText(now, total) {
+    const remaining = Math.max(0, +(total - now).toFixed(1));
+    return remaining === 0 ? 'Ziel erreicht' : `${remaining} kWh bis zum Ziel`;
+  }
+  const sourceAccentByType = {
+    home: '#34D041',
+    kindergarten: '#FF4FA8',
+    school: '#E2A72C',
+    youth: '#FF7E66',
+    hospital: '#5BBBEA',
+    library: '#9C7AE3',
+    pool: '#35B9D6',
+    care: '#7ED8B1',
+    social: '#F1A257'
+  };
+  function placeTypeFromKey(placeKey = 'home') {
+    const prefix = String(placeKey).split('_')[0];
+    return sourceAccentByType[prefix] ? prefix : 'home';
+  }
+  const sourceSubtitleByType = {
+    kindergarten: 'Sichere Betreuung bis 17 Uhr',
+    school: 'Lernräume bleiben versorgt',
+    youth: 'Offener Treff bleibt aktiv',
+    hospital: 'Versorgung läuft stabil',
+    library: 'Lernplätze bleiben hell',
+    pool: 'Betrieb bleibt stabil',
+    care: 'Gemeinschaft bleibt warm',
+    social: 'Ausgabe bleibt versorgt'
+  };
+  const donationTitleByType = {
+    kindergarten: 'Gemeinsam für Betreuung spenden',
+    school: 'Gemeinsam für Lernräume spenden',
+    youth: 'Gemeinsam für den Treff spenden',
+    hospital: 'Gemeinsam für Versorgung spenden',
+    library: 'Gemeinsam für Lernplätze spenden',
+    pool: 'Gemeinsam fürs Bad spenden',
+    care: 'Gemeinsam für Wärme spenden',
+    social: 'Gemeinsam für Ausgabe spenden'
+  };
+  const donationMessagesByType = {
+    kindergarten: ['Betreuung', 'Wärme', 'Heute'],
+    school: ['Lernen', 'Geräte', 'Heute'],
+    youth: ['Treff', 'Freizeit', 'Support'],
+    hospital: ['Akut', 'Nacht', 'Reserve'],
+    library: ['Lernen', 'Lesen', 'Kids'],
+    pool: ['Wasser', 'Umkleide', 'Betrieb'],
+    care: ['Gemeinschaft', 'Wärme', 'Pflege'],
+    social: ['Ausgabe', 'Kühlung', 'Licht']
+  };
+  function compactRemainingGoalText(now, total) {
+    const remaining = Math.max(0, +(total - now).toFixed(1));
+    return remaining === 0 ? 'Ziel erreicht' : `Noch ${remaining} kWh`;
+  }
+  function formatKwhValue(value) {
+    return Number(value).toLocaleString('en-US', { maximumFractionDigits: 1 });
+  }
+  function formatDonationKwh(value) {
+    return Number(value).toLocaleString('de-DE', { maximumFractionDigits: 1 });
+  }
+  function formatGoalLabel(now, total) {
+    return `<span class="goal-number">${formatKwhValue(now)}</span><span class="goal-separator" aria-label="von"></span><span class="goal-number">${formatKwhValue(total)}</span><span class="goal-unit">kWh</span>`;
+  }
+
+  function resetDonationComposer() {
+    selectedDonationKwh = 1;
+    energyDonationModal?.classList.remove('is-open');
+    energyDonationModal?.setAttribute('aria-hidden', 'true');
+    if (donationMessage) donationMessage.value = '';
+    if (donateEnergyBtn) donateEnergyBtn.textContent = 'Jetzt Energie spenden';
+    energyDonationMessageChips.forEach(chip => chip.classList.remove('active'));
+    updateEnergyDonation(1);
+  }
+
+  function donationImpactText(value) {
+    const title = activePlace && placeInfo[activePlace]?.title ? placeInfo[activePlace].title : 'diese Einrichtung';
+    return `${formatDonationKwh(value)} kWh unterstützen ${title} heute direkt.`;
+  }
+
+  function updateEnergyDonation(value) {
+    selectedDonationKwh = Math.max(0.1, Number(value) || 1);
+    const label = formatDonationKwh(selectedDonationKwh);
+    if (energyDonationValue) energyDonationValue.value = label;
+    if (energyDonationCtaText) energyDonationCtaText.textContent = `${label} kWh beitragen`;
+    if (energyDonationImpact) energyDonationImpact.textContent = donationImpactText(selectedDonationKwh);
+    energyDonationPills.forEach(pill => pill.classList.toggle('active', Number(pill.dataset.val) === selectedDonationKwh));
+  }
+
+  function openEnergyDonationOverlay() {
+    const sourceType = placeTypeFromKey(activePlace);
+    updateEnergyDonation(selectedDonationKwh || 1);
+    if (energyDonationEyebrow && activePlace && placeInfo[activePlace]) energyDonationEyebrow.textContent = placeInfo[activePlace].title;
+    if (energyDonationTitle) energyDonationTitle.textContent = donationTitleByType[sourceType] || 'Gemeinsam Energie spenden';
+    const messages = donationMessagesByType[sourceType] || ['Für heute', 'Für den Betrieb', 'Danke'];
+    energyDonationMessageChips.forEach((chip, index) => {
+      const message = messages[index] || messages[0];
+      chip.textContent = message;
+      chip.dataset.message = message;
+      chip.classList.remove('active');
+    });
+    if (donationMessage) donationMessage.value = '';
+    energyDonationModal?.classList.add('is-open');
+    energyDonationModal?.setAttribute('aria-hidden', 'false');
+  }
+
+  function closeEnergyDonationOverlay() {
+    energyDonationModal?.classList.remove('is-open');
+    energyDonationModal?.setAttribute('aria-hidden', 'true');
+  }
+
+  function institution(title, copy, goalNow, goalTotal, hintOpen) {
+    return {
+      title,
+      copy,
+      number: '',
+      unit: 'kW direkt senden',
+      isInstitution: true,
+      goalNow,
+      goalTotal,
+      goalText: remainingGoalText(goalNow, goalTotal),
+      hintOpen,
+      hintClosed: 'EINRICHTUNG ANTIPPEN'
+    };
+  }
+
+  const placeInfo = {
+    home: { title: 'Dein Haus', copy: 'Wähle eine Einrichtung, um Energie direkt dorthin zu senden.', number: '3.2', unit: 'kW verfügbar', isInstitution: false, surplusNow: 3.2, surplusTotal: 5.0, goalNow: 0, goalTotal: 0, goalText: '', hintOpen: 'HAUS ANTIPPEN ZUM SCHLIESSEN', hintClosed: 'EINRICHTUNG WÄHLEN' },
+    kindergarten_citygate: institution('Evangelischer Kindergarten Citygate', '21., Seyringerstraße 3/4. Ziel: Gruppenräume und Küche im Norden Wiens stabil versorgen.', 6.7, 10, hintByType.kindergarten),
+    kindergarten_seestadt: institution('Kindergarten Hannah-Arendt-Platz', '22., Hannah-Arendt-Platz 8. Ziel: Betreuung und Essensausgabe in der Seestadt absichern.', 7.9, 12, hintByType.kindergarten),
+    kindergarten_gersthof: institution('Kindergarten Gersthofer Straße', '18., Gersthofer Straße 125-127. Ziel: Betreuung und warme Gruppenräume im Nordwesten versorgen.', 6.1, 9, hintByType.kindergarten),
+    kindergarten_liesing: institution('Kindergarten Alma-Seidler-Weg', '23., Alma-Seidler-Weg 2. Ziel: Nachmittagsbetreuung im Süden Wiens absichern.', 5.8, 9, hintByType.kindergarten),
+    school_tu_wien: institution('Technische Universität Wien', '4., Karlsplatz 13. Ziel: Arbeitsräume und Laborumfeld mit lokalem Strom unterstützen.', 10.4, 16, hintByType.school),
+    school_wu_wien: institution('Wirtschaftsuniversität Wien', '2., Welthandelsplatz 1. Ziel: Campusbereiche und Lernplätze am Nachmittag puffern.', 11.2, 17, hintByType.school),
+    school_fichtnergasse: institution('G 13 Fichtnergasse 15', '13., Fichtnergasse 15. Ziel: Klassenräume und Nachmittagsbetrieb im Westen Wiens versorgen.', 8.9, 13, hintByType.school),
+    school_astgasse: institution('GRg 14 Astgasse 3', '14., Astgasse 3. Ziel: Lernräume und digitale Ausstattung in Penzing unterstützen.', 9.4, 14, hintByType.school),
+    school_anton_boeck: institution('pGRg 21 Anton-Böck-Gasse 37', '21., Anton-Böck-Gasse 37. Ziel: Schulbetrieb im Norden Wiens mit lokalem Strom puffern.', 10.1, 15, hintByType.school),
+    school_draschestrasse: institution('GRg 23 Draschestraße 90-92', '23., Draschestraße 90-92. Ziel: Klassenräume und Nachmittagsangebote im Süden absichern.', 8.2, 13, hintByType.school),
+    youth_skatehalle: institution('Skatehalle Wien', '21., Vohburggasse 2. Ziel: Jugend- und Sportangebot im Norden Wiens zuverlässig versorgen.', 5.8, 9, hintByType.youth),
+    youth_base20: institution('BasE 20', '20., Engerthstraße 78-80. Ziel: Indoor-Jugendangebot und Treffpunktbetrieb unterstützen.', 4.9, 8, hintByType.youth),
+    youth_sea: institution('Jugendzentrum SEA', '22., Barbara-Prammer-Allee 16. Ziel: Jugendzentrum in der Seestadt mit lokaler Energie stützen.', 6.4, 10, hintByType.youth),
+    youth_penzing: institution('Jugendtreff Penzing', '14., Linzerstraße 45/3. Ziel: Treffpunkt, Beratung und Freizeitangebot im Westen versorgen.', 4.7, 8, hintByType.youth),
+    hospital_akh: institution('Universitätsklinikum AKH Wien', '9., Währinger Gürtel 18-20. Ziel: lokale Notfallreserve für besonders kritische Infrastruktur.', 22.4, 30, hintByType.hospital),
+    hospital_favoriten: institution('Klinik Favoriten', '10., Kundratstraße 3. Ziel: Unterstützung für Akutbereiche und Nachtbetrieb.', 18.6, 25, hintByType.hospital),
+    hospital_donaustadt: institution('Klinik Donaustadt', '22., Langobardenstraße 122. Ziel: Versorgungstrakte im Osten Wiens stabil unterstützen.', 17.2, 24, hintByType.hospital),
+    hospital_hietzing: institution('Klinik Hietzing', '13., Riedelgasse 5. Ziel: lokale Reserve für Pflege- und Klinikbereiche im Westen Wiens.', 15.1, 22, hintByType.hospital),
+    pool_stadionbad: institution('Stadionbad', '2., Einfahrt Meiereistraße. Ziel: Pumpen, Umkleiden und Wassertechnik mit lokalem Strom unterstützen.', 8.4, 13, hintByType.pool),
+    pool_doebling: institution('Kombibad Döbling', '19., Geweygasse 6. Ziel: Hallenbadbetrieb und Wassertechnik im Norden Wiens stabil versorgen.', 7.2, 11, hintByType.pool),
+    pool_laaerberg: institution('Laaerbergbad', '10., Ludwig-von-Höhnel-Gasse 2. Ziel: Freibadbetrieb und Infrastruktur im Süden Wiens puffern.', 9.1, 14, hintByType.pool),
+    library_hietzing: institution('Bücherei Hietzing', '13., Preyergasse 1-7. Ziel: Lesebereich, Medienausleihe und Lernplätze im Westen sichern.', 4.1, 7, hintByType.library),
+    library_donaustadt: institution('Bücherei Donaustadt', '22., Bernoullistraße 1. Ziel: Lernplätze und Medienausleihe im Osten Wiens unterstützen.', 4.8, 8, hintByType.library),
+    library_liesing: institution('Bücherei Liesing', '23., Breitenfurter Straße 358. Ziel: Lesebereich und Kinderprogramm im Süden Wiens versorgen.', 3.9, 7, hintByType.library),
+    social_ottakring: institution('Sozialmarkt Ottakring', '16., Wilhelminenstraße 22. Ziel: Beleuchtung, Kühlung und Kassa während der Ausgabe stützen.', 4.8, 8, hintByType.social),
+    social_vinzinmarkt: institution('VinziMarkt Simmering', '11., Hauffgasse 4A. Ziel: Ausgabezeiten, Kühlung und Licht im Südosten Wiens absichern.', 5.2, 8, hintByType.social),
+    social_donaustadt: institution('Sozialmarkt Donaustadt', '22., Ullreichgasse 13. Ziel: Kühlung, Kassa und Ausgabezeiten im Sozialmarkt stützen.', 5.6, 9, hintByType.social),
+    social_samariterbund: institution('Samariterbund Sozialmarkt', '15., Pillergasse 20. Ziel: Versorgung und Ausgabe im Westen Wiens unterstützen.', 4.6, 7, hintByType.social)
+  };
+
+  /* ── Source card content ── */
+  function updateSourceContent(placeKey = 'home') {
+    const info = placeInfo[placeKey] || placeInfo.home;
+    const isInstitution = !!info.isInstitution;
+    const isHome = placeKey === 'home' && !isInstitution;
+    const sourceType = placeTypeFromKey(placeKey);
+    if (sourceTitle) sourceTitle.textContent = info.title;
+    const institutionGoal = sourceSubtitleByType[sourceType] || 'Ziel bleibt versorgt';
+    if (sourceCopy) sourceCopy.textContent = isInstitution ? institutionGoal : info.copy.replace('. Ziel:', '.\nZiel:');
+    if (sourceGoalText) sourceGoalText.textContent = institutionGoal;
+    if (sourceNumber) sourceNumber.textContent = info.number;
+    if (sourceUnit) sourceUnit.textContent = info.unit;
+    destinationSource?.style.setProperty('--source-accent', sourceAccentByType[sourceType] || sourceAccentByType.home);
+    mapCard?.classList.toggle('home-source', isHome);
+    mapCard?.classList.toggle('institution-source', isInstitution);
+    destinationSource?.classList.toggle('institution-active', isInstitution);
+    destinationSource?.classList.toggle('home-active', isHome);
+    homeImpactCard?.setAttribute('aria-hidden', isHome ? 'false' : 'true');
+    if (donationGoal) donationGoal.setAttribute('aria-hidden', isInstitution ? 'false' : 'true');
+    resetDonationComposer();
+    if (isInstitution) {
+      const fraction = info.goalTotal ? info.goalNow / info.goalTotal : 0;
+      const remaining = Math.max(0, +(info.goalTotal - info.goalNow).toFixed(1));
+      if (goalLabel) goalLabel.innerHTML = formatGoalLabel(info.goalNow, info.goalTotal);
+      if (goalCollected) goalCollected.textContent = `${formatKwhValue(info.goalNow)} kWh`;
+      if (goalStatus) goalStatus.textContent = remaining === 0 ? 'Ziel erreicht' : `${formatKwhValue(remaining)} kWh offen`;
+      buildDots(goalDotsEl, fraction, GOAL_DOT_COUNT, true);
+      buildDots(surplusDotsEl, 0, 0, false);
+    } else {
+      buildDots(goalDotsEl, 0, 0, false);
+      buildDots(surplusDotsEl, info.surplusNow / info.surplusTotal, SURPLUS_DOT_COUNT, true);
+    }
+  }
+
+  function syncActiveMarkers() {
+    const srcMode = mapCard.classList.contains('source-mode');
+    homeMarker?.classList.toggle('active', activePlace === 'home' && srcMode);
+    homeMarker?.setAttribute('aria-pressed', (activePlace === 'home' && srcMode) ? 'true' : 'false');
+    poiMarkers.forEach(poi => {
+      const active = poi.dataset.info === activePlace && srcMode;
+      poi.classList.toggle('active', active);
+      poi.setAttribute('aria-pressed', active ? 'true' : 'false');
+    });
+  }
+
+  function applySourceContent(active, placeKey = activePlace || 'home') {
+    mapCard.classList.toggle('source-mode', active);
+    if (active) {
+      activePlace = placeKey;
+      updateSourceContent(placeKey);
+    } else {
+      activePlace = null;
+      mapCard?.classList.remove('home-source', 'institution-source');
+      destinationSource?.classList.remove('institution-active', 'home-active');
+      homeImpactCard?.setAttribute('aria-hidden', 'true');
+      resetDonationComposer();
+    }
+    destinationRoute?.setAttribute('aria-hidden', active ? 'true' : 'false');
+    destinationSource?.setAttribute('aria-hidden', active ? 'false' : 'true');
+    syncActiveMarkers();
+    if (phone?.classList.contains('map-fullscreen')) {
+      mapEl.style.paddingBottom = active ? '190px' : '';
+      requestAnimationFrame(() => map?.invalidateSize());
+    }
+    scheduleBottomSheetBounds();
+    if (active) scheduleBottomSheetBounds(620);
+  }
+
+  function setSourceCard(active, adjustMap = true, placeKey = activePlace || 'home') {
+    const isSourceActive = mapCard.classList.contains('source-mode');
+    if (isSourceActive === active) {
+      if (active && adjustMap && isExpanded && activePlace !== placeKey) {
+        const currentH = mapEl.offsetHeight;
+        const currentExtra = activePlace ? getLayoutSourceExtra(activePlace) : 0;
+        const nextExtra = getLayoutSourceExtra(placeKey);
+        const delta = nextExtra - currentExtra;
+        if (delta !== 0) {
+          const coverH = getExpandedCoverHeight();
+          mapEl.classList.add('is-fixed-height');
+          mapEl.style.height = currentH + 'px';
+          void mapEl.offsetHeight;
+          requestAnimationFrame(() => {
+            applySourceContent(active, placeKey);
+            mapEl.style.height = Math.max(0, currentH + delta) + 'px';
+            mapCard.style.marginBottom = `-${coverH + nextExtra}px`;
+            map?.invalidateSize();
+            scheduleBottomSheetBounds();
+          });
+          return;
+        }
+      }
+      getSourceExtraHeight(placeKey);
+      applySourceContent(active, placeKey);
+      return;
+    }
+    if (!isExpanded || !adjustMap) { applySourceContent(active, placeKey); return; }
+    const currentH = mapEl.offsetHeight;
+    const sourceExtra = getLayoutSourceExtra(placeKey);
+    const coverH = getExpandedCoverHeight();
+    const nextH = active ? currentH + sourceExtra : Math.max(0, currentH - sourceExtra);
+    mapEl.classList.add('is-fixed-height');
+    mapEl.style.height = currentH + 'px';
+    void mapEl.offsetHeight;
+    requestAnimationFrame(() => {
+      applySourceContent(active, placeKey);
+      mapEl.style.height = nextH + 'px';
+      mapCard.style.marginBottom = `-${coverH + (active ? sourceExtra : 0)}px`;
+      map?.invalidateSize();
+      scheduleBottomSheetBounds();
+    });
+  }
+
+  function closeSourceCard() {
+    const closingPlace = activePlace;
+    setSourceCard(false);
+    const info = closingPlace ? placeInfo[closingPlace] : null;
+    hint.textContent = isExpanded ? (info?.hintClosed || 'MARKER ANTIPPEN') : 'KARTE ANTIPPEN';
+  }
+
+  function toggleMap(e) {
+    if (phone?.classList.contains('map-fullscreen')) return;
+    if (destination?.contains(e?.target)) return;
+    if (isAnimating) return;
+    isAnimating = true; tap();
+    if (!isExpanded) {
+      const currentH = mapEl.offsetHeight;
+      const coverH = getExpandedCoverHeight();
+      const targetH = currentH + coverH;
+      mapEl.style.height = currentH + 'px';
+      mapEl.classList.add('is-fixed-height');
+      mapCard.style.marginBottom = `-${coverH}px`;
+      requestAnimationFrame(() => { mapEl.style.height = targetH + 'px'; map?.invalidateSize(); });
+      mapCard.classList.add('expanded');
+      setSourceCard(false, false);
+      hint.textContent = 'EINRICHTUNG WÄHLEN';
+      setTimeout(() => { isAnimating = false; }, 600);
+      isExpanded = true;
+    } else {
+      const expandedH = mapEl.offsetHeight;
+      mapEl.classList.remove('is-fixed-height');
+      mapEl.style.height = '';
+      const naturalH = mapEl.offsetHeight;
+      mapEl.classList.add('is-fixed-height');
+      mapEl.style.height = expandedH + 'px';
+      void mapEl.offsetHeight;
+      requestAnimationFrame(() => { mapEl.style.height = naturalH + 'px'; mapCard.style.marginBottom = '0px'; map?.invalidateSize(); });
+      mapCard.classList.remove('expanded');
+      setSourceCard(false, false);
+      hint.textContent = 'KARTE ANTIPPEN';
+      setTimeout(() => { mapEl.classList.remove('is-fixed-height'); mapEl.style.height = ''; mapCard.style.marginBottom = ''; isAnimating = false; }, 600);
+      isExpanded = false;
+    }
+  }
+
+  function openSourceFromMarker(e) {
+    e.preventDefault(); e.stopPropagation();
+    if (isAnimating) return;
+    tap();
+    if (activePlace === 'home' && mapCard.classList.contains('source-mode')) { closeSourceCard(); return; }
+    homeMarker.classList.add('active');
+    homeMarker.setAttribute('aria-pressed', 'true');
+    if (!isExpanded) {
+      isAnimating = true;
+      const currentH = mapEl.offsetHeight;
+      const coverH = getExpandedCoverHeight();
+      const sourceExtra = getLayoutSourceExtra('home');
+      const targetH = currentH + coverH + sourceExtra;
+      mapEl.style.height = currentH + 'px';
+      mapEl.classList.add('is-fixed-height');
+      mapCard.style.marginBottom = `-${coverH + sourceExtra}px`;
+      requestAnimationFrame(() => { mapCard.classList.add('expanded'); applySourceContent(true, 'home'); mapEl.style.height = targetH + 'px'; map?.invalidateSize(); });
+      hint.textContent = placeInfo.home.hintOpen;
+      isExpanded = true;
+      setTimeout(() => { isAnimating = false; }, 600);
+      return;
+    }
+    setSourceCard(true, true, 'home');
+    hint.textContent = placeInfo.home.hintOpen;
+  }
+
+  function openInfoFromPoi(e) {
+    e.preventDefault(); e.stopPropagation();
+    if (isAnimating) return;
+    const poi = e.currentTarget;
+    const placeKey = poi?.dataset?.info;
+    if (!placeKey || !placeInfo[placeKey]) return;
+    tap();
+    const def = poiDefs.find(p => p.info === placeKey);
+    if (activePlace === placeKey && mapCard.classList.contains('source-mode')) { closeSourceCard(); return; }
+
+    function panToMarker() {
+      if (!def || !map) return;
+      requestAnimationFrame(() => {
+        const zoom = map.getZoom();
+        const pt = map.project(def.latLng, zoom);
+        const shifted = map.unproject(L.point(pt.x, pt.y - 25), zoom);
+        map.panTo(shifted, { animate: true, duration: 0.5 });
+      });
+    }
+
+    if (!isExpanded) {
+      isAnimating = true;
+      const currentH = mapEl.offsetHeight;
+      const coverH = getExpandedCoverHeight();
+      const sourceExtra = getLayoutSourceExtra(placeKey);
+      const targetH = currentH + coverH + sourceExtra;
+      mapEl.style.height = currentH + 'px';
+      mapEl.classList.add('is-fixed-height');
+      mapCard.style.marginBottom = `-${coverH + sourceExtra}px`;
+      requestAnimationFrame(() => { mapCard.classList.add('expanded'); applySourceContent(true, placeKey); mapEl.style.height = targetH + 'px'; map?.invalidateSize(); });
+      hint.textContent = placeInfo[placeKey].hintOpen;
+      isExpanded = true;
+      setTimeout(() => { isAnimating = false; panToMarker(); }, 650);
+      return;
+    }
+    setSourceCard(true, true, placeKey);
+    hint.textContent = placeInfo[placeKey].hintOpen;
+    panToMarker();
+  }
+
+  sourceClose?.addEventListener('click', e => { e.preventDefault(); e.stopPropagation(); tap(); closeSourceCard(); });
+
+  function resetExpandedMapLayout() {
+    setSourceCard(false, false);
+    homeMarker?.classList.remove('active');
+    homeMarker?.setAttribute('aria-pressed', 'false');
+    document.querySelectorAll('.poi.active').forEach(p => { p.classList.remove('active'); p.setAttribute('aria-pressed', 'false'); });
+    mapCard.classList.remove('expanded');
+    mapEl.classList.remove('is-fixed-height');
+    mapEl.style.height = '';
+    mapEl.style.paddingBottom = '';
+    mapCard.style.marginBottom = '';
+    mapCard.style.setProperty('--sheet-lift', '0px');
+    isExpanded = false;
+    isAnimating = false;
+    hint.textContent = 'KARTE ANTIPPEN';
+  }
+
+  function centerHomeOnMap() {
+    tap();
+    map?.flyTo(homeLatLng, homeZoom, { animate: true, duration: .65 });
+    hint.textContent = 'DEIN ZUHAUSE';
+  }
+
+  function setMapFullscreen(active) {
+    tap();
+    if (active) resetExpandedMapLayout();
+    if (!active && mapCard.classList.contains('source-mode')) {
+      setSourceCard(false, false);
+    }
+    phone?.classList.toggle('map-fullscreen', active);
+    expandMapBtn?.classList.toggle('is-active', active);
+    expandMapBtn?.setAttribute('aria-pressed', active ? 'true' : 'false');
+    expandMapBtn?.setAttribute('aria-label', active ? 'Karte verkleinern' : 'Karte vergrößern');
+    expandMapBtn?.setAttribute('title', active ? 'Karte verkleinern' : 'Karte vergrößern');
+    hint.textContent = active ? 'WIEN-ÜBERBLICK' : 'KARTE ANTIPPEN';
+    mapEl.style.paddingBottom = '';
+    mapCard.style.setProperty('--sheet-lift', '0px');
+    requestAnimationFrame(() => {
+      map?.invalidateSize();
+      if (active) map?.setView(homeLatLng, overviewZoom, { animate: false });
+    });
+    setTimeout(() => map?.invalidateSize(), 360);
+  }
+
+  centerHomeBtn?.addEventListener('click', e => {
+    e.preventDefault(); e.stopPropagation();
+    centerHomeOnMap();
+  });
+
+  expandMapBtn?.addEventListener('click', e => {
+    e.preventDefault(); e.stopPropagation();
+    setMapFullscreen(!phone?.classList.contains('map-fullscreen'));
+  });
+
+  mapFloatingClose?.addEventListener('click', e => {
+    e.preventDefault(); e.stopPropagation();
+    if (phone?.classList.contains('map-fullscreen')) setMapFullscreen(false);
+    homeMarker?.classList.remove('active');
+    homeMarker?.setAttribute('aria-pressed', 'false');
+    document.querySelectorAll('.poi.active').forEach(p => { p.classList.remove('active'); p.setAttribute('aria-pressed', 'false'); });
+    if (isExpanded) toggleMap(new Event('click'));
+    setSourceCard(false, false);
+    hint.textContent = 'KARTE ANTIPPEN';
+  });
+
+  donateEnergyBtn?.addEventListener('click', e => {
+    e.preventDefault(); e.stopPropagation(); tap();
+    if (!activePlace || activePlace === 'home') return;
+    openEnergyDonationOverlay();
+  });
+
+  energyDonationClose?.addEventListener('click', e => {
+    e.preventDefault(); e.stopPropagation(); tap();
+    closeEnergyDonationOverlay();
+  });
+  energyDonationBackdrop?.addEventListener('click', e => {
+    e.preventDefault(); e.stopPropagation();
+    closeEnergyDonationOverlay();
+  });
+
+  const donationSteps = [0.5, 1, 2, 5];
+  energyDonationMinus?.addEventListener('click', e => {
+    e.preventDefault(); e.stopPropagation(); tap();
+    const below = donationSteps.filter(step => step < selectedDonationKwh);
+    if (below.length) updateEnergyDonation(below[below.length - 1]);
+  });
+  energyDonationPlus?.addEventListener('click', e => {
+    e.preventDefault(); e.stopPropagation(); tap();
+    const above = donationSteps.filter(step => step > selectedDonationKwh);
+    if (above.length) updateEnergyDonation(above[0]);
+  });
+  energyDonationPills.forEach(pill => {
+    pill.addEventListener('click', e => {
+      e.preventDefault(); e.stopPropagation(); tap();
+      updateEnergyDonation(Number(pill.dataset.val) || 1);
+    });
+  });
+  energyDonationMessageChips.forEach(chip => {
+    chip.addEventListener('click', e => {
+      e.preventDefault(); e.stopPropagation(); tap();
+      if (donationMessage) donationMessage.value = chip.dataset.message || chip.textContent.trim();
+      energyDonationMessageChips.forEach(item => item.classList.toggle('active', item === chip));
+    });
+  });
+  energyDonationValue?.addEventListener('focus', () => {
+    energyDonationValue.value = String(selectedDonationKwh).replace('.', ',');
+    energyDonationValue.select();
+  });
+  energyDonationValue?.addEventListener('input', () => {
+    const raw = Number(String(energyDonationValue.value).replace(',', '.').replace(/[^\d.]/g, ''));
+    if (!Number.isNaN(raw) && raw > 0) updateEnergyDonation(Math.min(raw, 99));
+  });
+  energyDonationValue?.addEventListener('blur', () => updateEnergyDonation(selectedDonationKwh));
+  energyDonationValue?.addEventListener('keydown', e => {
+    if (e.key === 'Enter') energyDonationValue.blur();
+  });
+
+  function submitEnergyDonation() {
+    if (!activePlace || activePlace === 'home') return;
+    const info = placeInfo[activePlace];
+    if (!info) return;
+    const overlay = document.getElementById('loadingOverlay');
+    const loadingText = document.getElementById('loadingText');
+    const msg = donationMessage?.value?.trim() || '';
+    const donationKwh = Math.max(0.1, Number(selectedDonationKwh) || 1);
+    const donationLabel = `${formatDonationKwh(donationKwh)} kWh`;
+    closeEnergyDonationOverlay();
+    overlay?.classList.remove('done');
+    if (loadingText) loadingText.textContent = msg ? `Sende Gruß & buche ${donationLabel}…` : `Buche ${donationLabel}…`;
+    overlay?.classList.add('show');
+    setTimeout(() => {
+      overlay?.classList.add('done');
+      if (loadingText) loadingText.textContent = msg ? 'Gruß gesendet & Spende gebucht' : 'Spende gebucht';
+      info.goalNow = Math.min(info.goalTotal, +(info.goalNow + donationKwh).toFixed(1));
+      const remaining = Math.max(0, +(info.goalTotal - info.goalNow).toFixed(1));
+      info.goalText = remaining === 0 ? 'Ziel erreicht' : `${remaining} kWh bis zum Ziel`;
+      const fraction = info.goalTotal ? info.goalNow / info.goalTotal : 0;
+      if (goalLabel) goalLabel.innerHTML = formatGoalLabel(info.goalNow, info.goalTotal);
+      if (goalCollected) goalCollected.textContent = `${formatKwhValue(info.goalNow)} kWh`;
+      if (goalStatus) goalStatus.textContent = remaining === 0 ? 'Ziel erreicht' : `${formatKwhValue(remaining)} kWh offen`;
+      buildDots(goalDotsEl, fraction, GOAL_DOT_COUNT, false);
+    }, 950);
+    setTimeout(() => { overlay?.classList.remove('show', 'done'); closeSourceCard(); }, 1900);
+  }
+  energyDonationCta?.addEventListener('click', e => {
+    e.preventDefault(); e.stopPropagation(); tap();
+    submitEnergyDonation();
+  });
+
+  window.addEventListener('resize', () => scheduleBottomSheetBounds());
+
+  function updateClock() {
+    const el = document.querySelector('.statusbar .time');
+    if (!el) return;
+    const d = new Date();
+    el.textContent = d.getHours() + ':' + String(d.getMinutes()).padStart(2, '0');
+  }
+  updateClock();
+  setInterval(updateClock, 30000);
+
+  let lastTouch = 0;
+  document.addEventListener('touchend', e => {
+    const now = Date.now();
+    if (now - lastTouch <= 300) e.preventDefault();
+    lastTouch = now;
+  }, { passive: false });
+
+  /* ── Leaflet map ── */
+  map = L.map('mapboxMap', {
+    center: restoredMapView?.center || homeLatLng,
+    zoom: restoredMapView?.zoom || 12,
+    minZoom: 11,
+    maxZoom: 18,
+    maxBounds: [[48.06, 16.10], [48.38, 16.64]],
+    maxBoundsViscosity: 1.0,
+    zoomControl: false,
+    attributionControl: false
+  });
+
+  function saveMapView() {
+    if (!map) return;
+    const center = map.getCenter();
+    try {
+      sessionStorage.setItem(mapViewStateKey, JSON.stringify({
+        center: [center.lat, center.lng],
+        zoom: map.getZoom()
+      }));
+    } catch (e) {}
+  }
+
+  map.on('moveend zoomend', saveMapView);
+  window.addEventListener('pagehide', saveMapView);
+
+  const cartoMapStyle = document.documentElement.classList.contains('dark-mode') ? 'dark_all' : 'light_all';
+
+  L.tileLayer(`https://{s}.basemaps.cartocdn.com/${cartoMapStyle}/{z}/{x}/{y}{r}.png`, {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="https://carto.com/">CARTO</a>',
+    subdomains: 'abcd',
+    maxZoom: 19
+  }).addTo(map);
+
+  const poiIconByType = {
+    kindergarten: '<svg viewBox="0 0 24 24"><path d="M4 19h16"/><path d="M7 19V9l5-4 5 4v10"/><path d="M9.5 14h5"/><path d="M10 11h.01"/><path d="M14 11h.01"/></svg>',
+    school: '<svg viewBox="0 0 24 24"><path d="M3 9l9-4 9 4-9 4-9-4z"/><path d="M7 11v5c2 2 8 2 10 0v-5"/><path d="M21 9v5"/></svg>',
+    youth: '<svg viewBox="0 0 24 24"><circle cx="8" cy="9" r="2.5"/><circle cx="16" cy="9" r="2.5"/><path d="M4 19v-1.2c0-2.1 2-3.8 4-3.8s4 1.7 4 3.8V19"/><path d="M12 19v-1.2c0-2.1 2-3.8 4-3.8s4 1.7 4 3.8V19"/></svg>',
+    hospital: '<svg viewBox="0 0 24 24"><path d="M4 20h16"/><path d="M6 20V7h12v13"/><path d="M12 10v6"/><path d="M9 13h6"/></svg>',
+    library: '<svg viewBox="0 0 24 24"><path d="M5 19V6.5A2.5 2.5 0 0 1 7.5 4H20v15H7.5A2.5 2.5 0 0 0 5 21"/><path d="M8 8h8"/><path d="M8 12h6"/></svg>',
+    pool: '<svg viewBox="0 0 24 24"><path d="M5 18c1.4 0 1.4-1 2.8-1s1.4 1 2.8 1 1.4-1 2.8-1 1.4 1 2.8 1 1.4-1 2.8-1"/><path d="M5 21c1.4 0 1.4-1 2.8-1s1.4 1 2.8 1 1.4-1 2.8-1 1.4 1 2.8 1 1.4-1 2.8-1"/><path d="M9 15V7.5A3.5 3.5 0 0 1 12.5 4H15"/><path d="M9 10h6"/></svg>',
+    care: '<svg viewBox="0 0 24 24"><path d="M4 20h16"/><path d="M7 20V9l5-4 5 4v11"/><path d="M12 16s-3-1.9-3-4a1.9 1.9 0 0 1 3-1.5A1.9 1.9 0 0 1 15 12c0 2.1-3 4-3 4z"/></svg>',
+    social: '<svg viewBox="0 0 24 24"><path d="M6 10h12l-1.2 9H7.2L6 10z"/><path d="M9 10a3 3 0 0 1 6 0"/><path d="M10 14h4"/></svg>'
+  };
+
+  const poiDefs = [
+    { type: 'kindergarten', label: 'Kita Citygate', info: 'kindergarten_citygate', latLng: [48.26418124247209, 16.45371282335269] },
+    { type: 'kindergarten', label: 'Kita Seestadt', info: 'kindergarten_seestadt', latLng: [48.22300107156889, 16.50083025497572] },
+    { type: 'kindergarten', label: 'Kita Gersthof', info: 'kindergarten_gersthof', latLng: [48.237938518034596, 16.320182054720007] },
+    { type: 'kindergarten', label: 'Kita Liesing', info: 'kindergarten_liesing', latLng: [48.14818236713011, 16.312038191556233] },
+    { type: 'school', label: 'TU Wien', info: 'school_tu_wien', latLng: [48.19875, 16.36958] },
+    { type: 'school', label: 'WU Wien', info: 'school_wu_wien', latLng: [48.2137, 16.4097] },
+    { type: 'school', label: 'G 13', info: 'school_fichtnergasse', latLng: [48.18632012926308, 16.288569902848174] },
+    { type: 'school', label: 'GRg 14', info: 'school_astgasse', latLng: [48.191500129615314, 16.290229901842885] },
+    { type: 'school', label: 'pGRg 21', info: 'school_anton_boeck', latLng: [48.29655012907016, 16.388849902431442] },
+    { type: 'school', label: 'GRg 23', info: 'school_draschestrasse', latLng: [48.14942012950675, 16.349299902212863] },
+    { type: 'youth', label: 'Skatehalle', info: 'youth_skatehalle', latLng: [48.281892472382125, 16.375697444323762] },
+    { type: 'youth', label: 'BasE 20', info: 'youth_base20', latLng: [48.24144802287855, 16.383212882086482] },
+    { type: 'youth', label: 'JZ SEA', info: 'youth_sea', latLng: [48.22941187479997, 16.510757402182687] },
+    { type: 'youth', label: 'JZ Penzing', info: 'youth_penzing', latLng: [48.192538926522445, 16.315233109444275] },
+    { type: 'hospital', label: 'AKH', info: 'hospital_akh', latLng: [48.2201905566178, 16.344339343122236] },
+    { type: 'hospital', label: 'Favoriten', info: 'hospital_favoriten', latLng: [48.173659013631394, 16.34989830878787] },
+    { type: 'hospital', label: 'Donaustadt', info: 'hospital_donaustadt', latLng: [48.219013339642, 16.46421650887073] },
+    { type: 'hospital', label: 'Hietzing', info: 'hospital_hietzing', latLng: [48.160669963871, 16.282389099757648] },
+    { type: 'pool', label: 'Stadionbad', info: 'pool_stadionbad', latLng: [48.20371246454418, 16.42221050284947] },
+    { type: 'pool', label: 'Döblingbad', info: 'pool_doebling', latLng: [48.25084793999643, 16.358049151650775] },
+    { type: 'pool', label: 'Laaerberg', info: 'pool_laaerberg', latLng: [48.15934960992557, 16.384734448379312] },
+    { type: 'library', label: 'Bücherei 13', info: 'library_hietzing', latLng: [48.17411024880971, 16.28491420487322] },
+    { type: 'library', label: 'Bücherei 22', info: 'library_donaustadt', latLng: [48.240792209803075, 16.438582691798032] },
+    { type: 'library', label: 'Bücherei 23', info: 'library_liesing', latLng: [48.13567411991216, 16.282765723189367] },
+    { type: 'social', label: 'Sozial 16', info: 'social_ottakring', latLng: [48.2163673697364, 16.318394455665704] },
+    { type: 'social', label: 'VinziMarkt', info: 'social_vinzinmarkt', latLng: [48.177223422469396, 16.411537232723372] },
+    { type: 'social', label: 'Sozial 22', info: 'social_donaustadt', latLng: [48.25316345251107, 16.433639173212423] },
+    { type: 'social', label: 'Sozial 15', info: 'social_samariterbund', latLng: [48.184658220365144, 16.326770224613284] }
+  ];
+
+  /* Home marker */
+  {
+    const el = document.createElement('div');
+    el.className = 'marker'; el.id = 'fixedHomeMarker';
+    el.setAttribute('role', 'button'); el.setAttribute('tabindex', '0');
+    el.setAttribute('aria-label', 'Dein Haus – Source anzeigen'); el.setAttribute('aria-pressed', 'false');
+    el.innerHTML = '<div class="marker-rings" aria-hidden="true"><span></span><span></span><span></span></div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.15" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.8 11.5c0-.45.2-.88.55-1.16l3.7-3.02a1.48 1.48 0 0 1 1.9 0l3.7 3.02c.35.28.55.71.55 1.16v5.58a2.02 2.02 0 0 1-2.02 2.02H8.82a2.02 2.02 0 0 1-2.02-2.02Z"/></svg>';
+    L.marker(homeLatLng, {
+      icon: L.divIcon({ html: el.outerHTML, className: '', iconSize: [30, 30], iconAnchor: [15, 15] })
+    }).addTo(map);
+    homeMarker = document.getElementById('fixedHomeMarker');
+    homeMarker.addEventListener('click', openSourceFromMarker);
+    homeMarker.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') openSourceFromMarker(e); });
+  }
+
+  /* POI markers */
+  poiDefs.forEach(({ type, label, info, latLng }) => {
+    const svg = poiIconByType[type] || poiIconByType.school;
+    const markerTitle = placeInfo[info]?.title || label;
+    const el = document.createElement('div');
+    el.className = `poi ${type}`; el.setAttribute('role', 'button'); el.setAttribute('tabindex', '0');
+    el.setAttribute('data-info', info); el.setAttribute('aria-label', `${markerTitle} anzeigen`);
+    el.setAttribute('aria-pressed', 'false'); el.setAttribute('data-label', label);
+    el.innerHTML = `<div class="poi-rings" aria-hidden="true"><span></span><span></span><span></span></div>${svg}`;
+    L.marker(latLng, {
+      icon: L.divIcon({ html: el.outerHTML, className: '', iconSize: [34, 34], iconAnchor: [17, 17] })
+    }).addTo(map);
+    const added = document.querySelector(`.poi[data-info="${info}"]`);
+    if (added) {
+      poiMarkers.push(added);
+      added.addEventListener('click', openInfoFromPoi);
+      added.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') openInfoFromPoi(e); });
+    }
+  });
+  applyPriorityFilter();
+
+  map.on('click', e => {
+    const t = e.originalEvent?.target;
+    if (t?.closest?.('.marker, .poi, .destination')) return;
+    if (mapCard.classList.contains('source-mode')) { closeSourceCard(); return; }
+    if (isExpanded) { resetExpandedMapLayout(); return; }
+    if (phone?.classList.contains('map-fullscreen')) return;
+    toggleMap(e.originalEvent || e);
+  });
+
+  window.addEventListener('resize', () => {
+    map?.invalidateSize();
+    if (mapCard.classList.contains('source-mode')) getSourceExtraHeight(activePlace);
+  });
+
+</script>
+
+<script src="page-transition.js"></script>
+</body>
+</html>

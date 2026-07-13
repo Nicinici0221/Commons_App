@@ -1,0 +1,1029 @@
+
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Solar Dashboard</title>
+  <style>
+    @font-face {
+      font-family: "Bingo";
+      src: url("Bingo.woff2") format("woff2"), url("Bingo.woff") format("woff"), url("Bingo.ttf") format("truetype");
+      font-weight: 400; font-style: normal; font-display: swap;
+    }
+    @font-face {
+      font-family: "Bersan";
+      src: url("Bersan.woff") format("woff"), url("Bersan.ttf") format("truetype"), url("Bersan.otf") format("opentype");
+      font-weight: 400; font-style: normal; font-display: swap;
+    }
+    @font-face {
+      font-family: "Constructio";
+      src: url("Constructio/TTF/ConstructioGrotesk-Regular.ttf") format("truetype"), url("Constructio/OTF/ConstructioGrotesk-Regular.otf") format("opentype");
+      font-weight: 400; font-style: normal; font-display: swap;
+    }
+    @font-face {
+      font-family: "Runex";
+      src: url("Web-TT/Runex-Regular.woff2") format("woff2"), url("Web-TT/Runex-Regular.woff") format("woff"), url("Web-TT/Runex-Regular.ttf") format("truetype");
+      font-weight: 400; font-style: normal; font-display: swap;
+    }
+    @font-face {
+      
+    }      font-family: "Aminute";
+      src: url("Aminute/Web-TT/Aminute.woff2") format("woff2"), url("Aminute/Web-TT/Aminute.woff") format("woff"), url("Aminute/Web-TT/Aminute.ttf") format("truetype");
+      font-weight: 400; font-style: normal; font-display: swap;
+    }
+    @font-face {
+      font-family: "Kurdis";
+      src: url("Kurdis Family Delivderables/WOFF2/Kurdis-Wide.woff2") format("woff2"), url("Kurdis Family Delivderables/WOFF/Kurdis-Wide.woff") format("woff"), url("Kurdis Family Delivderables/TTF/Kurdis-Wide.ttf") format("truetype");
+      font-weight: 400; font-style: normal; font-display: swap;
+    }
+    @font-face {
+      font-family: "Kurdis";
+      src: url("Kurdis Family Delivderables/WOFF2/Kurdis-WideBold.woff2") format("woff2"), url("Kurdis Family Delivderables/WOFF/Kurdis-WideBold.woff") format("woff"), url("Kurdis Family Delivderables/TTF/Kurdis-WideBold.ttf") format("truetype");
+      font-weight: 700; font-style: normal; font-display: swap;
+    }
+    @font-face {
+      font-family: "KurdisRegular";
+      src: url("Kurdis Family Delivderables/WOFF2/Kurdis-Regular.woff2") format("woff2"), url("Kurdis Family Delivderables/WOFF/Kurdis-Regular.woff") format("woff"), url("Kurdis Family Delivderables/TTF/Kurdis-Regular.ttf") format("truetype");
+      font-weight: 400; font-style: normal; font-display: swap;
+    }
+    @font-face {
+      font-family: "HelvenaLight";
+      src: url("helvena-grotesk-modern-bold-brand-identity-font-2026-04-07-06-20-11-utc/Helvena Font File/WOFF2/Helvena-Light.woff2") format("woff2"), url("helvena-grotesk-modern-bold-brand-identity-font-2026-04-07-06-20-11-utc/Helvena Font File/WOFF/Helvena-Light.woff") format("woff"), url("helvena-grotesk-modern-bold-brand-identity-font-2026-04-07-06-20-11-utc/Helvena Font File/TTF/Helvena-Light.ttf") format("truetype");
+      font-weight: 300; font-style: normal; font-display: swap;
+    }
+    @font-face {
+      font-family: "HelvenaRegular";
+      src: url("helvena-grotesk-modern-bold-brand-identity-font-2026-04-07-06-20-11-utc/Helvena Font File/WOFF2/Helvena-Regular.woff2") format("woff2"), url("helvena-grotesk-modern-bold-brand-identity-font-2026-04-07-06-20-11-utc/Helvena Font File/WOFF/Helvena-Regular.woff") format("woff"), url("helvena-grotesk-modern-bold-brand-identity-font-2026-04-07-06-20-11-utc/Helvena Font File/TTF/Helvena-Regular.ttf") format("truetype");
+      font-weight: 400; font-style: normal; font-display: swap;
+    }
+    @font-face {
+      font-family: "HelvenaExtraLight";
+      src: url("helvena-grotesk-modern-bold-brand-identity-font-2026-04-07-06-20-11-utc/Helvena Font File/WOFF2/Helvena-Extralight.woff2") format("woff2"), url("helvena-grotesk-modern-bold-brand-identity-font-2026-04-07-06-20-11-utc/Helvena Font File/WOFF/Helvena-Extralight.woff") format("woff"), url("helvena-grotesk-modern-bold-brand-identity-font-2026-04-07-06-20-11-utc/Helvena Font File/TTF/Helvena-Extralight.ttf") format("truetype");
+      font-weight: 200; font-style: normal; font-display: swap;
+    }
+
+    :root {
+      --bg: #f7f7f6;
+      --panel: #fbfbfa;
+      --panel-dark: #f4f4f3;
+      --panel-mid: #ffffff;
+      --circle: #f1f1f0;
+      --muted: #787f79;
+      --text: #171a16;
+      --green: #6fcf9e;
+      --green-bright: #96ecc0;
+      --dark-dot: #d9ded7;
+      --white: #ffffff;
+      --lime: #96ecc0;
+      --border: rgba(23,26,22,.11);
+      --border-faint: rgba(23,26,22,.06);
+      --card-solid: #ffffff;
+      --overlay: rgba(23,26,22,.22);
+    }
+
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+    html, body {
+      width: 100%; min-height: 100%; margin: 0;
+      background: #e2e5df;
+      font-family: "SF Pro Display", "SF Pro Text", -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+      color: var(--text);
+      -webkit-font-smoothing: antialiased;
+      text-rendering: geometricPrecision;
+    }
+
+    body { display: grid; place-items: center; padding: 20px; }
+
+    .phone {
+      position: relative;
+      width: 500px;
+      height: 960px;
+      overflow: hidden;
+      background: #fbfbfa;
+      border-radius: 32px;
+      box-shadow: 0 28px 80px rgba(35,42,36,.18);
+      isolation: isolate;
+    }
+
+    /* Notch */
+    .phone::before {
+      content: "";
+      position: absolute;
+      top: 16px; left: 50%;
+      width: 128px; height: 31px;
+      border-radius: 18px;
+      transform: translateX(-50%);
+      background: #0a1020;
+      z-index: 40;
+    }
+
+    /* ── Hero gradient ── */
+    .hero-bg {
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 510px;
+      background:
+        radial-gradient(ellipse 92% 82% at 114% 104%, rgba(228, 151, 124, 0.58) 0%, rgba(184, 107, 102, 0.38) 38%, rgba(99, 74, 83, 0.20) 66%, rgba(7, 14, 28, 0) 88%),
+        radial-gradient(ellipse 76% 58% at 64% 58%, rgba(30, 41, 66, 0.38) 0%, rgba(7, 14, 28, 0) 72%),
+        linear-gradient(to right, rgba(1, 4, 10, 0.48) 0%, rgba(5, 10, 21, 0.12) 56%, transparent 78%),
+        linear-gradient(180deg, #070d18 0%, #0b162a 54%, #15213a 100%);
+      border-radius: 0 0 32px 32px;
+      z-index: 0;
+    }
+
+    /* ── Status bar ── */
+    .statusbar {
+      position: absolute;
+      top: 25px; left: 0; right: 0;
+      height: 20px;
+      z-index: 30;
+      pointer-events: none;
+    }
+
+    .time {
+      position: absolute;
+      left: 45px; top: -1px;
+      color: #ffffff;
+      font-size: 17px;
+      font-weight: 600;
+      letter-spacing: -.15px;
+    }
+
+    .status-icons {
+      position: absolute;
+      right: 43px; top: 0;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: #ffffff;
+    }
+
+    .signal { display: flex; align-items: flex-end; gap: 2px; height: 12px; }
+    .signal span { width: 3px; background: currentColor; border-radius: 2px; }
+    .signal span:nth-child(1) { height: 4px; opacity: .7; }
+    .signal span:nth-child(2) { height: 6px; opacity: .8; }
+    .signal span:nth-child(3) { height: 9px; opacity: .9; }
+    .signal span:nth-child(4) { height: 12px; }
+
+    .wifi { width: 17px; height: 12px; position: relative; }
+    .wifi::before, .wifi::after {
+      content: ""; position: absolute; left: 50%;
+      border: 2px solid currentColor; border-bottom: 0;
+      border-left-color: transparent; border-right-color: transparent;
+      transform: translateX(-50%);
+    }
+    .wifi::before { top: 1px; width: 16px; height: 8px; border-radius: 16px 16px 0 0; opacity: .9; }
+    .wifi::after { top: 6px; width: 8px; height: 5px; border-radius: 10px 10px 0 0; }
+
+    .battery { width: 23px; height: 12px; border: 1.7px solid currentColor; border-radius: 4px; position: relative; }
+    .battery::before { content: ""; position: absolute; right: -4px; top: 3px; width: 2px; height: 5px; border-radius: 2px; background: currentColor; }
+    .battery::after { content: ""; position: absolute; inset: 2px 3px 2px 2px; border-radius: 2px; background: currentColor; }
+
+    /* ── App header (on dark hero) ── */
+    .app-header {
+      position: relative;
+      z-index: 9;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 78px 34px 0;
+    }
+
+    .app-user { display: flex; align-items: center; gap: 16px; min-width: 0; }
+
+    .commons-logo {
+      position: relative;
+      width: 60px; height: 60px;
+      flex: 0 0 auto;
+      border-radius: 50%;
+      background: #101110;
+      border: 1px solid rgba(255,255,255,.18);
+      display: grid;
+      place-items: center;
+      padding: 0;
+      cursor: pointer;
+      overflow: hidden;
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.12),
+        inset 0 -1px 0 rgba(0,0,0,.18),
+        0 4px 16px rgba(0,0,0,.16);
+      transition: transform .16s ease;
+    }
+    .commons-logo:active { transform: scale(.96); }
+    .commons-logo img {
+      width: 86%;
+      height: 86%;
+      display: block;
+      object-fit: contain;
+      object-position: center center;
+    }
+
+    .app-user-copy { min-width: 0; }
+
+    .app-user-name {
+      font-family: "Kurdis", "SF Pro Display", "Helvetica Neue", Arial, sans-serif;
+      color: #ffffff;
+      font-size: 22px;
+      line-height: 1.05;
+      font-weight: 400;
+      letter-spacing: 0;
+      transform: scaleY(.9);
+      transform-origin: left bottom;
+    }
+
+    .app-user-status {
+      margin-top: 6px;
+      color: rgba(255,255,255,.5);
+      font-size: 11px;
+      line-height: 1;
+      font-weight: 300;
+      letter-spacing: 1.8px;
+      white-space: nowrap;
+    }
+
+    .app-actions { display: flex; align-items: center; gap: 10px; flex: 0 0 auto; }
+
+    .app-icon-btn {
+      position: relative;
+      width: 60px; height: 60px;
+      border: 1px solid rgba(255,255,255,.18);
+      border-radius: 50%;
+      background: rgba(8, 14, 30, 0.22);
+      backdrop-filter: blur(28px) saturate(180%);
+      -webkit-backdrop-filter: blur(28px) saturate(180%);
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.12),
+        inset 0 -1px 0 rgba(0,0,0,.18),
+        0 4px 16px rgba(0,0,0,.16);
+      display: grid;
+      place-items: center;
+      color: rgba(255,255,255,.92);
+      cursor: pointer;
+      transition: transform .16s ease, background .16s ease;
+    }
+
+    .commons-logo::before,
+    .app-icon-btn::before {
+      content: "";
+      position: absolute;
+      inset: -1px;
+      border-radius: 50%;
+      padding: 1px;
+      background: linear-gradient(135deg, rgba(255,255,255,.34) 0%, rgba(255,255,255,.16) 38%, rgba(255,255,255,.07) 62%, rgba(255,255,255,.22) 100%);
+      -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      pointer-events: none;
+    }
+
+    .commons-logo img,
+    .app-icon-btn svg,
+    .app-icon-btn .badge {
+      position: relative;
+      z-index: 1;
+    }
+
+    .commons-logo::before { z-index: 2; }
+    .commons-logo::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      border: 1px solid rgba(255,255,255,.18);
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.12),
+        inset 0 -1px 0 rgba(0,0,0,.18);
+      pointer-events: none;
+      z-index: 3;
+    }
+    .commons-logo img { z-index: 0; }
+
+    .app-icon-btn:active { transform: scale(.96); }
+    .app-icon-btn svg {
+      width: 24px; height: 24px;
+      stroke: currentColor; fill: none;
+      stroke-width: 1.55;
+      stroke-linecap: round; stroke-linejoin: round;
+    }
+    .app-icon-btn .badge {
+      position: absolute;
+      top: 11px; right: 15px;
+      width: 13px; height: 13px;
+      border-radius: 50%;
+      background: #071123;
+      box-shadow: none;
+      z-index: 4;
+    }
+
+    .app-icon-btn .badge::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: rgba(255,255,255,.96);
+      transform: translate(-50%, -50%);
+    }
+
+    /* ── Hero center content ── */
+    .hero-content {
+      position: absolute;
+      top: 188px;
+      left: 0; right: 0;
+      z-index: 3;
+      text-align: center;
+    }
+
+    .hero-kicker {
+      display: block;
+      transform: translateY(-4px);
+      color: rgba(255,255,255,.45);
+      font-size: 11px;
+      font-weight: 300;
+      letter-spacing: 2.6px;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+
+    .hero-number {
+      font-family: "Kurdis", "SF Pro Display", "Helvetica Neue", Arial, sans-serif;
+      position: relative;
+      top: 11px;
+      display: block;
+      color: #ffffff;
+      font-size: 126px;
+      font-weight: 400;
+      line-height: 1;
+      letter-spacing: -3px;
+      text-shadow: 0 2px 40px rgba(0,0,0,.25);
+    }
+
+    .hero-unit {
+      display: block;
+      font-family: "Bingo", "SF Pro Display", "Helvetica Neue", Arial, sans-serif;
+      color: #ffffff;
+      font-size: 34px;
+      font-weight: 400;
+      margin-top: 0px;
+      margin-bottom: 8px;
+    }
+
+    .hero-desc {
+      font-family: "HelvenaLight", "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
+      color: rgba(255,255,255,.88);
+      font-size: 15px;
+      font-weight: 300;
+      line-height: 1.45;
+      letter-spacing: .2px;
+      padding: 0 44px;
+      margin: 7px 0 7px;
+    }
+    .hero-desc strong { color: #ffffff; font-weight: 500; }
+
+    /* Glassmorphism pill */
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 10px;
+      padding: 9px 18px;
+      border-radius: 999px;
+      background: rgba(8, 14, 30, 0.22);
+      backdrop-filter: blur(28px) saturate(180%);
+      -webkit-backdrop-filter: blur(28px) saturate(180%);
+      border: 1px solid rgba(255,255,255,.18);
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.12),
+        inset 0 -1px 0 rgba(0,0,0,.18),
+        0 4px 16px rgba(0,0,0,.16);
+      color: rgba(255,255,255,.90);
+      font-family: "HelvenaLight", "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
+      font-size: 13.5px;
+      font-weight: 300;
+      letter-spacing: .2px;
+    }
+    .hero-badge svg {
+      width: 15px; height: 15px;
+      stroke: #ffffff; fill: none;
+      stroke-width: 1.55;
+      stroke-linecap: round; stroke-linejoin: round;
+      flex: 0 0 auto;
+    }
+
+    /* ── Cards section ── */
+    .cards {
+      position: absolute;
+      top: 526px;
+      left: 0; right: 0;
+      bottom: 131px;
+      padding: 0 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .top-cards {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      flex: 0 0 auto;
+    }
+
+    .bottom-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      flex: 1;
+    }
+
+    .metric-card {
+      position: relative;
+      border-radius: 28px;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.94), rgba(247,248,245,.78)),
+        rgba(232,235,230,.85);
+      border: 1px solid rgba(23,26,22,.08);
+      overflow: hidden;
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.85),
+        inset 0 -1px 0 rgba(20,22,20,.05),
+        0 8px 24px rgba(30,32,30,.07);
+    }
+
+    .top-cards .metric-card { height: 160px; }
+    .bottom-row .metric-card { height: auto; min-height: 130px; }
+
+    .metric-card .icon-bubble {
+      position: absolute;
+      top: 14px; right: 14px;
+      width: 54px; height: 54px;
+      border-radius: 50%;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.80), rgba(255,255,255,.22)),
+        rgba(232,233,232,.74);
+      display: grid;
+      place-items: center;
+      box-shadow: inset 0 0 0 1px rgba(20,22,20,.04), 0 4px 12px rgba(30,32,30,.04);
+    }
+
+    .metric-card .icon {
+      width: 20px; height: 20px;
+      stroke: rgba(23,26,22,.78);
+      stroke-width: 1.65;
+      fill: none;
+      stroke-linecap: round; stroke-linejoin: round;
+    }
+
+    .metric-text {
+      position: absolute;
+      left: 20px; bottom: 20px;
+    }
+
+    .metric-number {
+      display: flex;
+      align-items: baseline;
+      gap: 5px;
+      white-space: nowrap;
+    }
+
+    .metric-number strong {
+      font-family: "KurdisRegular", "Kurdis", "SF Pro Display", "Helvetica Neue", Arial, sans-serif;
+      font-size: 36px;
+      line-height: .92;
+      font-weight: 400;
+      letter-spacing: 0;
+      transform: scaleY(.9);
+      transform-origin: left bottom;
+    }
+
+    .metric-number span {
+      font-size: 13.5px; line-height: 1.25;
+      font-weight: 300; letter-spacing: .2px;
+      padding-bottom: 2px;
+    }
+
+    .metric-number sub, .metric-label sub { font-size: .68em; line-height: 0; vertical-align: sub; }
+
+    .metric-label {
+      font-family: "HelvenaLight", "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: 13.5px;
+      font-weight: 400;
+      letter-spacing: .28px;
+    }
+
+    /* ── Energie spenden CTA card ── */
+    .cta-card {
+      position: relative;
+      border-radius: 28px;
+      background:
+        linear-gradient(180deg, rgba(238,238,237,.92), rgba(224,224,223,.86));
+      border: 1px solid rgba(23,26,22,.08);
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.7),
+        0 8px 24px rgba(30,32,30,.07);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 16px 20px 20px;
+      cursor: pointer;
+      transition: transform .18s ease;
+    }
+    .cta-card:active { transform: scale(.97); }
+
+    .cta-label {
+      font-family: "HelvenaRegular", "HelvenaLight", "SF Pro Display", "Helvetica Neue", Arial, sans-serif;
+      font-size: 20px;
+      font-weight: 400;
+      line-height: 1.25;
+      color: var(--text);
+      letter-spacing: -.1px;
+    }
+
+    .cta-arrow {
+      width: 56px; height: 56px;
+      border-radius: 50%;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.92), rgba(240,241,238,.75));
+      border: 1px solid rgba(23,26,22,.08);
+      display: grid;
+      place-items: center;
+      flex: 0 0 auto;
+      box-shadow: 0 4px 12px rgba(30,32,30,.08);
+    }
+    .cta-arrow svg {
+      width: 20px; height: 20px;
+      stroke: var(--text); fill: none;
+      stroke-width: 1.8;
+      stroke-linecap: round; stroke-linejoin: round;
+    }
+
+    /* ── Tab bar ── */
+    .tabbar {
+      position: absolute;
+      left: 92px; right: 92px; bottom: 38px;
+      z-index: 8;
+      height: 76px;
+      border-radius: 999px;
+      background:
+        linear-gradient(180deg, rgba(18,19,19,.98), rgba(5,6,6,.98)),
+        #050606;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      align-items: center;
+      padding: 6px;
+      border: 1px solid rgba(255,255,255,.08);
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.10),
+        inset 0 -1px 0 rgba(0,0,0,.58),
+        0 18px 34px rgba(0,0,0,.24);
+      backdrop-filter: blur(24px) saturate(140%);
+      -webkit-backdrop-filter: blur(24px) saturate(140%);
+    }
+
+    .tab-indicator {
+      position: absolute;
+      top: 0; left: 0;
+      z-index: 0;
+      width: 58px; height: 58px;
+      border-radius: 50%;
+      background:
+        radial-gradient(ellipse 48% 38% at 88% 92%, rgba(255,255,255,.085) 0%, rgba(255,255,255,.035) 38%, rgba(255,255,255,0) 76%),
+        linear-gradient(0deg, rgba(255,255,255,.045), rgba(255,255,255,.016)),
+        rgba(255,255,255,.025);
+      border: 1.4px solid rgba(255,255,255,.28);
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.12),
+        inset 0 -1px 0 rgba(0,0,0,.38),
+        0 8px 18px rgba(0,0,0,.20);
+      transform: translate(0, 0) scale(1);
+      transition: none;
+      pointer-events: none;
+      will-change: transform;
+    }
+
+    .tab {
+      position: relative; z-index: 1;
+      width: 58px; height: 58px;
+      border: 0; border-radius: 50%;
+      margin: auto;
+      display: grid; place-items: center;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.045), rgba(255,255,255,.012)),
+        rgba(255,255,255,.018);
+      border: 1px solid rgba(255,255,255,.035);
+      color: rgba(255,255,255,.88);
+      cursor: pointer;
+      transition: background .2s ease, color .2s ease, transform .2s ease;
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.04),
+        0 6px 14px rgba(0,0,0,.14);
+    }
+
+    .tabbar.is-animating { animation: navButtonPop .22s ease-out; }
+    .tab.is-animating svg { animation: navIconPop .22s ease-out; }
+    .tab.active { background: transparent; color: #ffffff; box-shadow: none; }
+    .tab:active { transform: scale(.96); }
+
+    .tab svg {
+      display: block;
+      width: 23px; height: 23px;
+      stroke: currentColor; fill: none;
+      stroke-width: 1.9;
+      stroke-linecap: round; stroke-linejoin: round;
+      transform: translate(0, 0);
+    }
+
+    .tab .home-icon { transform: translate(-.8px, -1px); }
+
+    .tab .bars-icon {
+      width: 24px; height: 24px;
+      fill: currentColor;
+      stroke: none;
+      transform: translate(-1px, 1px);
+    }
+
+    @keyframes navButtonPop {
+      0% { transform: scale(1); } 50% { transform: scale(.975); }
+      100% { transform: scale(1); }
+    }
+    @keyframes navIconPop {
+      0% { transform: scale(1); } 50% { transform: scale(.94); }
+      100% { transform: scale(1); }
+    }
+    @keyframes float-up {
+      0% { transform: translateY(20px); opacity: 0; }
+      100% { transform: translateY(0); opacity: 1; }
+    }
+
+    .reveal-up { animation: float-up .72s cubic-bezier(.22,1,.36,1) backwards; }
+    .reveal-delay-1 { animation-delay: .06s; }
+    .reveal-delay-2 { animation-delay: .18s; }
+    .reveal-delay-3 { animation-delay: .30s; }
+    .reveal-delay-4 { animation-delay: .40s; }
+    .reveal-delay-5 { animation-delay: .48s; }
+    .reveal-delay-6 { animation-delay: .56s; }
+
+    /* ── Notification modal ── */
+    .modal-backdrop {
+      position: absolute; inset: 0; z-index: 48;
+      background: var(--overlay);
+      backdrop-filter: blur(8px);
+      opacity: 0; pointer-events: none;
+      transition: opacity .22s ease;
+    }
+    .modal-sheet {
+      position: absolute;
+      left: 16px; right: 16px; bottom: 20px;
+      z-index: 49;
+      height: 540px;
+      max-height: 640px;
+      display: flex; flex-direction: column;
+      overflow: hidden;
+      border-radius: 30px;
+      border: 1px solid var(--border);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.96), rgba(255,255,255,.8)),
+        var(--card-solid);
+      transform: translateY(104%);
+      transition: transform .32s cubic-bezier(.32,.72,.24,1);
+    }
+    .notifications-modal.is-open .modal-backdrop { opacity: 1; pointer-events: auto; }
+    .notifications-modal.is-open .modal-sheet { transform: translateY(0); }
+
+    .sheet-header {
+      position: sticky; top: 0; z-index: 10;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 20px 18px 14px;
+      border-bottom: 1px solid var(--border-faint);
+    }
+    .sheet-header::before {
+      content: ""; position: absolute; top: 8px; left: 50%;
+      width: 44px; height: 4px; border-radius: 999px;
+      background: rgba(23,26,22,.14); transform: translateX(-50%);
+    }
+    .sheet-title { font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; color: var(--text); font-size: 20px; font-weight: 600; letter-spacing: -.12px; }
+    .sheet-close { width: 32px; height: 32px; border: 0; border-radius: 16px; background: var(--border-faint); color: var(--text); display: grid; place-items: center; cursor: pointer; }
+    .sheet-close svg, .notif-icon svg, .notif-time svg { stroke: currentColor; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+    .sheet-body { flex: 1; overflow-y: auto; scrollbar-width: none; }
+    .sheet-body::-webkit-scrollbar { display: none; }
+    .notif-list { min-height: 100%; padding: 16px 16px 82px; display: flex; flex-direction: column; }
+    .notif-list.is-empty { align-items: center; justify-content: center; }
+    .notif-row { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 8px; padding: 12px; border: 1px solid var(--border-faint); border-radius: 22px; background: linear-gradient(180deg, rgba(255,255,255,.055), rgba(255,255,255,.018)), var(--card-solid); }
+    .notif-icon { width: 32px; height: 32px; flex: 0 0 auto; border-radius: 12px; background: var(--border-faint); display: grid; place-items: center; color: rgba(23,26,22,.82); }
+    .notif-icon.lime { color: rgba(23,26,22,.82); }
+    .notif-text { font-family: "HelvenaLight", "SF Pro Text", "Helvetica Neue", Arial, sans-serif; color: var(--text); font-size: 13.5px; font-weight: 300; line-height: 1.35; letter-spacing: .24px; }
+    .notif-text strong { font-weight: 700; letter-spacing: .18px; }
+    .notif-time { font-family: "HelvenaLight", "SF Pro Text", "Helvetica Neue", Arial, sans-serif; display: flex; align-items: center; gap: 4px; margin-top: 4px; color: rgba(23,26,22,.42); font-size: 10px; font-weight: 300; letter-spacing: .18px; }
+    .notif-delete { flex: 0 0 auto; align-self: flex-start; margin-left: auto; padding: 5px; border: 0; background: none; color: rgba(23,26,22,.28); cursor: pointer; display: grid; place-items: center; transition: color .15s ease; line-height: 0; }
+    .notif-delete:hover { color: rgba(23,26,22,.62); }
+    .notif-delete svg { width: 11px; height: 11px; stroke: currentColor; fill: none; stroke-width: 2.4; stroke-linecap: round; }
+    .notif-empty { display: none; padding: 44px 20px 36px; text-align: center; }
+    .notif-empty.is-visible { display: block; }
+    .notif-empty-icon { width: 52px; height: 52px; margin: 0 auto 16px; border-radius: 50%; background: var(--border-faint); display: grid; place-items: center; color: rgba(23,26,22,.82); }
+    .notif-empty-icon svg { width: 22px; height: 22px; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+    .notif-empty-title { font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; color: var(--text); font-size: 17px; font-weight: 600; letter-spacing: -.08px; }
+    .notif-empty-copy { font-family: "HelvenaLight", "SF Pro Text", "Helvetica Neue", Arial, sans-serif; margin-top: 7px; color: rgba(23,26,22,.58); font-size: 13.5px; font-weight: 300; line-height: 1.35; letter-spacing: .24px; }
+    .clear-btn { font-family: "HelvenaLight", "SF Pro Text", "Helvetica Neue", Arial, sans-serif; position: absolute; left: 16px; right: 16px; bottom: 16px; z-index: 20; width: auto; margin: 0; padding: 12px; border: 0; border-radius: 16px; background: rgba(244,244,243,.96); color: rgba(23,26,22,.62); font-size: 12px; font-weight: 300; letter-spacing: .28px; cursor: pointer; backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); }
+    .clear-btn:active { transform: scale(.97); }
+
+    @media (max-width: 540px) {
+      body { padding: 0; background: var(--bg); }
+      .phone { width: 100vw; height: 100svh; min-height: 890px; border-radius: 0; box-shadow: none; }
+    }
+  </style>
+</head>
+<body>
+  <main class="phone" aria-label="Solar Dashboard App">
+
+    <!-- Gradient hero background -->
+    <div class="hero-bg" aria-hidden="true"></div>
+
+    <!-- Status bar -->
+    <div class="statusbar" aria-hidden="true">
+      <div class="time">13:13</div>
+      <div class="status-icons">
+        <div class="signal"><span></span><span></span><span></span><span></span></div>
+        <div class="wifi"></div>
+        <div class="battery"></div>
+      </div>
+    </div>
+
+    <!-- App header -->
+    <section class="app-header reveal-up reveal-delay-1" aria-label="Commons Status">
+      <div class="app-user">
+        <button class="commons-logo" type="button" aria-label="Profil öffnen">
+          <img src="Icons/pb 10.png" alt="Profilbild von Nici">
+        </button>
+        <div class="app-user-copy">
+          <div class="app-user-name">Hi Nici!</div>
+          <div class="app-user-status">Ulm &bull; Commons aktiv</div>
+        </div>
+      </div>
+
+      <div class="app-actions">
+        <button class="app-icon-btn" type="button" id="notificationsButton" aria-label="Benachrichtigungen öffnen">
+          <svg viewBox="0 0 24 24"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 7h18s-3 0-3-7"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          <span class="badge" aria-hidden="true"></span>
+        </button>
+        <button class="app-icon-btn" type="button" aria-label="Einstellungen öffnen">
+          <svg viewBox="0 0 24 24"><circle cx="6" cy="12" r="1.9" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1.9" fill="currentColor" stroke="none"/><circle cx="18" cy="12" r="1.9" fill="currentColor" stroke="none"/></svg>
+        </button>
+      </div>
+    </section>
+
+    <!-- Hero center content -->
+    <div class="hero-content reveal-up reveal-delay-2">
+      <small class="hero-kicker">DIESE WOCHE HAST DU</small>
+      <strong class="hero-number">82</strong>
+      <span class="hero-unit">kWh</span>
+      <p class="hero-desc">
+        von deinem <strong>Überschuss</strong> an<br>
+        <strong>lokale Einrichtungen</strong> gespendet.
+      </p>
+      <div class="hero-badge">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2 4 14h7l-1 8 10-13h-7l0-7Z"/></svg>
+        <span>&asymp; 7 warme Mahlzeiten in der Kita</span>
+      </div>
+    </div>
+
+    <!-- Metric cards -->
+    <section class="cards">
+      <div class="top-cards">
+        <article class="metric-card reveal-up reveal-delay-3">
+          <div class="icon-bubble">
+            <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2m10-10h-2M4 12H2m17.1-7.1-1.4 1.4M6.3 17.7l-1.4 1.4m14.2 0-1.4-1.4M6.3 6.3 4.9 4.9"/></svg>
+          </div>
+          <div class="metric-text">
+            <div class="metric-number"><strong>2000</strong><span>kWh</span></div>
+            <div class="metric-label">Community gespendet</div>
+          </div>
+        </article>
+
+        <article class="metric-card reveal-up reveal-delay-4">
+          <div class="icon-bubble">
+            <svg class="icon" viewBox="0 0 24 24"><path d="M13 2 4 14h7l-1 8 10-13h-7l0-7Z"/></svg>
+          </div>
+          <div class="metric-text">
+            <div class="metric-number"><strong>120</strong><span>g CO<sub>2</sub></span></div>
+            <div class="metric-label">CO<sub>2</sub> gespart</div>
+          </div>
+        </article>
+      </div>
+
+      <div class="bottom-row">
+        <article class="metric-card reveal-up reveal-delay-5">
+          <div class="icon-bubble">
+            <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+          </div>
+          <div class="metric-text">
+            <div class="metric-number"><strong>28</strong><span>kWh</span></div>
+            <div class="metric-label">Verf&uuml;gbarer &Uuml;berschuss</div>
+          </div>
+        </article>
+
+        <article class="cta-card reveal-up reveal-delay-6" role="button" tabindex="0" aria-label="Energie spenden">
+          <span class="cta-label">Energie<br>spenden</span>
+          <div class="cta-arrow">
+            <svg viewBox="0 0 24 24"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- Tab bar -->
+    <nav class="tabbar" aria-label="Navigation">
+      <span class="tab-indicator" aria-hidden="true"></span>
+      <button class="tab active" aria-label="Homepage" aria-current="page">
+        <svg class="home-icon" viewBox="0 0 24 24"><path d="M6.8 11.5c0-.45.2-.88.55-1.16l3.7-3.02a1.48 1.48 0 0 1 1.9 0l3.7 3.02c.35.28.55.71.55 1.16v5.58a2.02 2.02 0 0 1-2.02 2.02H8.82a2.02 2.02 0 0 1-2.02-2.02Z"/></svg>
+      </button>
+      <button class="tab" aria-label="Community">
+        <svg viewBox="0 0 24 24"><path d="M9.8 11.2a3.2 3.2 0 1 0 0-6.4 3.2 3.2 0 0 0 0 6.4Z"/><path d="M4.2 19.3c.6-3.1 2.5-4.8 5.6-4.8s5 1.7 5.6 4.8"/><path d="M16 11a2.7 2.7 0 1 0 0-5.4"/><path d="M16.8 14.7c1.9.5 3 2 3.5 4.4"/></svg>
+      </button>
+      <button class="tab" aria-label="Projekte">
+        <svg viewBox="0 0 24 24"><path d="M5.2 6.8h5.4l1.6 2h6.6a1.8 1.8 0 0 1 1.8 1.8v6.8a1.8 1.8 0 0 1-1.8 1.8H5.2a1.8 1.8 0 0 1-1.8-1.8V8.6a1.8 1.8 0 0 1 1.8-1.8Z"/></svg>
+      </button>
+      <button class="tab" aria-label="Dashboard">
+        <svg class="bars-icon" viewBox="0 0 24 24"><rect x="5" y="13" width="4" height="6" rx="1"/><rect x="11" y="9" width="4" height="10" rx="1"/><rect x="17" y="5" width="4" height="14" rx="1"/></svg>
+      </button>
+    </nav>
+
+    <!-- Notifications modal -->
+    <section class="notifications-modal" id="notificationsModal" aria-hidden="true">
+      <div class="modal-backdrop" id="notificationsBackdrop"></div>
+      <div class="modal-sheet" role="dialog" aria-modal="true" aria-labelledby="notificationsTitle">
+        <div class="sheet-header">
+          <div class="sheet-title" id="notificationsTitle">Benachrichtigungen</div>
+          <button class="sheet-close" type="button" id="notificationsClose" aria-label="Benachrichtigungen schließen">
+            <svg width="14" height="14" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg>
+          </button>
+        </div>
+        <div class="sheet-body">
+          <div class="notif-list">
+            <div class="notif-row">
+              <div class="notif-icon"><svg width="14" height="14" viewBox="0 0 24 24"><path d="M19.5 12.6 12 20l-7.5-7.4a5 5 0 0 1 7.1-7.1l.4.4.4-.4a5 5 0 0 1 7.1 7.1Z"/></svg></div>
+              <div>
+                <div class="notif-text"><strong>Grundschule am Park: </strong>Danke - die Schattenbäume sind fast finanziert</div>
+                <div class="notif-time"><svg width="9" height="9" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg> vor 12 Min</div>
+              </div>
+            </div>
+            <div class="notif-row">
+              <div class="notif-icon lime"><svg width="14" height="14" viewBox="0 0 24 24"><path d="M12 2 14.7 8.6 22 9.2l-5.5 4.7 1.7 7.1L12 17.2 5.8 21l1.7-7.1L2 9.2l7.3-.6L12 2Z"/></svg></div>
+              <div>
+                <div class="notif-text"><strong>500 kWh</strong> im Commons-Topf: neues Quartiersziel freigeschaltet!</div>
+                <div class="notif-time"><svg width="9" height="9" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg> vor 1 Std</div>
+              </div>
+            </div>
+            <div class="notif-row">
+              <div class="notif-icon"><svg width="14" height="14" viewBox="0 0 24 24"><path d="M19.5 12.6 12 20l-7.5-7.4a5 5 0 0 1 7.1-7.1l.4.4.4-.4a5 5 0 0 1 7.1 7.1Z"/></svg></div>
+              <div>
+                <div class="notif-text"><strong>Kita Sonnenhof: </strong>Eure Überschüsse werden zu neuen Büchern</div>
+                <div class="notif-time"><svg width="9" height="9" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg> vor 3 Std</div>
+              </div>
+            </div>
+            <div class="notif-row">
+              <div class="notif-icon"><svg width="14" height="14" viewBox="0 0 24 24"><path d="M13 2 4 14h7l-1 8 10-13h-7l0-7Z"/></svg></div>
+              <div>
+                <div class="notif-text"><strong>Autopilot</strong> hat <strong>16 kWh</strong> an lokale Projekte gebucht</div>
+                <div class="notif-time"><svg width="9" height="9" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg> heute</div>
+              </div>
+            </div>
+            <div class="notif-row">
+              <div class="notif-icon lime"><svg width="14" height="14" viewBox="0 0 24 24"><path d="M12 2 14.7 8.6 22 9.2l-5.5 4.7 1.7 7.1L12 17.2 5.8 21l1.7-7.1L2 9.2l7.3-.6L12 2Z"/></svg></div>
+              <div>
+                <div class="notif-text"><strong>3 Einrichtungen</strong> sind heute aktiv unterstützt worden</div>
+                <div class="notif-time"><svg width="9" height="9" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg> heute</div>
+              </div>
+            </div>
+            <div class="notif-row">
+              <div class="notif-icon"><svg width="14" height="14" viewBox="0 0 24 24"><path d="M13 2 4 14h7l-1 8 10-13h-7l0-7Z"/></svg></div>
+              <div>
+                <div class="notif-text"><strong>Jugendzentrum West: </strong>18 kWh wurden für den Nachmittagsbetrieb reserviert</div>
+                <div class="notif-time"><svg width="9" height="9" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg> gestern</div>
+              </div>
+            </div>
+            <div class="notif-row">
+              <div class="notif-icon"><svg width="14" height="14" viewBox="0 0 24 24"><path d="M19.5 12.6 12 20l-7.5-7.4a5 5 0 0 1 7.1-7.1l.4.4.4-.4a5 5 0 0 1 7.1 7.1Z"/></svg></div>
+              <div>
+                <div class="notif-text"><strong>Seniorentreff Mitte: </strong>Danke für euren Beitrag zum warmen Mittagstisch</div>
+                <div class="notif-time"><svg width="9" height="9" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg> gestern</div>
+              </div>
+            </div>
+            <div class="notif-row">
+              <div class="notif-icon"><svg width="14" height="14" viewBox="0 0 24 24"><path d="M12 2 14.7 8.6 22 9.2l-5.5 4.7 1.7 7.1L12 17.2 5.8 21l1.7-7.1L2 9.2l7.3-.6L12 2Z"/></svg></div>
+              <div>
+                <div class="notif-text"><strong>Quartiersziel</strong> erreicht: 72% der Woche sind bereits gedeckt</div>
+                <div class="notif-time"><svg width="9" height="9" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg> gestern</div>
+              </div>
+            </div>
+            <div class="notif-row">
+              <div class="notif-icon"><svg width="14" height="14" viewBox="0 0 24 24"><path d="M5.2 6.8h5.4l1.6 2h6.6a1.8 1.8 0 0 1 1.8 1.8v6.8a1.8 1.8 0 0 1-1.8 1.8H5.2a1.8 1.8 0 0 1-1.8-1.8V8.6a1.8 1.8 0 0 1 1.8-1.8Z"/></svg></div>
+              <div>
+                <div class="notif-text"><strong>Bibliothek Süd: </strong>Neues Projekt für Leselampen wurde hinzugefügt</div>
+                <div class="notif-time"><svg width="9" height="9" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg> Mo</div>
+              </div>
+            </div>
+            <div class="notif-row">
+              <div class="notif-icon"><svg width="14" height="14" viewBox="0 0 24 24"><path d="M13 2 4 14h7l-1 8 10-13h-7l0-7Z"/></svg></div>
+              <div>
+                <div class="notif-text"><strong>24 kWh</strong> liegen noch als verfügbarer Überschuss bereit</div>
+                <div class="notif-time"><svg width="9" height="9" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg> Mo</div>
+              </div>
+            </div>
+            <div class="notif-empty" id="notificationsEmpty" aria-live="polite">
+              <div class="notif-empty-icon"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></div>
+              <div class="notif-empty-title">Keine Benachrichtigungen mehr</div>
+              <div class="notif-empty-copy">Alles aufgeräumt. Deine Energie wirkt weiter im Quartier.</div>
+            </div>
+            <button class="clear-btn" type="button">Alle löschen</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const tabs = document.querySelectorAll('.tab');
+    const tabbar = document.querySelector('.tabbar');
+    const tabIndicator = document.querySelector('.tab-indicator');
+    const notificationsButton = document.getElementById('notificationsButton');
+    const notificationsModal = document.getElementById('notificationsModal');
+    const notificationsClose = document.getElementById('notificationsClose');
+    const notificationsBackdrop = document.getElementById('notificationsBackdrop');
+    const clearNotifications = document.querySelector('.clear-btn');
+    const notificationsEmpty = document.getElementById('notificationsEmpty');
+    const notificationsList = document.querySelector('.notif-list');
+
+    function moveTabIndicator(tab, animate = true) {
+      if (!tab || !tabIndicator || !tabbar) return;
+      if (!animate) { tabIndicator.style.transition = 'none'; }
+      const tabRect = tab.getBoundingClientRect();
+      const tabbarRect = tabbar.getBoundingClientRect();
+      tabIndicator.style.transform = `translate(${tabRect.left - tabbarRect.left - 2}px, ${tabRect.top - tabbarRect.top - 2}px) scale(1)`;
+      if (!animate) { tabIndicator.offsetHeight; tabIndicator.style.transition = ''; }
+    }
+
+    tabs.forEach((tab) => {
+      tab.addEventListener('click', () => {
+        tabs.forEach((item) => { item.classList.remove('active', 'is-animating'); item.removeAttribute('aria-current'); });
+        tabbar.classList.remove('is-animating');
+        moveTabIndicator(tab, false);
+        tab.classList.add('active', 'is-animating');
+        tabbar.offsetHeight;
+        tabbar.classList.add('is-animating');
+        tab.setAttribute('aria-current', 'page');
+        window.setTimeout(() => {
+          tab.classList.remove('is-animating');
+          tabbar.classList.remove('is-animating');
+        }, 260);
+      });
+    });
+
+    window.addEventListener('resize', () => { moveTabIndicator(document.querySelector('.tab.active'), false); });
+
+    function openNotifications() { notificationsModal.classList.add('is-open'); notificationsModal.setAttribute('aria-hidden', 'false'); }
+    function closeNotifications() { notificationsModal.classList.remove('is-open'); notificationsModal.setAttribute('aria-hidden', 'true'); }
+
+    notificationsButton.addEventListener('click', openNotifications);
+    notificationsClose.addEventListener('click', closeNotifications);
+    notificationsBackdrop.addEventListener('click', closeNotifications);
+    clearNotifications.addEventListener('click', () => {
+      document.querySelectorAll('.notif-row').forEach((row) => { row.remove(); });
+      notificationsList.classList.add('is-empty');
+      notificationsEmpty.classList.add('is-visible');
+      clearNotifications.style.display = 'none';
+      const badge = notificationsButton.querySelector('.badge');
+      if (badge) { badge.style.display = 'none'; }
+      closeNotifications();
+    });
+
+    document.querySelectorAll('.notif-row').forEach(row => {
+      const btn = document.createElement('button');
+      btn.className = 'notif-delete';
+      btn.type = 'button';
+      btn.setAttribute('aria-label', 'Benachrichtigung löschen');
+      btn.innerHTML = '<svg viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg>';
+      row.appendChild(btn);
+    });
+
+    notificationsList.addEventListener('click', (e) => {
+      const btn = e.target.closest('.notif-delete');
+      if (!btn) return;
+      btn.closest('.notif-row').remove();
+      if (!notificationsList.querySelector('.notif-row')) {
+        notificationsList.classList.add('is-empty');
+        notificationsEmpty.classList.add('is-visible');
+        clearNotifications.style.display = 'none';
+        const badge = notificationsButton.querySelector('.badge');
+        if (badge) badge.style.display = 'none';
+      }
+    });
+
+    moveTabIndicator(document.querySelector('.tab.active'), false);
+  </script>
+</body>
+</html>

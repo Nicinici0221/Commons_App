@@ -1,0 +1,46 @@
+html, body { background: #e2e5df; }
+html.dark-mode, html.dark-mode body { background: #0c0c0c !important; }
+
+@keyframes wc-route-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes wc-route-surface-in {
+  from { opacity: .96; }
+  to { opacity: 1; }
+}
+
+@keyframes wc-route-fade-out {
+  from { opacity: 1; }
+  to { opacity: .96; }
+}
+
+html.wc-route-return .phone {
+  animation: wc-route-surface-in .25s ease both !important;
+}
+
+html.wc-route-return .reveal-up {
+  animation: wc-route-fade-in .25s ease both !important;
+  animation-delay: 0s !important;
+  opacity: 1 !important;
+  transform: none !important;
+}
+
+html.wc-route-return .page-scroll {
+  animation: wc-route-fade-in .25s ease both !important;
+}
+
+html.wc-route-exit .phone {
+  animation: wc-route-fade-out .13s ease both !important;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html.wc-route-return .phone,
+  html.wc-route-return .reveal-up,
+  html.wc-route-return .page-scroll,
+  html.wc-route-exit .phone {
+    animation: none !important;
+  }
+}

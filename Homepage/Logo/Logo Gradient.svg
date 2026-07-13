@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Ebene_1" data-name="Ebene 1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 245.35 242.69">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: url(#Unbenannter_Verlauf_172);
+      }
+
+      .cls-2 {
+        fill: #fff;
+        font-family: Kurdis-Wide, Kurdis;
+        font-size: 30px;
+      }
+    </style>
+    <linearGradient id="Unbenannter_Verlauf_172" data-name="Unbenannter Verlauf 172" x1="55.91" y1="57.67" x2="234.59" y2="230.03" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#030009"/>
+      <stop offset=".38" stop-color="#1e2236"/>
+      <stop offset=".73" stop-color="#644a50"/>
+      <stop offset="1" stop-color="#8c6772"/>
+    </linearGradient>
+  </defs>
+  <rect class="cls-1" x="12.86" y="12.2" width="222.75" height="222.75" rx="21.23" ry="21.23"/>
+  <text class="cls-2" transform="translate(33.62 134.63)"><tspan x="0" y="0">COMMONS</tspan></text>
+</svg>

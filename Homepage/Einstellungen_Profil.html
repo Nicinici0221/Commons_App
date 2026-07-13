@@ -1,0 +1,273 @@
+﻿<!doctype html>
+<html lang="de">
+<head>
+  <style>html,body{background:#e2e5df}</style>
+  <script>(function(){try{if(localStorage.getItem("commons_setting_dark-mode")==="true")document.documentElement.classList.add("dark-mode");}catch(e){}})();</script>
+  <link rel="stylesheet" href="dark-mode.css" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#FF7B00" />
+  <link rel="manifest" href="../manifest.json" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-title" content="HfG Erbe" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <link rel="apple-touch-icon" href="../assets/icons/icon-512.png" />
+  <link rel="stylesheet" href="../assets/css/mobile-app.css" />
+  <title>Persönliche Daten · Commons</title>
+  <script src="page-transition-head.js"></script>
+  <link rel="stylesheet" href="page-transitions.css" />
+  <style>
+    @font-face { font-family: "General Sans"; src: url("GeneralSans_Complete/GeneralSans_Complete/Fonts/WEB/fonts/GeneralSans-Variable.woff2") format("woff2"); font-weight: 200 700; font-style: normal; font-display: swap; }
+    @font-face { font-family: "KurdisRegular"; src: url("Kurdis Family Delivderables/WOFF2/Kurdis-Regular.woff2") format("woff2"); font-weight: 400; font-style: normal; font-display: swap; }
+    @font-face { font-family: "HelvenaLight"; src: url("helvena-grotesk-modern-bold-brand-identity-font-2026-04-07-06-20-11-utc/Helvena Font File/WOFF2/Helvena-Light.woff2") format("woff2"); font-weight: 300; font-style: normal; font-display: swap; }
+
+    :root { --text: #171a16; --muted: #777777; --border-soft: rgba(24,24,24,.06); }
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    html, body { width: 100%; min-height: 100%; margin: 0; background: #e2e5df; font-family: "General Sans", -apple-system, sans-serif; color: var(--text); -webkit-font-smoothing: antialiased; }
+    body { display: grid; place-items: center; padding: 20px; }
+
+    .phone { position: relative; width: min(440px, calc(100vw - 40px)); aspect-ratio: 440/956; overflow: hidden; border-radius: 32px; background: radial-gradient(ellipse 88% 48% at 50% 106%, rgba(232,235,230,.92), rgba(251,251,250,0) 66%), #fbfbfa; box-shadow: 0 28px 80px rgba(35,42,36,.18); isolation: isolate; }
+    .phone::before { content: ""; position: absolute; top: 16px; left: 50%; width: 128px; height: 31px; border-radius: 18px; transform: translateX(-50%); background: #0a1020; z-index: 40; }
+    .phone::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 78px; pointer-events: none; z-index: 4; background: linear-gradient(to top, rgba(251,251,251,.78), rgba(251,251,251,.42) 42%, rgba(251,251,251,0)); }
+
+    .statusbar { position: absolute; top: 25px; left: 0; right: 0; height: 20px; z-index: 30; pointer-events: none; }
+    .time { position: absolute; left: 45px; top: -1px; color: var(--text); font-size: 17px; font-weight: 600; letter-spacing: -.15px; }
+    .status-icons { position: absolute; right: 43px; top: 0; display: flex; align-items: center; gap: 6px; color: var(--text); }
+    .signal { display: flex; align-items: flex-end; gap: 2px; height: 12px; }
+    .signal span { width: 3px; background: currentColor; border-radius: 2px; }
+    .signal span:nth-child(1) { height: 4px; opacity: .7; }
+    .signal span:nth-child(2) { height: 6px; opacity: .8; }
+    .signal span:nth-child(3) { height: 9px; opacity: .9; }
+    .signal span:nth-child(4) { height: 12px; }
+    .wifi { width: 17px; height: 12px; position: relative; }
+    .wifi::before, .wifi::after { content: ""; position: absolute; left: 50%; border: 2px solid currentColor; border-bottom: 0; border-left-color: transparent; border-right-color: transparent; transform: translateX(-50%); }
+    .wifi::before { top: 1px; width: 16px; height: 8px; border-radius: 16px 16px 0 0; opacity: .9; }
+    .wifi::after { top: 6px; width: 8px; height: 5px; border-radius: 10px 10px 0 0; }
+    .battery { width: 23px; height: 12px; border: 1.7px solid currentColor; border-radius: 4px; position: relative; }
+    .battery::before { content: ""; position: absolute; right: -4px; top: 3px; width: 2px; height: 5px; border-radius: 2px; background: currentColor; }
+    .battery::after { content: ""; position: absolute; inset: 2px 3px 2px 2px; border-radius: 2px; background: currentColor; }
+
+    .topbar { position: absolute; top: 78px; left: 24px; right: 24px; z-index: 5; display: flex; justify-content: space-between; align-items: center; }
+    .icon-button { position: relative; width: 48px; height: 48px; border-radius: 50%; border: 1px solid rgba(23,26,22,.08); cursor: pointer; background: linear-gradient(180deg, rgba(255,255,255,.92), rgba(240,241,238,.75)); color: var(--text); display: grid; place-items: center; text-decoration: none; box-shadow: inset 0 1px 0 rgba(255,255,255,.85), 0 4px 12px rgba(30,32,30,.06); }
+    .icon-button svg { width: 20px; height: 20px; stroke: currentColor; fill: none; stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.55; }
+
+    .settings-scroll { position: absolute; inset: 144px 0 0; z-index: 2; overflow-y: auto; scrollbar-width: none; padding: 0 28px 100px; }
+    .settings-scroll::-webkit-scrollbar { display: none; }
+
+    .eyebrow { display: block; color: var(--muted); font-size: 11px; line-height: 16px; font-weight: 400; letter-spacing: 2.6px; text-transform: uppercase; margin-bottom: 10px; }
+    h1 { margin: 0; font-size: 41px; line-height: 44px; font-weight: 300; letter-spacing: -.8px; transform: scaleY(.92); transform-origin: left bottom; }
+
+    .settings-card { position: relative; border-radius: 28px; background: linear-gradient(180deg, rgba(255,255,255,.94), rgba(247,248,245,.78)), rgba(238,238,237,.85); border: 1px solid rgba(23,26,22,.06); overflow: hidden; box-shadow: inset 0 1px 0 rgba(255,255,255,.88), inset 0 -1px 0 rgba(20,22,20,.03), 0 4px 16px rgba(30,32,30,.04); }
+    .section { margin-top: 24px; }
+    .section-title { margin: 0 0 14px 4px; color: var(--muted); font-size: 11.2px; line-height: 17px; font-weight: 600; letter-spacing: 2.8px; text-transform: uppercase; }
+
+    /* Avatar inline im ersten Card */
+    .avatar-field-row { display: flex; align-items: center; gap: 16px; padding: 18px 18px; }
+    .avatar-field-circle { width: 52px; height: 52px; border-radius: 50%; background: #101110; border: 1px solid rgba(24,24,24,.08); display: grid; place-items: center; overflow: hidden; flex: 0 0 auto; box-shadow: 0 2px 10px rgba(32,32,32,.07); }
+    .avatar-field-circle img { width: 88%; height: 88%; object-fit: contain; }
+    .avatar-field-copy { flex: 1; min-width: 0; }
+    .avatar-field-name { font-size: 15px; font-weight: 500; color: var(--text); letter-spacing: -.05px; }
+    .avatar-field-sub { font-size: 11.5px; color: var(--muted); margin-top: 2px; }
+
+    /* Input rows */
+    .field-row { position: relative; padding: 16px 18px; border-top: 1px solid var(--border-soft); }
+    .field-row:first-child { border-top: none; }
+    .field-label { font-size: 10.5px; font-weight: 600; letter-spacing: 1.4px; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
+    .field-input { width: 100%; border: none; outline: none; background: transparent; font-family: "General Sans", sans-serif; font-size: 15px; font-weight: 400; color: var(--text); padding: 0; appearance: none; }
+    .field-input::placeholder { color: rgba(24,24,24,.30); }
+    .field-input-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0; }
+    .field-input-row .field-row:first-child { border-top: none; border-right: 1px solid var(--border-soft); }
+    html:not(.dark-mode) .field-input-row .field-row:first-child { border-top: 1px solid var(--border-soft); }
+
+    /* Save button */
+    .save-bar { position: absolute; bottom: 0; left: 0; right: 0; z-index: 10; padding: 16px 28px 32px; background: linear-gradient(to top, rgba(251,251,250,1) 60%, rgba(251,251,250,0)); pointer-events: none; }
+    .save-btn { width: 100%; height: 54px; border-radius: 999px; border: 1px solid rgba(23,26,22,.09); background: #171a16; color: #fff; font-family: "General Sans", sans-serif; font-size: 15px; font-weight: 500; cursor: pointer; pointer-events: auto; letter-spacing: -.1px; transition: background .15s ease; }
+    .save-btn:active { background: #2a2e29; }
+
+    @keyframes float-up { 0% { transform: translateY(20px); opacity: 0; } 100% { transform: translateY(0); opacity: 1; } }
+    .reveal-up { animation: float-up .72s cubic-bezier(.22,1,.36,1) backwards; }
+    .reveal-delay-1 { animation-delay: .06s; }
+    .reveal-delay-2 { animation-delay: .16s; }
+    .reveal-delay-3 { animation-delay: .26s; }
+    .reveal-delay-4 { animation-delay: .36s; }
+    .reveal-delay-5 { animation-delay: .46s; }
+
+    @media (max-width: 540px) { body { padding: 0; } .phone { width: 100vw; border-radius: 0; box-shadow: none; } }
+  </style>
+</head>
+<body>
+<main class="phone" aria-label="Persönliche Daten">
+  <div class="statusbar" aria-hidden="true">
+    <div class="time">9:41</div>
+    <div class="status-icons">
+      <div class="signal"><span></span><span></span><span></span><span></span></div>
+      <div class="wifi"></div>
+      <div class="battery"></div>
+    </div>
+  </div>
+
+  <header class="topbar reveal-up reveal-delay-1">
+  <style>html,body{background:#e2e5df}</style>
+  <script>(function(){try{if(localStorage.getItem("commons_setting_dark-mode")==="true")document.documentElement.classList.add("dark-mode");}catch(e){}})();</script>
+  <link rel="stylesheet" href="dark-mode.css" />
+    <a class="icon-button" href="Einstellungen.html" aria-label="Zurück">
+      <svg viewBox="0 0 24 24"><path d="M15 18 9 12l6-6"/></svg>
+    </a>
+    <a class="icon-button" href="Homepage.html" aria-label="Homepage">
+      <svg viewBox="0 0 24 24"><path d="M6.8 11.5c0-.45.2-.88.55-1.16l3.7-3.02a1.48 1.48 0 0 1 1.9 0l3.7 3.02c.35.28.55.71.55 1.16v5.58a2.02 2.02 0 0 1-2.02 2.02H8.82a2.02 2.02 0 0 1-2.02-2.02Z"/></svg>
+    </a>
+  </header>
+
+  <section class="settings-scroll">
+    <small class="eyebrow reveal-up reveal-delay-2">Profil</small>
+    <h1 class="reveal-up reveal-delay-2">Meine Daten</h1>
+
+    <!-- Name + Avatar kombiniert -->
+    <section class="section reveal-up reveal-delay-3">
+      <h2 class="section-title">Name</h2>
+      <div class="settings-card">
+        <div class="avatar-field-row">
+          <div class="avatar-field-circle">
+            <img src="Icons/pb 10.png" alt="Profilbild" id="profileImg">
+          </div>
+          <div class="avatar-field-copy">
+            <div class="avatar-field-name" id="avatarName">Nicole Tänzer</div>
+            <div class="avatar-field-sub">Profilbild aus Einstellungen</div>
+          </div>
+        </div>
+        <div class="field-input-row">
+          <div class="field-row">
+            <div class="field-label">Vorname</div>
+            <input class="field-input" type="text" id="vorname" value="Nicole" autocomplete="given-name" inputmode="text">
+          </div>
+          <div class="field-row">
+            <div class="field-label">Nachname</div>
+            <input class="field-input" type="text" id="nachname" value="Tänzer" autocomplete="family-name" inputmode="text">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Kontakt -->
+    <section class="section reveal-up reveal-delay-4">
+      <h2 class="section-title">Kontakt</h2>
+      <div class="settings-card">
+        <div class="field-row">
+          <div class="field-label">E-Mail-Adresse (optional)</div>
+          <input class="field-input" type="email" id="email" value="" placeholder="deine@email.de" autocomplete="email" inputmode="email">
+        </div>
+        <div class="field-row">
+          <div class="field-label">Telefon (optional)</div>
+          <input class="field-input" type="tel" id="telefon" value="" placeholder="+43 …" autocomplete="tel" inputmode="tel">
+        </div>
+      </div>
+    </section>
+
+    <!-- Adresse -->
+    <section class="section reveal-up reveal-delay-4">
+      <h2 class="section-title">Adresse</h2>
+      <div class="settings-card">
+        <div class="field-row">
+          <div class="field-label">Straße &amp; Hausnummer</div>
+          <input class="field-input" type="text" id="strasse" value="Sonnenweg 12" autocomplete="street-address" inputmode="text">
+        </div>
+        <div class="field-input-row">
+          <div class="field-row">
+            <div class="field-label">PLZ</div>
+            <input class="field-input" type="text" id="plz" value="89073" autocomplete="postal-code" inputmode="numeric" maxlength="5">
+          </div>
+          <div class="field-row">
+            <div class="field-label">Ort</div>
+            <input class="field-input" type="text" id="ort" value="Ulm" autocomplete="address-level2" inputmode="text">
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field-label">Land</div>
+          <input class="field-input" type="text" id="land" value="Deutschland" autocomplete="country-name" inputmode="text">
+        </div>
+      </div>
+    </section>
+
+    <!-- Bezeichnung -->
+    <section class="section reveal-up reveal-delay-5">
+      <h2 class="section-title">Profilbezeichnung</h2>
+      <div class="settings-card">
+        <div class="field-row">
+          <div class="field-label">Anzeigename (auf der Karte)</div>
+          <input class="field-input" type="text" id="bezeichnung" value="PV-Überschussspenderin" inputmode="text">
+        </div>
+      </div>
+    </section>
+
+  </section>
+
+  <!-- Speichern-Button -->
+  <div class="save-bar">
+    <button class="save-btn" onclick="saveProfile()">Änderungen speichern</button>
+  </div>
+
+</main>
+<script>
+  (function() {
+    const el = document.querySelector('.time');
+    if (!el) return;
+    const u = () => { const n = new Date(); el.textContent = String(n.getHours()).padStart(2,'0') + ':' + String(n.getMinutes()).padStart(2,'0'); };
+    u(); setInterval(u, 10000);
+  })();
+
+  // Restore saved values
+  const fields = ['vorname','nachname','email','telefon','strasse','plz','ort','land','bezeichnung'];
+  fields.forEach(id => {
+    const stored = localStorage.getItem('commons_profil_' + id);
+    if (stored) document.getElementById(id).value = stored;
+  });
+
+  // Live preview name in avatar row
+  function updateAvatarName() {
+    const vn = document.getElementById('vorname').value.trim();
+    const nn = document.getElementById('nachname').value.trim();
+    const el = document.getElementById('avatarName');
+    if (el) el.textContent = [vn, nn].filter(Boolean).join(' ') || '—';
+  }
+  document.getElementById('vorname')?.addEventListener('input', updateAvatarName);
+  document.getElementById('nachname')?.addEventListener('input', updateAvatarName);
+  updateAvatarName();
+
+  // Restore avatar
+  const savedAvatar = localStorage.getItem('commons_user_avatar');
+  const savedType = localStorage.getItem('commons_user_avatar_type');
+  if (savedAvatar) document.getElementById('profileImg').src = savedAvatar;
+
+  // Restore name from main settings
+  const savedName = localStorage.getItem('commons_user_name');
+  if (savedName) {
+    const parts = savedName.trim().split(/\s+/);
+    if (parts.length >= 2) {
+      document.getElementById('vorname').value = parts[0];
+      document.getElementById('nachname').value = parts.slice(1).join(' ');
+    } else if (parts.length === 1) {
+      document.getElementById('vorname').value = parts[0];
+    }
+  }
+
+  function saveProfile() {
+    fields.forEach(id => {
+      localStorage.setItem('commons_profil_' + id, document.getElementById(id).value);
+    });
+    // Sync name back to main settings
+    const vn = document.getElementById('vorname').value.trim();
+    const nn = document.getElementById('nachname').value.trim();
+    const fullName = [vn, nn].filter(Boolean).join(' ');
+    if (fullName) localStorage.setItem('commons_user_name', fullName);
+
+    // Sync ort to profile-meta
+    const ort = document.getElementById('ort').value.trim();
+    const bez = document.getElementById('bezeichnung').value.trim();
+    if (ort) localStorage.setItem('commons_profil_meta', (bez || 'Mitglied') + ' · ' + ort);
+
+    location.href = 'Einstellungen.html';
+  }
+</script>
+<script src="page-transition.js"></script>
+</body>
+</html>

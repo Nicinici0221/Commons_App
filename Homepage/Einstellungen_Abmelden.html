@@ -1,0 +1,143 @@
+﻿<!doctype html>
+<html lang="de">
+<head>
+  <style>html,body{background:#e2e5df}</style>
+  <script>(function(){try{if(localStorage.getItem("commons_setting_dark-mode")==="true")document.documentElement.classList.add("dark-mode");}catch(e){}})();</script>
+  <link rel="stylesheet" href="dark-mode.css" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#FF7B00" />
+  <link rel="manifest" href="../manifest.json" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-title" content="HfG Erbe" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <link rel="apple-touch-icon" href="../assets/icons/icon-512.png" />
+  <link rel="stylesheet" href="../assets/css/mobile-app.css" />
+  <title>Community verlassen · Commons</title>
+  <script src="page-transition-head.js"></script>
+  <link rel="stylesheet" href="page-transitions.css" />
+  <style>
+    @font-face { font-family: "General Sans"; src: url("GeneralSans_Complete/GeneralSans_Complete/Fonts/WEB/fonts/GeneralSans-Variable.woff2") format("woff2"); font-weight: 200 700; font-style: normal; font-display: swap; }
+    @font-face { font-family: "KurdisRegular"; src: url("Kurdis Family Delivderables/WOFF2/Kurdis-Regular.woff2") format("woff2"); font-weight: 400; font-style: normal; font-display: swap; }
+    @font-face { font-family: "HelvenaLight"; src: url("helvena-grotesk-modern-bold-brand-identity-font-2026-04-07-06-20-11-utc/Helvena Font File/WOFF2/Helvena-Light.woff2") format("woff2"); font-weight: 300; font-style: normal; font-display: swap; }
+
+    :root { --text: #171a16; --muted: #777777; --border-soft: rgba(24,24,24,.06); }
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    html, body { width: 100%; min-height: 100%; margin: 0; background: #e2e5df; font-family: "General Sans", -apple-system, sans-serif; color: var(--text); -webkit-font-smoothing: antialiased; }
+    body { display: grid; place-items: center; padding: 20px; }
+
+    .phone { position: relative; width: min(440px, calc(100vw - 40px)); aspect-ratio: 440/956; overflow: hidden; border-radius: 32px; background: radial-gradient(ellipse 88% 48% at 50% 106%, rgba(232,235,230,.92), rgba(251,251,250,0) 66%), #fbfbfa; box-shadow: 0 28px 80px rgba(35,42,36,.18); isolation: isolate; }
+    .phone::before { content: ""; position: absolute; top: 16px; left: 50%; width: 128px; height: 31px; border-radius: 18px; transform: translateX(-50%); background: #0a1020; z-index: 40; }
+    .phone::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 78px; pointer-events: none; z-index: 4; background: linear-gradient(to top, rgba(251,251,251,.78), rgba(251,251,251,.42) 42%, rgba(251,251,251,0)); }
+
+    .statusbar { position: absolute; top: 25px; left: 0; right: 0; height: 20px; z-index: 30; pointer-events: none; }
+    .time { position: absolute; left: 45px; top: -1px; color: var(--text); font-size: 17px; font-weight: 600; letter-spacing: -.15px; }
+    .status-icons { position: absolute; right: 43px; top: 0; display: flex; align-items: center; gap: 6px; color: var(--text); }
+    .signal { display: flex; align-items: flex-end; gap: 2px; height: 12px; }
+    .signal span { width: 3px; background: currentColor; border-radius: 2px; }
+    .signal span:nth-child(1) { height: 4px; opacity: .7; }
+    .signal span:nth-child(2) { height: 6px; opacity: .8; }
+    .signal span:nth-child(3) { height: 9px; opacity: .9; }
+    .signal span:nth-child(4) { height: 12px; }
+    .wifi { width: 17px; height: 12px; position: relative; }
+    .wifi::before, .wifi::after { content: ""; position: absolute; left: 50%; border: 2px solid currentColor; border-bottom: 0; border-left-color: transparent; border-right-color: transparent; transform: translateX(-50%); }
+    .wifi::before { top: 1px; width: 16px; height: 8px; border-radius: 16px 16px 0 0; opacity: .9; }
+    .wifi::after { top: 6px; width: 8px; height: 5px; border-radius: 10px 10px 0 0; }
+    .battery { width: 23px; height: 12px; border: 1.7px solid currentColor; border-radius: 4px; position: relative; }
+    .battery::before { content: ""; position: absolute; right: -4px; top: 3px; width: 2px; height: 5px; border-radius: 2px; background: currentColor; }
+    .battery::after { content: ""; position: absolute; inset: 2px 3px 2px 2px; border-radius: 2px; background: currentColor; }
+
+    .topbar { position: absolute; top: 78px; left: 24px; right: 24px; z-index: 5; display: flex; justify-content: space-between; align-items: center; }
+    .icon-button { position: relative; width: 48px; height: 48px; border-radius: 50%; border: 1px solid rgba(23,26,22,.08); cursor: pointer; background: linear-gradient(180deg, rgba(255,255,255,.92), rgba(240,241,238,.75)); color: var(--text); display: grid; place-items: center; text-decoration: none; box-shadow: inset 0 1px 0 rgba(255,255,255,.85), 0 4px 12px rgba(30,32,30,.06); }
+    .icon-button svg { width: 20px; height: 20px; stroke: currentColor; fill: none; stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.55; }
+
+    .settings-scroll { position: absolute; inset: 144px 0 0; z-index: 2; overflow-y: auto; scrollbar-width: none; padding: 0 28px 40px; }
+    .settings-scroll::-webkit-scrollbar { display: none; }
+
+    .eyebrow { display: block; color: var(--muted); font-size: 11px; line-height: 16px; font-weight: 400; letter-spacing: 2.6px; text-transform: uppercase; margin-bottom: 10px; }
+    h1 { margin: 0; font-size: 41px; line-height: 44px; font-weight: 300; letter-spacing: -.8px; transform: scaleY(.92); transform-origin: left bottom; }
+
+    /* Warning card */
+    .warning-card { margin-top: 28px; border-radius: 24px; border: 1px solid rgba(23,26,22,.09); background: rgba(23,26,22,.03); padding: 22px 20px; }
+    .warning-title { font-size: 13px; font-weight: 600; color: rgba(23,26,22,.72); margin-bottom: 14px; letter-spacing: -.05px; }
+    .warning-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 10px; }
+    .warning-list li { display: flex; align-items: flex-start; gap: 10px; font-size: 12.5px; line-height: 17px; color: rgba(24,24,24,.68); }
+    .warning-list li::before { content: ""; flex: 0 0 5px; height: 5px; border-radius: 50%; background: rgba(23,26,22,.35); margin-top: 6px; }
+
+    /* Info text */
+    .info-text { margin-top: 20px; font-size: 11.5px; line-height: 17px; color: rgba(24,24,24,.42); letter-spacing: .1px; }
+
+    /* Buttons */
+    .btn-group { margin-top: 32px; display: flex; flex-direction: column; gap: 12px; }
+    .btn-confirm { height: 54px; border-radius: 999px; border: 1px solid rgba(23,26,22,.12); background: #171a16; color: rgba(255,255,255,.88); font-family: "General Sans", sans-serif; font-size: 14px; font-weight: 500; letter-spacing: -.1px; cursor: pointer; transition: background .15s ease; }
+    .btn-confirm:active { background: #2a2e29; }
+    .btn-cancel { height: 54px; border-radius: 999px; border: 1px solid rgba(23,26,22,.07); background: linear-gradient(180deg, rgba(255,255,255,.88), rgba(242,243,240,.72)); color: var(--text); font-family: "General Sans", sans-serif; font-size: 14px; font-weight: 400; letter-spacing: -.1px; cursor: pointer; box-shadow: inset 0 1px 0 rgba(255,255,255,.85); }
+
+    @keyframes float-up { 0% { transform: translateY(20px); opacity: 0; } 100% { transform: translateY(0); opacity: 1; } }
+    .reveal-up { animation: float-up .72s cubic-bezier(.22,1,.36,1) backwards; }
+    .reveal-delay-1 { animation-delay: .06s; }
+    .reveal-delay-2 { animation-delay: .16s; }
+    .reveal-delay-3 { animation-delay: .26s; }
+    .reveal-delay-4 { animation-delay: .36s; }
+    .reveal-delay-5 { animation-delay: .46s; }
+
+    @media (max-width: 540px) { body { padding: 0; } .phone { width: 100vw; border-radius: 0; box-shadow: none; } }
+  </style>
+</head>
+<body>
+<main class="phone" aria-label="Community verlassen">
+  <div class="statusbar" aria-hidden="true">
+    <div class="time">9:41</div>
+    <div class="status-icons">
+      <div class="signal"><span></span><span></span><span></span><span></span></div>
+      <div class="wifi"></div>
+      <div class="battery"></div>
+    </div>
+  </div>
+
+  <header class="topbar reveal-up reveal-delay-1">
+  <style>html,body{background:#e2e5df}</style>
+  <script>(function(){try{if(localStorage.getItem("commons_setting_dark-mode")==="true")document.documentElement.classList.add("dark-mode");}catch(e){}})();</script>
+  <link rel="stylesheet" href="dark-mode.css" />
+    <a class="icon-button" href="Einstellungen.html" aria-label="Zurück">
+      <svg viewBox="0 0 24 24"><path d="M15 18 9 12l6-6"/></svg>
+    </a>
+    <a class="icon-button" href="Homepage.html" aria-label="Homepage">
+      <svg viewBox="0 0 24 24"><path d="M6.8 11.5c0-.45.2-.88.55-1.16l3.7-3.02a1.48 1.48 0 0 1 1.9 0l3.7 3.02c.35.28.55.71.55 1.16v5.58a2.02 2.02 0 0 1-2.02 2.02H8.82a2.02 2.02 0 0 1-2.02-2.02Z"/></svg>
+    </a>
+  </header>
+
+  <section class="settings-scroll">
+    <small class="eyebrow reveal-up reveal-delay-2">Achtung</small>
+    <h1 class="reveal-up reveal-delay-2">Community verlassen</h1>
+
+    <div class="warning-card reveal-up reveal-delay-3">
+      <div class="warning-title">Was passiert beim Abmelden:</div>
+      <ul class="warning-list">
+        <li>Dein Autopilot wird sofort deaktiviert und deine Energie nicht mehr geteilt.</li>
+        <li>Alle laufenden Spenden werden mit sofortiger Wirkung gestoppt.</li>
+        <li>Deine Abstimmungsrechte im Verein erlöschen.</li>
+        <li>Deine persönlichen Daten werden nach 30 Tagen unwiderruflich gelöscht.</li>
+        <li>Deine Mitgliedschaft im Commons-Verein endet zum nächsten Monatsersten.</li>
+      </ul>
+    </div>
+
+    <p class="info-text reveal-up reveal-delay-4">Du kannst dich jederzeit erneut anmelden. Deine Energiedaten werden nach der Löschfrist nicht wiederhergestellt werden können.</p>
+
+    <div class="btn-group reveal-up reveal-delay-5">
+      <button class="btn-confirm" onclick="alert('In einem echten Prototyp würde hier die Abmeldung ausgelöst.')">Jetzt abmelden</button>
+      <a class="btn-cancel" href="Einstellungen.html" style="display:grid;place-items:center;text-decoration:none;">Abbrechen</a>
+    </div>
+  </section>
+</main>
+<script>
+  (function() {
+    const el = document.querySelector('.time');
+    if (!el) return;
+    const u = () => { const n = new Date(); el.textContent = String(n.getHours()).padStart(2,'0') + ':' + String(n.getMinutes()).padStart(2,'0'); };
+    u(); setInterval(u, 10000);
+  })();
+</script>
+<script src="page-transition.js"></script>
+</body>
+</html>

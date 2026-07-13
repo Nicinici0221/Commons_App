@@ -1,0 +1,1919 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Commons Einstellungen</title>
+  <script src="page-transition-head.js"></script>
+  <script>(function(){if(!sessionStorage.getItem('es_visited')){document.documentElement.classList.remove('wc-route-return');}})();</script>
+  <link rel="stylesheet" href="page-transitions.css" />
+  <style>
+    @font-face {
+      font-family: "KurdisRegular";
+      src: url("Kurdis Family Delivderables/WOFF2/Kurdis-Regular.woff2") format("woff2"), url("Kurdis Family Delivderables/WOFF/Kurdis-Regular.woff") format("woff"), url("Kurdis Family Delivderables/TTF/Kurdis-Regular.ttf") format("truetype");
+      font-weight: 400; font-style: normal; font-display: swap;
+    }
+    @font-face {
+      font-family: "HelvenaLight";
+      src: url("helvena-grotesk-modern-bold-brand-identity-font-2026-04-07-06-20-11-utc/Helvena Font File/WOFF2/Helvena-Light.woff2") format("woff2"), url("helvena-grotesk-modern-bold-brand-identity-font-2026-04-07-06-20-11-utc/Helvena Font File/WOFF/Helvena-Light.woff") format("woff"), url("helvena-grotesk-modern-bold-brand-identity-font-2026-04-07-06-20-11-utc/Helvena Font File/TTF/Helvena-Light.ttf") format("truetype");
+      font-weight: 300; font-style: normal; font-display: swap;
+    }
+    @font-face {
+      font-family: "HelvenaRegular";
+      src: url("helvena-grotesk-modern-bold-brand-identity-font-2026-04-07-06-20-11-utc/Helvena Font File/WOFF2/Helvena-Regular.woff2") format("woff2"), url("helvena-grotesk-modern-bold-brand-identity-font-2026-04-07-06-20-11-utc/Helvena Font File/WOFF/Helvena-Regular.woff") format("woff"), url("helvena-grotesk-modern-bold-brand-identity-font-2026-04-07-06-20-11-utc/Helvena Font File/TTF/Helvena-Regular.ttf") format("truetype");
+      font-weight: 400; font-style: normal; font-display: swap;
+    }
+    @font-face {
+      font-family: "General Sans";
+      src: url("GeneralSans_Complete/GeneralSans_Complete/Fonts/WEB/fonts/GeneralSans-Variable.woff2") format("woff2");
+      font-weight: 200 700; font-style: normal; font-display: swap;
+    }
+
+    :root {
+      --phone-w: 440px;
+      --phone-h: 956px;
+      --bg: #f8f8f8;
+      --panel: #fbfbfb;
+      --soft-panel: rgba(24,24,24,.06);
+      --text: #171a16;
+      --muted: #777777;
+      --border: rgba(24,24,24,.11);
+      --border-soft: rgba(24,24,24,.06);
+      --border-faint: rgba(24,24,24,.06);
+      --card-solid: #ffffff;
+    }
+
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+    @property --reserve-progress {
+      syntax: "<percentage>";
+      inherits: false;
+      initial-value: 0%;
+    }
+
+    html, body {
+      width: 100%;
+      min-height: 100%;
+      margin: 0;
+      background: #e2e5df;
+      font-family: "General Sans", "SF Pro Display", "SF Pro Text", -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+      color: var(--text);
+      -webkit-font-smoothing: antialiased;
+      text-rendering: geometricPrecision;
+    }
+
+    body { display: grid; place-items: center; padding: 20px; }
+
+    .phone {
+      position: relative;
+      width: min(440px, calc(100vw - 40px));
+      height: auto;
+      aspect-ratio: 440 / 956;
+      overflow: hidden;
+      border-radius: 32px;
+      background:
+        radial-gradient(ellipse 88% 48% at 50% 106%, rgba(232,235,230,.92) 0%, rgba(251,251,250,0) 66%),
+        #fbfbfa;
+      box-shadow: 0 28px 80px rgba(35,42,36,.18);
+      isolation: isolate;
+    }
+
+    .phone::before {
+      content: "";
+      position: absolute;
+      top: 16px;
+      left: 50%;
+      width: 128px;
+      height: 31px;
+      border-radius: 18px;
+      transform: translateX(-50%);
+      background: #0a1020;
+      z-index: 40;
+    }
+
+    .phone::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 78px;
+      pointer-events: none;
+      z-index: 4;
+      background: linear-gradient(
+        to top,
+        rgba(251,251,251,.78) 0%,
+        rgba(251,251,251,.42) 42%,
+        rgba(251,251,251,0) 100%
+      );
+    }
+
+    .statusbar {
+      position: absolute;
+      top: 25px;
+      left: 0;
+      right: 0;
+      height: 20px;
+      z-index: 30;
+      pointer-events: none;
+    }
+
+    .time {
+      position: absolute;
+      left: 45px;
+      top: -1px;
+      color: var(--text);
+      font-size: 17px;
+      font-weight: 600;
+      letter-spacing: -.15px;
+    }
+
+    .status-icons {
+      position: absolute;
+      right: 43px;
+      top: 0;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--text);
+    }
+
+    .signal { display: flex; align-items: flex-end; gap: 2px; height: 12px; }
+    .signal span { width: 3px; background: currentColor; border-radius: 2px; }
+    .signal span:nth-child(1) { height: 4px; opacity: .7; }
+    .signal span:nth-child(2) { height: 6px; opacity: .8; }
+    .signal span:nth-child(3) { height: 9px; opacity: .9; }
+    .signal span:nth-child(4) { height: 12px; }
+
+    .wifi { width: 17px; height: 12px; position: relative; }
+    .wifi::before, .wifi::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      border: 2px solid currentColor;
+      border-bottom: 0;
+      border-left-color: transparent;
+      border-right-color: transparent;
+      transform: translateX(-50%);
+    }
+    .wifi::before { top: 1px; width: 16px; height: 8px; border-radius: 16px 16px 0 0; opacity: .9; }
+    .wifi::after { top: 6px; width: 8px; height: 5px; border-radius: 10px 10px 0 0; }
+
+    .battery { width: 23px; height: 12px; border: 1.7px solid currentColor; border-radius: 4px; position: relative; }
+    .battery::before { content: ""; position: absolute; right: -4px; top: 3px; width: 2px; height: 5px; border-radius: 2px; background: currentColor; }
+    .battery::after { content: ""; position: absolute; inset: 2px 3px 2px 2px; border-radius: 2px; background: currentColor; }
+
+    .topbar {
+      position: absolute;
+      top: 78px;
+      left: 24px;
+      right: 24px;
+      z-index: 5;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .icon-button {
+      position: relative;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      border: 1px solid rgba(23,26,22,.08);
+      cursor: pointer;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.92), rgba(240,241,238,.75));
+      color: var(--text);
+      display: grid;
+      place-items: center;
+      text-decoration: none;
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.85),
+        0 4px 12px rgba(30,32,30,.06);
+    }
+
+    .icon-button svg,
+    .setting-icon svg {
+      stroke: currentColor;
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .icon-button svg {
+      position: relative;
+      z-index: 1;
+      width: 20px;
+      height: 20px;
+      stroke-width: 1.55;
+    }
+
+    .settings-scroll {
+      position: absolute;
+      inset: 144px 0 0;
+      z-index: 2;
+      overflow-y: auto;
+      scrollbar-width: none;
+      padding: 0 28px 40px;
+    }
+    .settings-scroll::-webkit-scrollbar { display: none; }
+
+    .eyebrow {
+      display: block;
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 16px;
+      font-weight: 400;
+      letter-spacing: 2.6px;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    h1 {
+      margin: 0;
+      color: var(--text);
+      font-family: "General Sans", "SF Pro Display", "Helvetica Neue", Arial, sans-serif;
+      font-size: 41px;
+      line-height: 44px;
+      font-weight: 300;
+      letter-spacing: -.8px;
+      transform: scaleY(.92);
+      transform-origin: left bottom;
+    }
+
+    .profile-card,
+    .settings-card,
+    .mini-card {
+      position: relative;
+      border-radius: 28px;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.94), rgba(247,248,245,.78)),
+        rgba(238,238,237,.85);
+      border: 1px solid rgba(23,26,22,.06);
+      overflow: hidden;
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.88),
+        inset 0 -1px 0 rgba(20,22,20,.03),
+        0 4px 16px rgba(30,32,30,.04);
+    }
+
+    .profile-card {
+      margin-top: 18px;
+      min-height: 106px;
+      padding: 18px 18px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .avatar {
+      position: relative;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: #101110;
+      border: 1px solid rgba(24,24,24,.08);
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      flex: 0 0 auto;
+      box-shadow: 0 4px 12px rgba(32,32,32,.05);
+    }
+
+    .avatar img {
+      width: 88%;
+      height: 88%;
+      object-fit: contain;
+      object-position: center;
+      display: block;
+    }
+
+    .profile-name {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      font-family: "General Sans", "SF Pro Display", "Helvetica Neue", Arial, sans-serif;
+      font-size: 17px;
+      line-height: 21px;
+      font-weight: 500;
+      color: var(--text);
+      letter-spacing: -.15px;
+      cursor: text;
+    }
+
+    .profile-name-text {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      min-height: 21px;
+    }
+
+    .profile-name-input {
+      width: 1ch;
+      min-width: 0;
+      max-width: 170px;
+      padding: 0;
+      border: 0;
+      outline: 0;
+      background: transparent;
+      color: inherit;
+      font: inherit;
+      letter-spacing: inherit;
+      line-height: inherit;
+      appearance: none;
+      cursor: text;
+    }
+
+    .profile-name-caret {
+      display: none;
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 1px;
+      height: 18px;
+      background: #111410;
+      animation: caret-blink 1s steps(1) infinite;
+      pointer-events: none;
+    }
+
+    .phone.keyboard-open .profile-name-caret {
+      display: inline-block;
+    }
+
+    .profile-name-measure {
+      position: absolute;
+      visibility: hidden;
+      white-space: pre;
+      pointer-events: none;
+      font: inherit;
+      letter-spacing: inherit;
+    }
+
+    @keyframes caret-blink {
+      0%, 49% { opacity: 1; }
+      50%, 100% { opacity: 0; }
+    }
+
+    .profile-name-input::selection {
+      background: rgba(24,24,24,.14);
+    }
+
+    .profile-edit-icon {
+      width: 16px;
+      height: 16px;
+      color: var(--text);
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+      flex: 0 0 auto;
+      margin-left: 0;
+    }
+
+    .profile-edit-icon svg {
+      width: 14px;
+      height: 14px;
+      stroke: currentColor;
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-width: 1.9;
+    }
+
+    .phone.keyboard-open .settings-scroll {
+      filter: none;
+    }
+
+    .keyboard-scrim {
+      position: absolute;
+      inset: 0 0 0 0;
+      z-index: 55;
+      display: none;
+      background: transparent;
+      border: 0;
+      outline: 0;
+      padding: 0;
+      appearance: none;
+      -webkit-appearance: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .phone.keyboard-open .keyboard-scrim {
+      display: block;
+    }
+
+    .keyboard-panel {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 60;
+      padding: 46px 7px 34px;
+      background: #dedede;
+      transform: translateY(104%);
+      transition: transform .46s cubic-bezier(.16,1,.3,1);
+      box-shadow: 0 -18px 38px rgba(24,24,24,.10);
+      user-select: none;
+      will-change: transform;
+    }
+
+    .phone.keyboard-open .keyboard-panel {
+      transform: translateY(0);
+    }
+
+    .keyboard-row {
+      display: flex;
+      justify-content: center;
+      gap: 6px;
+      margin-bottom: 9px;
+    }
+
+    .keyboard-key {
+      position: relative;
+      height: 48px;
+      border: 0;
+      border-radius: 7px;
+      background: #050605;
+      color: #ffffff;
+      box-shadow:
+        0 1px 0 rgba(24,24,24,.28),
+        0 1px 3px rgba(24,24,24,.08);
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      font-size: 20px;
+      line-height: 48px;
+      text-align: center;
+      cursor: pointer;
+      flex: 0 0 37px;
+      padding: 0;
+      outline: 0;
+      appearance: none;
+      -webkit-appearance: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .keyboard-key:active {
+      background: #f6f6f6;
+      transform: translateY(1px);
+    }
+
+    .keyboard-key.gray {
+      background: #c4c7c1;
+      color: #1c201b;
+      font-size: 17px;
+      flex-basis: 49px;
+    }
+
+    .keyboard-key.gray:active {
+      background: #b8bbb4;
+      color: #111410;
+    }
+
+    .keyboard-key.space {
+      flex-basis: 190px;
+      font-size: 15px;
+      color: #ffffff;
+    }
+
+    .keyboard-key.return {
+      flex-basis: 82px;
+      font-size: 15px;
+    }
+
+    .keyboard-key.mode {
+      flex-basis: 82px;
+      font-size: 15px;
+    }
+
+    .keyboard-row.home-row {
+      padding-left: 18px;
+      padding-right: 18px;
+    }
+
+    .keyboard-row.third-row {
+      gap: 7px;
+    }
+
+    .keyboard-grabber {
+      position: absolute;
+      top: 28px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 36px;
+      height: 4px;
+      border-radius: 999px;
+      background: rgba(24,24,24,.18);
+    }
+
+    .keyboard-done {
+      position: absolute;
+      right: 12px;
+      top: 14px;
+      border: 0;
+      outline: 0;
+      background: transparent;
+      color: #111410;
+      font: 600 14px/20px "General Sans", sans-serif;
+      padding: 0;
+      cursor: pointer;
+    }
+
+    .profile-meta {
+      margin-top: 3px;
+      color: rgba(24,24,24,.62);
+      font-family: "General Sans", "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
+      font-size: 11.5px;
+      line-height: 15px;
+      font-weight: 400;
+      letter-spacing: .25px;
+    }
+
+    .profile-energy {
+      margin-top: 6px;
+      color: #333833;
+      font-family: "General Sans", "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
+      font-size: 12.3px;
+      line-height: 15px;
+      font-weight: 400;
+    }
+
+    .section { margin-top: 24px; }
+
+    .account-section {
+      margin-top: 24px;
+    }
+
+    .section-title {
+      margin: 0 0 14px 4px;
+      color: var(--muted);
+      font-size: 11.2px;
+      line-height: 17px;
+      font-weight: 600;
+      letter-spacing: 2.8px;
+      text-transform: uppercase;
+    }
+
+    .settings-card {
+      overflow: hidden;
+    }
+
+    .setting-row {
+      position: relative;
+      display: grid;
+      grid-template-columns: 44px minmax(0, 1fr) auto;
+      gap: 12px;
+      align-items: center;
+      min-height: 90px;
+      padding: 18px 18px;
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .setting-row + .setting-row::before {
+      display: none;
+    }
+
+    .setting-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      color: var(--text);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.80), rgba(255,255,255,.22)),
+        rgba(232,233,232,.74);
+      border: 1px solid rgba(20,22,20,.04);
+      box-shadow: inset 0 0 0 1px rgba(20,22,20,.025), 0 4px 12px rgba(30,32,30,.04);
+    }
+
+    .setting-icon svg {
+      width: 19px;
+      height: 19px;
+      stroke-width: 1.75;
+    }
+
+    .setting-copy { min-width: 0; }
+
+    .setting-title {
+      font-family: "General Sans", "SF Pro Display", "Helvetica Neue", Arial, sans-serif;
+      font-size: 14px;
+      line-height: 18px;
+      font-weight: 500;
+      color: var(--text);
+      letter-spacing: -.05px;
+    }
+
+    .setting-desc {
+      margin-top: 4px;
+      color: rgba(24,24,24,.62);
+      font-family: "General Sans", "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
+      font-size: 11.3px;
+      line-height: 15px;
+      font-weight: 400;
+      letter-spacing: .16px;
+    }
+
+    .setting-desc strong {
+      color: inherit;
+      font-weight: 400;
+    }
+
+    .chevron {
+      width: 24px;
+      height: 24px;
+      display: grid;
+      place-items: center;
+      color: rgba(24,24,24,.38);
+    }
+
+    .chevron svg {
+      width: 15px;
+      height: 15px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 1.8;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .status-pill {
+      min-width: 52px;
+      padding: 6px 9px 5px;
+      border-radius: 999px;
+      background: var(--border-faint);
+      border: 1px solid rgba(24,24,24,.045);
+      color: rgba(24,24,24,.72);
+      font-size: 10px;
+      line-height: 12px;
+      font-weight: 600;
+      letter-spacing: .6px;
+      text-align: center;
+      text-transform: uppercase;
+    }
+
+    .value {
+      color: rgba(24,24,24,.58);
+      font-size: 13px;
+      line-height: 16px;
+      font-weight: 400;
+      white-space: nowrap;
+    }
+
+    .toggle {
+      position: relative;
+      width: 43px;
+      height: 26px;
+      border-radius: 999px;
+      border: 1px solid rgba(24,24,24,.10);
+      background: #050605;
+      box-shadow: inset 0 1px 2px rgba(24,24,24,.08);
+      cursor: pointer;
+      appearance: none;
+      flex: 0 0 auto;
+      transition: background .2s ease, border-color .2s ease;
+    }
+
+    .toggle::after {
+      content: "";
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: #050605;
+      box-shadow: 0 1px 3px rgba(0,0,0,.20);
+      transition: transform .2s ease;
+    }
+
+    .toggle.is-off {
+      background: #ffffff;
+      border-color: rgba(24,24,24,.10);
+      box-shadow: inset 0 1px 2px rgba(24,24,24,.05);
+    }
+
+    .toggle.is-off::after {
+      background: #050605;
+    }
+
+    .toggle:not(.is-off) {
+      border-color: #050605;
+    }
+
+    .toggle:not(.is-off)::after {
+      transform: translateX(17px);
+      background: #ffffff;
+    }
+
+    .mini-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .reserve-section .mini-grid {
+      margin-top: 0;
+    }
+
+    .mini-card {
+      min-height: 138px;
+      padding: 20px 52px 17px 16px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .mini-card:nth-child(2) {
+      padding-right: 50px;
+      padding-left: 16px;
+    }
+
+    .mini-label {
+      color: var(--muted);
+      font-family: "General Sans", "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
+      font-size: 9.6px;
+      line-height: 13px;
+      font-weight: 600;
+      letter-spacing: 1.8px;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .mini-value {
+      margin-top: auto;
+      color: var(--text);
+      font-family: "General Sans", "SF Pro Display", "Helvetica Neue", Arial, sans-serif;
+      font-size: 29px;
+      line-height: 31px;
+      font-weight: 400;
+      letter-spacing: -.3px;
+    }
+
+    .mini-copy {
+      margin-top: 5px;
+      color: var(--muted);
+      font-family: "General Sans", "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
+      font-size: 10px;
+      line-height: 14px;
+      font-weight: 400;
+      white-space: nowrap;
+    }
+
+    .mini-ring {
+      position: absolute;
+      right: 15px;
+      top: 50%;
+      transform: translateY(-39%);
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: conic-gradient(#111410 0 var(--reserve-progress, 0%), #e8e8e8 var(--reserve-progress, 0%) 100%);
+      animation: fill-reserve .85s cubic-bezier(.22,1,.36,1) .48s forwards;
+    }
+
+    .mini-ring::after {
+      content: "";
+      position: absolute;
+      inset: 4px;
+      border-radius: 50%;
+      background: #f7f8f5;
+    }
+
+    .mini-radio {
+      position: absolute;
+      right: 14px;
+      top: 50%;
+      transform: translateY(-39%);
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: transparent;
+      border: 1px solid rgba(24,24,24,.10);
+      box-shadow:
+        0 0 0 5px rgba(24,24,24,.055),
+        0 0 0 10px rgba(24,24,24,.025);
+    }
+
+    .mini-radio::before {
+      content: "";
+      position: absolute;
+      inset: 8px;
+      border-radius: 50%;
+      border: 1px solid rgba(24,24,24,.13);
+      background: transparent;
+    }
+
+    .mini-radio::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 7px;
+      height: 7px;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      background: #111410;
+      border: 0;
+    }
+
+    .eda-title {
+      white-space: nowrap;
+      font-size: 13.2px;
+    }
+
+    .energy-options-card {
+      border-radius: 28px;
+      overflow: hidden;
+    }
+
+    .energy-options-card .setting-row + .energy-option-row::before {
+      display: none;
+    }
+
+    .energy-option-row {
+      position: relative;
+      display: grid;
+      grid-template-columns: 44px minmax(0, 1fr) auto;
+      gap: 16px;
+      align-items: center;
+      min-height: 90px;
+      padding: 18px 18px;
+    }
+
+    .energy-option-row + .energy-option-row::before {
+      display: none;
+    }
+
+    .energy-option-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      color: var(--text);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.80), rgba(255,255,255,.22)),
+        rgba(232,233,232,.74);
+      border: 1px solid rgba(20,22,20,.04);
+      box-shadow: inset 0 0 0 1px rgba(20,22,20,.025), 0 4px 12px rgba(30,32,30,.04);
+    }
+
+    .energy-option-icon svg {
+      width: 21px;
+      height: 21px;
+      stroke: currentColor;
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-width: 2;
+    }
+
+    .energy-option-title {
+      color: var(--text);
+      font-size: 14px;
+      line-height: 18px;
+      font-weight: 500;
+      letter-spacing: -.04px;
+    }
+
+    .energy-option-desc {
+      margin-top: 4px;
+      color: rgba(24,24,24,.62);
+      font-size: 11.3px;
+      line-height: 15px;
+      font-weight: 400;
+      letter-spacing: .12px;
+    }
+
+    .energy-switch {
+      position: relative;
+      width: 43px;
+      height: 26px;
+      border: 1px solid rgba(24,24,24,.10);
+      border-radius: 999px;
+      background: #ffffff;
+      cursor: pointer;
+      appearance: none;
+      flex: 0 0 auto;
+      box-shadow: inset 0 1px 2px rgba(24,24,24,.08);
+      transition: background .2s ease, border-color .2s ease;
+    }
+
+    .energy-switch::after {
+      content: "";
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: #050605;
+      box-shadow: 0 1px 3px rgba(0,0,0,.20);
+      transition: transform .2s ease;
+    }
+
+    .energy-switch.is-on {
+      background: #050605;
+      border-color: #050605;
+    }
+
+    .energy-switch.is-on::after {
+      background: #ffffff;
+      transform: translateX(17px);
+    }
+
+    .transparent-row {
+      background: rgba(255,255,255,.34);
+    }
+
+    .danger-card {
+      margin-top: 22px;
+      margin-bottom: 12px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .danger-button {
+      width: auto;
+      min-height: 42px;
+      padding: 0 18px;
+      border: 1px solid rgba(24,24,24,.075);
+      border-radius: 999px;
+      background: rgba(255,255,255,.62);
+      color: rgba(0, 0, 0, 0.46);
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.62),
+        0 6px 16px rgba(32,32,32,.035);
+      font-family: "General Sans", "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
+      font-size: 12px;
+      line-height: 18px;
+      font-weight: 500;
+      letter-spacing: .01px;
+      cursor: pointer;
+    }
+
+    .danger-button:active {
+      transform: translateY(1px);
+      background: rgba(255,255,255,.78);
+      color: rgba(24,24,24,.62);
+    }
+
+
+    @keyframes fill-reserve {
+      0% { --reserve-progress: 0%; }
+      100% { --reserve-progress: 50%; }
+    }
+
+    @keyframes float-up {
+      0% { transform: translateY(20px); opacity: 0; }
+      100% { transform: translateY(0); opacity: 1; }
+    }
+
+    @keyframes soft-fade {
+      0% { opacity: 0; }
+      100% { opacity: 1; }
+    }
+
+    .reveal-up { animation: float-up .72s cubic-bezier(.22,1,.36,1) backwards; }
+    .reveal-soft { animation: soft-fade .25s ease backwards; }
+    .reveal-delay-1 { animation-delay: .06s; }
+    .reveal-delay-2 { animation-delay: .16s; }
+    .reveal-delay-3 { animation-delay: .26s; }
+    .reveal-delay-4 { animation-delay: .36s; }
+    .reveal-delay-5 { animation-delay: .46s; }
+    .reveal-delay-6 { animation-delay: .56s; }
+
+    @media (max-width: 540px) {
+      body { padding: 0; background: var(--bg); }
+      .phone { width: 100vw; height: auto; min-height: 0; border-radius: 0; box-shadow: none; }
+    }
+
+    /* ── Avatar-Edit-Button ───────────────────────────── */
+    .avatar-wrap {
+      position: relative;
+      flex: 0 0 auto;
+    }
+
+    .avatar-edit-btn {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      width: 21px;
+      height: 21px;
+      border-radius: 50%;
+      background: #ffffff;
+      border: 1.5px solid rgba(24,24,24,.09);
+      box-shadow: 0 2px 6px rgba(24,24,24,.16);
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+      padding: 0;
+      appearance: none;
+      -webkit-appearance: none;
+      z-index: 1;
+    }
+
+    .avatar-edit-btn svg {
+      width: 10px;
+      height: 10px;
+      stroke: #171a16;
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-width: 2;
+    }
+
+    /* ── Profilbild-Sheet ─────────────────────────────── */
+    .avatar-sheet-scrim {
+      position: absolute;
+      inset: 0;
+      z-index: 48;
+      background: rgba(23,26,22,.18);
+      backdrop-filter: blur(3px);
+      -webkit-backdrop-filter: blur(3px);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .3s ease;
+    }
+
+    .avatar-sheet-scrim.is-open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .avatar-sheet {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 49;
+      background: rgba(249,249,247,.97);
+      border-radius: 26px 26px 0 0;
+      padding: 8px 16px 16px;
+      transform: translateY(104%);
+      transition: transform .44s cubic-bezier(.16,1,.3,1);
+      box-shadow: 0 -6px 28px rgba(24,24,24,.07);
+    }
+
+    .avatar-sheet.is-open {
+      transform: translateY(0);
+    }
+
+    .sheet-grabber {
+      width: 36px;
+      height: 4px;
+      border-radius: 999px;
+      background: rgba(24,24,24,.14);
+      margin: 0 auto 10px;
+    }
+
+    .sheet-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .sheet-title {
+      font-family: "General Sans", "SF Pro Display", "Helvetica Neue", Arial, sans-serif;
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text);
+      letter-spacing: -.1px;
+    }
+
+    .sheet-close {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      border: 1px solid rgba(24,24,24,.08);
+      background: rgba(24,24,24,.06);
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+      padding: 0;
+      appearance: none;
+      -webkit-appearance: none;
+      color: var(--text);
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .sheet-close svg {
+      width: 13px;
+      height: 13px;
+      stroke: currentColor;
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-width: 2.2;
+    }
+
+    .avatar-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .avatar-option {
+      position: relative;
+      aspect-ratio: 1;
+      border: none;
+      padding: 10px;
+      cursor: pointer;
+      appearance: none;
+      -webkit-appearance: none;
+      background: transparent;
+      border-radius: 50%;
+      -webkit-tap-highlight-color: transparent;
+      transition: transform .12s ease;
+    }
+
+    .avatar-option:active { transform: scale(.9); }
+
+    .avatar-opt-inner {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background: #111410;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(24,24,24,.10);
+    }
+
+    .avatar-option.is-selected .avatar-opt-inner {
+      outline: 2.5px solid rgba(24,24,24,.22);
+      outline-offset: 2px;
+    }
+
+    .avatar-opt-inner img {
+      width: 88%;
+      height: 88%;
+      object-fit: contain;
+    }
+
+    .avatar-opt-inner svg {
+      width: 46%;
+      height: 46%;
+      stroke: rgba(255,255,255,.88);
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-width: 1.5;
+    }
+
+    .avatar-opt-initial {
+      color: rgba(255,255,255,.90);
+      font-family: "General Sans", "SF Pro Display", sans-serif;
+      font-size: 15px;
+      font-weight: 400;
+      letter-spacing: -.2px;
+      line-height: 1;
+    }
+
+    .avatar-opt-initial.small { font-size: 12px; }
+
+    .avatar-opt-check {
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+      width: 17px;
+      height: 17px;
+      border-radius: 50%;
+      background: #111410;
+      border: 1.5px solid #f8f8f6;
+      display: none;
+      place-items: center;
+      z-index: 1;
+    }
+
+    .avatar-option.is-selected .avatar-opt-check {
+      display: grid;
+    }
+
+    .avatar-opt-check svg {
+      width: 9px;
+      height: 9px;
+      stroke: #ffffff;
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-width: 2.5;
+    }
+
+    .avatar-opt-ring .avatar-opt-inner {
+      box-shadow: 0 0 0 1.5px rgba(255,255,255,.28), 0 2px 8px rgba(24,24,24,.10);
+    }
+
+    .sheet-upload {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 13px 14px;
+      border-radius: 16px;
+      background: rgba(24,24,24,.04);
+      border: 1px solid rgba(24,24,24,.05);
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .avatar-page { display: none; }
+    .avatar-page.is-active { display: block; }
+
+    .avatar-pager {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      margin-bottom: 12px;
+    }
+
+    .avatar-pager-btn {
+      background: none;
+      border: none;
+      padding: 4px;
+      cursor: pointer;
+      color: rgba(24,24,24,.45);
+      display: grid;
+      place-items: center;
+      -webkit-tap-highlight-color: transparent;
+      transition: color .15s;
+    }
+
+    .avatar-pager-btn:disabled { opacity: .2; cursor: default; }
+    .avatar-pager-btn svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-linecap: round; stroke-linejoin: round; stroke-width: 2; }
+
+    .avatar-pager-label {
+      font-family: "General Sans", sans-serif;
+      font-size: 12px;
+      font-weight: 500;
+      color: rgba(24,24,24,.45);
+      letter-spacing: .1px;
+      min-width: 28px;
+      text-align: center;
+    }
+
+    .sheet-upload-title {
+      font-family: "General Sans", sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text);
+      letter-spacing: -.04px;
+    }
+
+    .sheet-upload-desc {
+      margin-top: 2px;
+      font-family: "General Sans", sans-serif;
+      font-size: 10.5px;
+      color: rgba(24,24,24,.50);
+      font-weight: 400;
+    }
+
+    .sheet-upload-btn {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      border: 1px solid rgba(24,24,24,.09);
+      background: rgba(255,255,255,.82);
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+      padding: 0;
+      appearance: none;
+      -webkit-appearance: none;
+      box-shadow: 0 1px 4px rgba(24,24,24,.06);
+      flex: 0 0 auto;
+    }
+
+    .sheet-upload-btn svg {
+      width: 15px;
+      height: 15px;
+      stroke: var(--text);
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-width: 1.7;
+    }
+
+  </style>
+</head>
+<body>
+  <main class="phone" aria-label="Commons Einstellungen">
+    <div class="statusbar" aria-hidden="true">
+      <div class="time">9:41</div>
+      <div class="status-icons">
+        <div class="signal"><span></span><span></span><span></span><span></span></div>
+        <div class="wifi"></div>
+        <div class="battery"></div>
+      </div>
+    </div>
+
+    <header class="topbar reveal-up reveal-delay-1">
+      <button class="icon-button" onclick="window.smoothBack ? smoothBack() : history.back()" aria-label="Zur&uuml;ck">
+        <svg viewBox="0 0 24 24"><path d="M15 18 9 12l6-6"/></svg>
+      </button>
+      <a class="icon-button" href="Homepage.html" aria-label="Homepage &ouml;ffnen">
+        <svg viewBox="0 0 24 24"><path d="M6.8 11.5c0-.45.2-.88.55-1.16l3.7-3.02a1.48 1.48 0 0 1 1.9 0l3.7 3.02c.35.28.55.71.55 1.16v5.58a2.02 2.02 0 0 1-2.02 2.02H8.82a2.02 2.02 0 0 1-2.02-2.02Z"/></svg>
+      </a>
+    </header>
+
+    <section class="settings-scroll">
+      <small class="eyebrow reveal-up reveal-delay-2">Profil</small>
+      <h1 class="reveal-up reveal-delay-2">Einstellungen</h1>
+
+      <div class="profile-card reveal-up reveal-delay-3" aria-label="Profil bearbeiten">
+        <div class="avatar-wrap">
+          <div class="avatar">
+            <img src="Icons/pb 10.png" alt="Profilbild von Nici" id="mainAvatarImg">
+          </div>
+          <button class="avatar-edit-btn" type="button" aria-label="Profilbild ändern">
+            <svg viewBox="0 0 24 24"><path d="M14 5l5 5"/><path d="M4 20l4.2-1 10-10a2.1 2.1 0 0 0-3-3l-10 10L4 20Z"/></svg>
+          </button>
+        </div>
+        <div style="flex:1;min-width:0;">
+          <label class="profile-name" for="profile-name-input">
+            <span class="profile-name-text">
+              <input class="profile-name-input" id="profile-name-input" name="profile-name" type="text" value="Nici Schmidt" autocomplete="name" inputmode="none" readonly aria-label="Profilname bearbeiten">
+              <span class="profile-name-caret" aria-hidden="true"></span>
+            </span>
+            <span class="profile-name-measure" aria-hidden="true">Nici Schmidt</span>
+            <span class="profile-edit-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M14 5l5 5"/><path d="M4 20l4.2-1 10-10a2.1 2.1 0 0 0-3-3l-10 10L4 20Z"/></svg>
+            </span>
+          </label>
+          <div class="profile-meta">PV-&Uuml;berschussspenderin &middot; Ulm</div>
+          <div class="profile-energy">13.5 kWh heute im Commons-Topf</div>
+        </div>
+        <div class="chevron"><svg viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></div>
+      </div>
+
+      <section class="section reveal-up reveal-delay-4" aria-labelledby="appearance-title">
+        <h2 class="section-title" id="appearance-title">Erscheinung</h2>
+        <div class="settings-card">
+          <div class="setting-row">
+            <div class="setting-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2m10-10h-2M4 12H2m17.1-7.1-1.4 1.4M6.3 17.7l-1.4 1.4m14.2 0-1.4-1.4M6.3 6.3 4.9 4.9"/></svg></div>
+            <div class="setting-copy">
+              <div class="setting-title">Dark Mode</div>
+            </div>
+            <button class="toggle is-off" type="button" aria-label="Dark Mode umschalten" aria-pressed="false"></button>
+          </div>
+        </div>
+      </section>
+
+      <section class="section reveal-up reveal-delay-5" aria-labelledby="your-energy-title">
+        <h2 class="section-title" id="your-energy-title">Deine Energie</h2>
+        <div class="settings-card energy-options-card">
+          <div class="setting-row" aria-label="Autopilot einstellen">
+            <div class="setting-icon"><svg viewBox="0 0 24 24"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></svg></div>
+            <div class="setting-copy">
+              <div class="setting-title">Autopilot</div>
+              <div class="setting-desc">Freien &Uuml;berschuss automatisch in lokale Projekte leiten.</div>
+            </div>
+            <button class="toggle is-off" type="button" aria-label="Autopilot umschalten" aria-pressed="false"></button>
+          </div>
+          <div class="energy-option-row">
+            <div class="energy-option-icon"><svg viewBox="0 0 24 24"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg></div>
+            <div>
+              <div class="energy-option-title">Ruhezeiten</div>
+              <div class="energy-option-desc">Energiefl&uuml;sse zwischen 23 Uhr und 6 Uhr pausieren.</div>
+            </div>
+            <button class="toggle is-off" type="button" aria-label="Ruhezeiten umschalten" aria-pressed="false"></button>
+          </div>
+        </div>
+      </section>
+
+      <section class="section reserve-section reveal-up reveal-delay-6" aria-label="Speicher-Reserve">
+        <div class="mini-grid">
+          <div class="mini-card">
+            <div class="mini-label">Speicher-Reserve</div>
+            <div class="mini-value">50%</div>
+            <div class="mini-copy">F&uuml;r deine Anlage reserviert.</div>
+            <div class="mini-ring" aria-hidden="true"></div>
+          </div>
+          <div class="mini-card">
+            <div class="mini-label">Projektfokus</div>
+            <div class="mini-value">lokal</div>
+            <div class="mini-copy">&Uuml;berschuss bleibt in Wien.</div>
+            <div class="mini-radio" aria-hidden="true"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section reveal-up reveal-delay-6" aria-labelledby="energy-title">
+        <h2 class="section-title" id="energy-title">Commons</h2>
+        <div class="settings-card">
+          <a class="setting-row" href="#" aria-label="Mein Energie-Profil &ouml;ffnen">
+            <div class="setting-icon"><svg viewBox="0 0 24 24"><path d="M13 2 4 14h7l-1 8 10-13h-7l0-7Z"/></svg></div>
+            <div class="setting-copy">
+              <div class="setting-title">Mein Energie-Profil</div>
+              <div class="setting-desc">Technische Details zur PV-Anlage oder zum Balkonkraftwerk: <strong>Modul-Leistung</strong>, Ausrichtung und Reserve.</div>
+            </div>
+            <div class="chevron"><svg viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></div>
+          </a>
+
+          <a class="setting-row" href="#" aria-label="EDA Schnittstelle und Smart Meter &ouml;ffnen">
+            <div class="setting-icon"><svg viewBox="0 0 24 24"><path d="M6 8h12M6 16h12"/><path d="M8 4h8a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Z"/></svg></div>
+            <div class="setting-copy">
+              <div class="setting-title eda-title">EDA-Schnittstelle &amp; Smart Meter</div>
+              <div class="setting-desc">Datenverbindung zum Netzbetreiber: aktiv, synchronisiert und alle 15 Minuten verschl&uuml;sselt.</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:6px;"><div class="status-pill">Aktiv</div><div class="chevron"><svg viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></div></div>
+          </a>
+        </div>
+      </section>
+
+      <section class="section account-section reveal-up reveal-delay-6" aria-labelledby="account-title">
+        <h2 class="section-title" id="account-title">Account</h2>
+        <div class="settings-card">
+          <a class="setting-row" href="#" aria-label="Vereinsverwaltung &ouml;ffnen">
+            <div class="setting-icon"><svg viewBox="0 0 24 24"><path d="M4 11.5 12 5l8 6.5"/><path d="M6.5 11v7.2a2.3 2.3 0 0 0 2.3 2.3h6.4a2.3 2.3 0 0 0 2.3-2.3V11"/><path d="M9.5 20.5v-4.5h5v4.5"/></svg></div>
+            <div class="setting-copy">
+              <div class="setting-title">Vereins-Verwaltung</div>
+              <div class="setting-desc">Digitale Mitgliedskarte des COMMONS e.V., offizielle Vereinsstatuten und j&auml;hrlicher Spendenbericht.</div>
+            </div>
+            <div class="chevron"><svg viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></div>
+          </a>
+
+          <a class="setting-row" href="#" aria-label="Benachrichtigungen einstellen">
+            <div class="setting-icon"><svg viewBox="0 0 24 24"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 7h18s-3 0-3-7"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></div>
+            <div class="setting-copy">
+              <div class="setting-title">Benachrichtigungen</div>
+              <div class="setting-desc">Push-Meldungen f&uuml;r neue Votings, laufende Spenden und Projekt-Updates.</div>
+            </div>
+            <div class="chevron"><svg viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></div>
+          </a>
+
+          <a class="setting-row" href="#" aria-label="Transparenz und Datenschutz &ouml;ffnen">
+            <div class="setting-icon"><svg viewBox="0 0 24 24"><path d="M12 3 19 6v5c0 4.8-2.8 8.2-7 10-4.2-1.8-7-5.2-7-10V6l7-3Z"/><path d="m9.2 12 1.9 1.9 3.9-4.1"/></svg></div>
+            <div class="setting-copy">
+              <div class="setting-title">Transparenz &amp; Datenschutz</div>
+              <div class="setting-desc">Einsehen, welche Stromdaten verarbeitet werden und wie die &Uuml;bertragung gesch&uuml;tzt ist.</div>
+            </div>
+            <div class="chevron"><svg viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></div>
+          </a>
+
+          <div class="setting-row transparent-row" aria-label="Anonym erscheinen einstellen">
+            <div class="setting-icon"><svg viewBox="0 0 24 24"><path d="M3 3l18 18"/><path d="M10.6 10.7A2 2 0 0 0 13.3 13.4"/><path d="M9.9 5.2A9.7 9.7 0 0 1 12 5c5 0 8.5 4.2 9.5 7-0.4 1.1-1.2 2.3-2.3 3.4"/><path d="M6.2 6.8C4.4 8.1 3.2 10 2.5 12c1 2.8 4.5 7 9.5 7 1.5 0 2.9-.4 4.1-1"/></svg></div>
+            <div class="setting-copy">
+              <div class="setting-title">Anonym erscheinen</div>
+              <div class="setting-desc">Deinen Namen auf der Karte ausblenden.</div>
+            </div>
+            <button class="toggle is-off" type="button" aria-label="Anonym erscheinen umschalten" aria-pressed="false"></button>
+          </div>
+        </div>
+      </section>
+
+      <section class="danger-card reveal-up reveal-delay-6" aria-label="Community verlassen">
+        <button class="danger-button" type="button">Von der Community abmelden</button>
+      </section>
+    </section>
+
+    <!-- Profilbild-Sheet -->
+    <div class="avatar-sheet-scrim" id="avatarScrim"></div>
+    <div class="avatar-sheet" id="avatarSheet" role="dialog" aria-modal="true" aria-label="Profilbild wählen">
+      <div class="sheet-grabber"></div>
+      <div class="sheet-header">
+        <span class="sheet-title">Profilbild wählen</span>
+        <button class="sheet-close" type="button" id="avatarSheetClose" aria-label="Schließen">
+          <svg viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg>
+        </button>
+      </div>
+      <div class="avatar-page is-active" id="avatarPage1">
+        <div class="avatar-grid">
+          <button class="avatar-option" type="button" data-src="__initials_full__"><div class="avatar-opt-inner"><span class="avatar-opt-initial" id="initialsFullDisplay">NS</span></div><div class="avatar-opt-check"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></div></button>
+          <button class="avatar-option" type="button" data-src="__initials_first__"><div class="avatar-opt-inner"><span class="avatar-opt-initial" id="initialsFirstDisplay">N</span></div><div class="avatar-opt-check"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></div></button>
+          <button class="avatar-option is-selected" type="button" data-src="Icons/pb 10.png"><div class="avatar-opt-inner"><img src="Icons/pb 10.png" alt=""></div><div class="avatar-opt-check"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></div></button>
+          <button class="avatar-option" type="button" data-src="Icons/pb 11.png"><div class="avatar-opt-inner"><img src="Icons/pb 11.png" alt=""></div><div class="avatar-opt-check"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></div></button>
+          <button class="avatar-option" type="button" data-src="Icons/pb 13.png"><div class="avatar-opt-inner"><img src="Icons/pb 13.png" alt=""></div><div class="avatar-opt-check"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></div></button>
+          <button class="avatar-option" type="button" data-src="Icons/pb 14.png"><div class="avatar-opt-inner"><img src="Icons/pb 14.png" alt=""></div><div class="avatar-opt-check"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></div></button>
+          <button class="avatar-option" type="button" data-src="Icons/pb 15.png"><div class="avatar-opt-inner"><img src="Icons/pb 15.png" alt=""></div><div class="avatar-opt-check"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></div></button>
+          <button class="avatar-option" type="button" data-src="Icons/pb 16.png"><div class="avatar-opt-inner"><img src="Icons/pb 16.png" alt=""></div><div class="avatar-opt-check"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></div></button>
+          <button class="avatar-option" type="button" data-src="Icons/pb 17.png"><div class="avatar-opt-inner"><img src="Icons/pb 17.png" alt=""></div><div class="avatar-opt-check"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></div></button>
+          <button class="avatar-option" type="button" data-src="Icons/pb 19.png"><div class="avatar-opt-inner"><img src="Icons/pb 19.png" alt=""></div><div class="avatar-opt-check"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></div></button>
+          <button class="avatar-option" type="button" data-src="Icons/pb 20.png"><div class="avatar-opt-inner"><img src="Icons/pb 20.png" alt=""></div><div class="avatar-opt-check"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></div></button>
+          <button class="avatar-option" type="button" data-src="Icons/pb 21.png"><div class="avatar-opt-inner"><img src="Icons/pb 21.png" alt=""></div><div class="avatar-opt-check"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></div></button>
+          <button class="avatar-option" type="button" data-src="Icons/pb 22.png"><div class="avatar-opt-inner"><img src="Icons/pb 22.png" alt=""></div><div class="avatar-opt-check"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></div></button>
+          <button class="avatar-option" type="button" data-src="Icons/pb 23.png"><div class="avatar-opt-inner"><img src="Icons/pb 23.png" alt=""></div><div class="avatar-opt-check"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></div></button>
+          <button class="avatar-option" type="button" data-src="Icons/pb 24.png"><div class="avatar-opt-inner"><img src="Icons/pb 24.png" alt=""></div><div class="avatar-opt-check"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></div></button>
+          <button class="avatar-option" type="button" data-src="Icons/pb 25.png"><div class="avatar-opt-inner"><img src="Icons/pb 25.png" alt=""></div><div class="avatar-opt-check"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></div></button>
+        </div>
+      </div>
+      <div class="avatar-page" id="avatarPage2">
+        <div class="avatar-grid">
+          <button class="avatar-option" type="button" data-src="Icons/pb 26.png"><div class="avatar-opt-inner"><img src="Icons/pb 26.png" alt=""></div><div class="avatar-opt-check"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></div></button>
+          <button class="avatar-option" type="button" data-src="Icons/pb 28.png"><div class="avatar-opt-inner"><img src="Icons/pb 28.png" alt=""></div><div class="avatar-opt-check"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></div></button>
+          <button class="avatar-option" type="button" data-src="Icons/pb 29.png"><div class="avatar-opt-inner"><img src="Icons/pb 29.png" alt=""></div><div class="avatar-opt-check"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></div></button>
+          <button class="avatar-option" type="button" data-src="Icons/pb 30.png"><div class="avatar-opt-inner"><img src="Icons/pb 30.png" alt=""></div><div class="avatar-opt-check"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></div></button>
+          <button class="avatar-option" type="button" data-src="Icons/pb 31.png"><div class="avatar-opt-inner"><img src="Icons/pb 31.png" alt=""></div><div class="avatar-opt-check"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></div></button>
+          <button class="avatar-option" type="button" data-src="Icons/pb 32.png"><div class="avatar-opt-inner"><img src="Icons/pb 32.png" alt=""></div><div class="avatar-opt-check"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></div></button>
+          <button class="avatar-option" type="button" data-src="Icons/pb 33.png"><div class="avatar-opt-inner"><img src="Icons/pb 33.png" alt=""></div><div class="avatar-opt-check"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></div></button>
+          <button class="avatar-option" type="button" data-src="Icons/pb 34.png"><div class="avatar-opt-inner"><img src="Icons/pb 34.png" alt=""></div><div class="avatar-opt-check"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></div></button>
+          <button class="avatar-option" type="button" data-src="Icons/pb 35.png"><div class="avatar-opt-inner"><img src="Icons/pb 35.png" alt=""></div><div class="avatar-opt-check"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></div></button>
+          <button class="avatar-option" type="button" data-src="Icons/pb 36.png"><div class="avatar-opt-inner"><img src="Icons/pb 36.png" alt=""></div><div class="avatar-opt-check"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></div></button>
+          <button class="avatar-option" type="button" data-src="Icons/pb 37.png"><div class="avatar-opt-inner"><img src="Icons/pb 37.png" alt=""></div><div class="avatar-opt-check"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></div></button>
+          <button class="avatar-option" type="button" data-src="Icons/pb 38.png"><div class="avatar-opt-inner"><img src="Icons/pb 38.png" alt=""></div><div class="avatar-opt-check"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></div></button>
+          <button class="avatar-option" type="button" data-src="Icons/pb 39.png"><div class="avatar-opt-inner"><img src="Icons/pb 39.png" alt=""></div><div class="avatar-opt-check"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></div></button>
+          <button class="avatar-option" type="button" data-src="Icons/pb 40.png"><div class="avatar-opt-inner"><img src="Icons/pb 40.png" alt=""></div><div class="avatar-opt-check"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></div></button>
+          <button class="avatar-option" type="button" data-src="Icons/pb 41.png"><div class="avatar-opt-inner"><img src="Icons/pb 41.png" alt=""></div><div class="avatar-opt-check"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></div></button>
+          <button class="avatar-option" type="button" data-src="Icons/pb 42.png"><div class="avatar-opt-inner"><img src="Icons/pb 42.png" alt=""></div><div class="avatar-opt-check"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></div></button>
+        </div>
+      </div>
+      <div class="avatar-pager">
+        <button class="avatar-pager-btn" id="avatarPrev" disabled><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></button>
+        <span class="avatar-pager-label" id="avatarPageLabel">1 / 2</span>
+        <button class="avatar-pager-btn" id="avatarNext"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></button>
+      </div>
+      <div class="sheet-upload" id="uploadRow">
+        <div>
+          <div class="sheet-upload-title">Eigenes Bild hinzuf&uuml;gen</div>
+          <div class="sheet-upload-desc">W&auml;hle ein Bild aus deiner Galerie.</div>
+        </div>
+        <button class="sheet-upload-btn" type="button" aria-label="Bild aus Galerie wählen" id="uploadBtn">
+          <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        </button>
+        <input type="file" id="avatarFileInput" accept="image/*" style="display:none">
+      </div>
+    </div>
+
+    <button class="keyboard-scrim" type="button" aria-label="Tastatur schlie&szlig;en"></button>
+
+    <div class="keyboard-panel" aria-hidden="true">
+      <div class="keyboard-grabber"></div>
+      <button class="keyboard-done" type="button">Fertig</button>
+      <div class="keyboard-row">
+        <button class="keyboard-key" type="button" data-key="q">q</button>
+        <button class="keyboard-key" type="button" data-key="w">w</button>
+        <button class="keyboard-key" type="button" data-key="e">e</button>
+        <button class="keyboard-key" type="button" data-key="r">r</button>
+        <button class="keyboard-key" type="button" data-key="t">t</button>
+        <button class="keyboard-key" type="button" data-key="y">y</button>
+        <button class="keyboard-key" type="button" data-key="u">u</button>
+        <button class="keyboard-key" type="button" data-key="i">i</button>
+        <button class="keyboard-key" type="button" data-key="o">o</button>
+        <button class="keyboard-key" type="button" data-key="p">p</button>
+      </div>
+      <div class="keyboard-row home-row">
+        <button class="keyboard-key" type="button" data-key="a">a</button>
+        <button class="keyboard-key" type="button" data-key="s">s</button>
+        <button class="keyboard-key" type="button" data-key="d">d</button>
+        <button class="keyboard-key" type="button" data-key="f">f</button>
+        <button class="keyboard-key" type="button" data-key="g">g</button>
+        <button class="keyboard-key" type="button" data-key="h">h</button>
+        <button class="keyboard-key" type="button" data-key="j">j</button>
+        <button class="keyboard-key" type="button" data-key="k">k</button>
+        <button class="keyboard-key" type="button" data-key="l">l</button>
+      </div>
+      <div class="keyboard-row third-row">
+        <button class="keyboard-key gray shift-key" type="button" data-action="shift">↑</button>
+        <button class="keyboard-key" type="button" data-key="z">z</button>
+        <button class="keyboard-key" type="button" data-key="x">x</button>
+        <button class="keyboard-key" type="button" data-key="c">c</button>
+        <button class="keyboard-key" type="button" data-key="v">v</button>
+        <button class="keyboard-key" type="button" data-key="b">b</button>
+        <button class="keyboard-key" type="button" data-key="n">n</button>
+        <button class="keyboard-key" type="button" data-key="m">m</button>
+        <button class="keyboard-key gray" type="button" data-action="backspace">⌫</button>
+      </div>
+      <div class="keyboard-row">
+        <button class="keyboard-key gray mode" type="button" data-action="clear">123</button>
+        <button class="keyboard-key space" type="button" data-key=" ">space</button>
+        <button class="keyboard-key gray return" type="button" data-action="done">return</button>
+      </div>
+    </div>
+
+  </main>
+  <script>
+    // Live clock
+    (function() {
+      const el = document.querySelector('.time');
+      if (!el) return;
+      const update = () => { const n = new Date(); el.textContent = n.getHours() + ':' + String(n.getMinutes()).padStart(2,'0'); };
+      update(); setInterval(update, 10000);
+    })();
+
+    // Skip reveal animation if already visited this session
+    (function() {
+      if (sessionStorage.getItem('es_visited')) {
+        document.querySelectorAll('.reveal-up').forEach(el => {
+          el.classList.remove('reveal-up', 'reveal-delay-1', 'reveal-delay-2', 'reveal-delay-3', 'reveal-delay-4', 'reveal-delay-5', 'reveal-delay-6');
+          el.classList.add('reveal-soft');
+        });
+      } else {
+        sessionStorage.setItem('es_visited', '1');
+      }
+    })();
+
+    document.querySelectorAll('.toggle').forEach((toggle) => {
+      toggle.addEventListener('click', () => {
+        const isOn = toggle.getAttribute('aria-pressed') === 'true';
+        toggle.setAttribute('aria-pressed', String(!isOn));
+        toggle.classList.toggle('is-off', isOn);
+      });
+    });
+
+    const profileNameInput = document.querySelector('.profile-name-input');
+    const profileNameMeasure = document.querySelector('.profile-name-measure');
+    const profileNameCaret = document.querySelector('.profile-name-caret');
+    const profileNameText = document.querySelector('.profile-name-text');
+    const phone = document.querySelector('.phone');
+    const keyboardPanel = document.querySelector('.keyboard-panel');
+    let keyboardShift = false;
+    let profileCaretIndex = profileNameInput?.value.length || 0;
+
+    const measureProfileText = (text) => {
+      if (!profileNameMeasure) return text.length * 8;
+      profileNameMeasure.textContent = text || ' ';
+      return profileNameMeasure.getBoundingClientRect().width;
+    };
+
+    const syncProfileCaret = () => {
+      if (!profileNameInput || !profileNameCaret) return;
+      const caretText = profileNameInput.value.slice(0, profileCaretIndex);
+      profileNameCaret.style.left = `${Math.ceil(caretText ? measureProfileText(caretText) : 0)}px`;
+    };
+
+    const syncProfileNameWidth = () => {
+      if (!profileNameInput) return;
+      if (profileNameMeasure) {
+        profileNameInput.style.width = `${Math.ceil(measureProfileText(profileNameInput.value)) + 14}px`;
+        syncProfileCaret();
+        return;
+      }
+      profileNameInput.style.width = `${Math.max(profileNameInput.value.length, 4)}ch`;
+      syncProfileCaret();
+    };
+
+    const openKeyboard = () => {
+      phone?.classList.add('keyboard-open');
+      keyboardPanel?.setAttribute('aria-hidden', 'false');
+    };
+
+    const closeKeyboard = () => {
+      phone?.classList.remove('keyboard-open');
+      keyboardPanel?.setAttribute('aria-hidden', 'true');
+      const name = profileNameInput?.value?.trim();
+      if (name) localStorage.setItem('commons_user_name', name);
+    };
+
+    const updateKeyboardCase = () => {
+      document.querySelectorAll('.keyboard-key[data-key]').forEach((key) => {
+        const value = key.dataset.key;
+        if (!value || value === ' ') return;
+        key.textContent = keyboardShift ? value.toUpperCase() : value.toLowerCase();
+      });
+      const shiftKey = document.querySelector('.shift-key');
+      if (shiftKey) shiftKey.style.background = keyboardShift ? '#aeb2ab' : '#c4c7c1';
+    };
+
+    const setProfileName = (value) => {
+      if (!profileNameInput) return;
+      profileNameInput.value = value.slice(0, 24);
+      profileCaretIndex = Math.min(profileCaretIndex, profileNameInput.value.length);
+      syncProfileNameWidth();
+      syncInitialsDisplay();
+      const savedType = localStorage.getItem(AVATAR_TYPE_KEY);
+      if (savedType) applyAvatar(savedType);
+    };
+
+    const setProfileCaretFromPoint = (clientX) => {
+      if (!profileNameInput || !profileNameText) return;
+      const text = profileNameInput.value;
+      const left = profileNameText.getBoundingClientRect().left;
+      const x = Math.max(0, clientX - left);
+      let closestIndex = 0;
+      let closestDistance = Number.POSITIVE_INFINITY;
+
+      for (let index = 0; index <= text.length; index += 1) {
+        const width = index === 0 ? 0 : measureProfileText(text.slice(0, index));
+        const distance = Math.abs(width - x);
+        if (distance < closestDistance) {
+          closestDistance = distance;
+          closestIndex = index;
+        }
+      }
+
+      profileCaretIndex = closestIndex;
+      syncProfileCaret();
+    };
+
+    const insertProfileText = (text) => {
+      if (!profileNameInput) return;
+      const currentValue = profileNameInput.value;
+      setProfileName(`${currentValue.slice(0, profileCaretIndex)}${text}${currentValue.slice(profileCaretIndex)}`);
+      profileCaretIndex = Math.min(profileCaretIndex + text.length, profileNameInput.value.length);
+      syncProfileCaret();
+    };
+
+    const deleteProfileText = () => {
+      if (!profileNameInput || profileCaretIndex === 0) return;
+      const currentValue = profileNameInput.value;
+      setProfileName(`${currentValue.slice(0, profileCaretIndex - 1)}${currentValue.slice(profileCaretIndex)}`);
+      profileCaretIndex -= 1;
+      syncProfileCaret();
+    };
+
+    const savedProfileName = localStorage.getItem('commons_user_name');
+    if (savedProfileName && profileNameInput) {
+      profileNameInput.value = savedProfileName;
+      profileCaretIndex = savedProfileName.length;
+      if (profileNameMeasure) profileNameMeasure.textContent = savedProfileName;
+    }
+    syncProfileNameWidth();
+    updateKeyboardCase();
+
+    document.querySelector('.profile-name')?.addEventListener('pointerdown', (event) => {
+      event.preventDefault();
+      setProfileCaretFromPoint(event.clientX);
+      openKeyboard();
+    });
+
+    document.querySelectorAll('.keyboard-key').forEach((key) => {
+      key.addEventListener('pointerdown', (event) => {
+        event.preventDefault();
+        const action = key.dataset.action;
+        const value = key.dataset.key;
+
+        if (action === 'done') {
+          closeKeyboard();
+          return;
+        }
+
+        if (action === 'backspace') {
+          deleteProfileText();
+          return;
+        }
+
+        if (action === 'shift') {
+          keyboardShift = !keyboardShift;
+          updateKeyboardCase();
+          return;
+        }
+
+        if (action === 'clear') {
+          profileCaretIndex = 0;
+          setProfileName('');
+          return;
+        }
+
+        if (value) {
+          const nextValue = keyboardShift && value !== ' ' ? value.toUpperCase() : value;
+          insertProfileText(nextValue);
+          if (keyboardShift) {
+            keyboardShift = false;
+            updateKeyboardCase();
+          }
+        }
+      });
+    });
+
+    document.querySelector('.keyboard-done')?.addEventListener('pointerdown', (event) => {
+      event.preventDefault();
+      closeKeyboard();
+    });
+
+    document.querySelector('.keyboard-scrim')?.addEventListener('pointerdown', (event) => {
+      event.preventDefault();
+      closeKeyboard();
+    });
+
+    // Avatar sheet
+    const avatarScrimEl = document.getElementById('avatarScrim');
+    const avatarSheetEl = document.getElementById('avatarSheet');
+    const mainAvatarImg = document.getElementById('mainAvatarImg');
+    const AVATAR_KEY = 'commons_user_avatar';
+    const AVATAR_TYPE_KEY = 'commons_user_avatar_type';
+
+    const getInitialsText = (type) => {
+      const name = (document.querySelector('.profile-name-input')?.value || 'Nici Schmidt').trim();
+      const parts = name.split(/\s+/).filter(Boolean);
+      if (type === 'full' && parts.length >= 2) return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+      return parts[0]?.[0]?.toUpperCase() || '?';
+    };
+
+    const initialsToDataUrl = (text) => {
+      const s = 200;
+      const c = document.createElement('canvas');
+      c.width = s; c.height = s;
+      const ctx = c.getContext('2d');
+      ctx.fillStyle = '#111410';
+      ctx.beginPath(); ctx.arc(s/2, s/2, s/2, 0, Math.PI*2); ctx.fill();
+      ctx.fillStyle = 'rgba(255,255,255,.90)';
+      ctx.font = `400 ${text.length > 1 ? 68 : 84}px "General Sans", Arial, sans-serif`;
+      ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      ctx.fillText(text, s/2, s/2 + 3);
+      return c.toDataURL();
+    };
+
+    const syncInitialsDisplay = () => {
+      const full = document.getElementById('initialsFullDisplay');
+      const first = document.getElementById('initialsFirstDisplay');
+      if (full) full.textContent = getInitialsText('full');
+      if (first) first.textContent = getInitialsText('first');
+    };
+
+    const applyAvatar = (src) => {
+      if (!src) return;
+      const isInitials = src === '__initials_full__' || src === '__initials_first__';
+      let displaySrc = src;
+      if (isInitials) {
+        const type = src === '__initials_full__' ? 'full' : 'first';
+        displaySrc = initialsToDataUrl(getInitialsText(type));
+        localStorage.setItem(AVATAR_TYPE_KEY, src);
+        localStorage.removeItem(AVATAR_KEY);
+      } else {
+        localStorage.removeItem(AVATAR_TYPE_KEY);
+        localStorage.setItem(AVATAR_KEY, src);
+      }
+      if (mainAvatarImg) mainAvatarImg.src = displaySrc;
+      document.querySelectorAll('.avatar-option').forEach((o) => {
+        o.classList.toggle('is-selected', o.dataset.src === src);
+      });
+    };
+
+    // Restore saved avatar on load
+    syncInitialsDisplay();
+    const savedType = localStorage.getItem(AVATAR_TYPE_KEY);
+    const savedAvatar = localStorage.getItem(AVATAR_KEY);
+    if (savedType) applyAvatar(savedType);
+    else if (savedAvatar) applyAvatar(savedAvatar);
+
+    const openAvatarSheet = () => {
+      avatarSheetEl?.classList.add('is-open');
+      avatarScrimEl?.classList.add('is-open');
+    };
+
+    const closeAvatarSheet = () => {
+      avatarSheetEl?.classList.remove('is-open');
+      avatarScrimEl?.classList.remove('is-open');
+    };
+
+    document.querySelector('.avatar-wrap')?.addEventListener('pointerdown', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      openAvatarSheet();
+    });
+
+    document.getElementById('avatarSheetClose')?.addEventListener('pointerdown', (e) => {
+      e.preventDefault();
+      closeAvatarSheet();
+    });
+
+    avatarScrimEl?.addEventListener('pointerdown', (e) => {
+      e.preventDefault();
+      closeAvatarSheet();
+    });
+
+    document.querySelectorAll('.avatar-option').forEach((option) => {
+      option.addEventListener('pointerdown', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        applyAvatar(option.dataset.src);
+      });
+    });
+
+    // Paging
+    let currentAvatarPage = 1;
+    const pages = [document.getElementById('avatarPage1'), document.getElementById('avatarPage2')];
+    const prevBtn = document.getElementById('avatarPrev');
+    const nextBtn = document.getElementById('avatarNext');
+    const pageLabel = document.getElementById('avatarPageLabel');
+
+    const setAvatarPage = (n) => {
+      currentAvatarPage = n;
+      pages.forEach((p, i) => p.classList.toggle('is-active', i + 1 === n));
+      prevBtn.disabled = n === 1;
+      nextBtn.disabled = n === pages.length;
+      pageLabel.textContent = `${n} / ${pages.length}`;
+    };
+
+    prevBtn?.addEventListener('pointerdown', (e) => { e.preventDefault(); e.stopPropagation(); if (currentAvatarPage > 1) setAvatarPage(currentAvatarPage - 1); });
+    nextBtn?.addEventListener('pointerdown', (e) => { e.preventDefault(); e.stopPropagation(); if (currentAvatarPage < pages.length) setAvatarPage(currentAvatarPage + 1); });
+
+    const fileInput = document.getElementById('avatarFileInput');
+    document.getElementById('uploadRow')?.addEventListener('pointerdown', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      fileInput.click();
+    });
+
+    fileInput?.addEventListener('change', () => {
+      const file = fileInput.files?.[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        const dataUrl = ev.target.result;
+        if (mainAvatarImg) mainAvatarImg.src = dataUrl;
+        localStorage.setItem(AVATAR_KEY, dataUrl);
+        document.querySelectorAll('.avatar-option').forEach((o) => o.classList.remove('is-selected'));
+        closeAvatarSheet();
+      };
+      reader.readAsDataURL(file);
+      fileInput.value = '';
+    });
+  </script>
+    <script src="page-transition.js"></script>
+</body>
+</html>

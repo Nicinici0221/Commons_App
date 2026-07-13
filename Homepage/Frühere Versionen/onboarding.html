@@ -1,0 +1,891 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Onboarding - COMMONS</title>
+  <style>
+    /* ── Fonts (identisch zur bestehenden App) ── */
+    @font-face { font-family: "Bingo"; src: url("Bingo.woff2") format("woff2"), url("Bingo.woff") format("woff"), url("Bingo.ttf") format("truetype"); font-weight: 400; font-style: normal; font-display: swap; }
+    @font-face { font-family: "Kurdis"; src: url("Kurdis Family Delivderables/WOFF2/Kurdis-Wide.woff2") format("woff2"), url("Kurdis Family Delivderables/WOFF/Kurdis-Wide.woff") format("woff"), url("Kurdis Family Delivderables/TTF/Kurdis-Wide.ttf") format("truetype"); font-weight: 400; font-style: normal; font-display: swap; }
+    @font-face { font-family: "Kurdis"; src: url("Kurdis Family Delivderables/WOFF2/Kurdis-WideBold.woff2") format("woff2"), url("Kurdis Family Delivderables/WOFF/Kurdis-WideBold.woff") format("woff"), url("Kurdis Family Delivderables/TTF/Kurdis-WideBold.ttf") format("truetype"); font-weight: 700; font-style: normal; font-display: swap; }
+    @font-face { font-family: "KurdisRegular"; src: url("Kurdis Family Delivderables/WOFF2/Kurdis-Regular.woff2") format("woff2"), url("Kurdis Family Delivderables/WOFF/Kurdis-Regular.woff") format("woff"), url("Kurdis Family Delivderables/TTF/Kurdis-Regular.ttf") format("truetype"); font-weight: 400; font-style: normal; font-display: swap; }
+    @font-face { font-family: "General Sans"; src: url("GeneralSans_Complete/GeneralSans_Complete/Fonts/WEB/fonts/GeneralSans-Variable.woff2") format("woff2"); font-weight: 100 900; font-style: normal; font-display: swap; }
+    @font-face { font-family: "HelvenaLight"; src: url("helvena-grotesk-modern-bold-brand-identity-font-2026-04-07-06-20-11-utc/Helvena Font File/WOFF2/Helvena-Light.woff2") format("woff2"), url("helvena-grotesk-modern-bold-brand-identity-font-2026-04-07-06-20-11-utc/Helvena Font File/WOFF/Helvena-Light.woff") format("woff"), url("helvena-grotesk-modern-bold-brand-identity-font-2026-04-07-06-20-11-utc/Helvena Font File/TTF/Helvena-Light.ttf") format("truetype"); font-weight: 300; font-style: normal; font-display: swap; }
+
+    :root {
+      --bg: #f7f7f6;
+      --panel: #fbfbfa;
+      --muted: #787f79;
+      --text: #171a16;
+      --border: rgba(23,26,22,.11);
+      --border-faint: rgba(23,26,22,.06);
+      --card-solid: #ffffff;
+      --green: #4a7c59;
+    }
+
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+    html, body {
+      width: 100%; min-height: 100%; margin: 0;
+      background: #e2e5df;
+      font-family: "General Sans", "SF Pro Display", -apple-system, BlinkMacSystemFont, sans-serif;
+      color: var(--text);
+      -webkit-font-smoothing: antialiased;
+      text-rendering: geometricPrecision;
+    }
+    body { display: grid; place-items: center; padding: 20px; }
+
+    /* ── Phone Container (identisch zur App) ── */
+    .phone {
+      position: relative;
+      width: min(440px, calc(100vw - 40px));
+      height: auto;
+      aspect-ratio: 440 / 956;
+      overflow: hidden;
+      background: #fbfbfa;
+      border-radius: 32px;
+      box-shadow: 0 28px 80px rgba(35,42,36,.18);
+      isolation: isolate;
+    }
+    .phone::before {
+      content: ""; position: absolute; top: 16px; left: 50%; width: 128px; height: 31px; border-radius: 18px; transform: translateX(-50%); background: #0a1020; z-index: 60;
+      transition: opacity .3s ease;
+      display: none;
+    }
+    .phone.is-intro::before { opacity: 0; }
+
+    /* ── Status Bar ── */
+    .statusbar { display: none; position: absolute; top: 25px; left: 0; right: 0; height: 20px; z-index: 55; pointer-events: none; transition: opacity .3s ease; }
+    .time { position: absolute; left: 45px; top: -1px; color: #171a16; font-family: "General Sans", sans-serif; font-size: 17px; font-weight: 600; letter-spacing: -.15px; }
+    .status-icons { position: absolute; right: 43px; top: 0; display: flex; align-items: center; gap: 6px; color: #171a16; }
+    .signal { display: flex; align-items: flex-end; gap: 2px; height: 12px; }
+    .signal span { width: 3px; background: currentColor; border-radius: 2px; }
+    .signal span:nth-child(1) { height: 4px; opacity: .7; }
+    .signal span:nth-child(2) { height: 6px; opacity: .8; }
+    .signal span:nth-child(3) { height: 9px; opacity: .9; }
+    .signal span:nth-child(4) { height: 12px; }
+    .wifi { width: 17px; height: 12px; position: relative; }
+    .wifi::before, .wifi::after { content: ""; position: absolute; left: 50%; border: 2px solid currentColor; border-bottom: 0; border-left-color: transparent; border-right-color: transparent; transform: translateX(-50%); }
+    .wifi::before { top: 1px; width: 16px; height: 8px; border-radius: 16px 16px 0 0; opacity: .9; }
+    .wifi::after { top: 6px; width: 8px; height: 5px; border-radius: 10px 10px 0 0; }
+    .battery { width: 23px; height: 12px; border: 1.7px solid currentColor; border-radius: 4px; position: relative; }
+    .battery::before { content: ""; position: absolute; right: -4px; top: 3px; width: 2px; height: 5px; border-radius: 2px; background: currentColor; }
+    .battery::after { content: ""; position: absolute; inset: 2px 3px 2px 2px; border-radius: 2px; background: currentColor; }
+
+    /* ── Top-Leiste: Zurück · Fortschritt · Skip/Zähler ── */
+    .onb-top { display: none; position: absolute; top: 60px; left: 24px; right: 24px; z-index: 40; align-items: center; gap: 14px; transition: opacity .3s ease; }
+    .phone.is-intro .statusbar,
+    .phone.is-intro .onb-top { opacity: 0; pointer-events: none; }
+    .onb-back {
+      width: 34px; height: 34px; flex: 0 0 auto; border-radius: 50%; border: 1px solid rgba(23,26,22,.08); cursor: pointer;
+      background: linear-gradient(180deg, rgba(255,255,255,.94), rgba(242,243,240,.78));
+      display: grid; place-items: center; color: #171a16;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.9), 0 2px 8px rgba(30,32,30,.05);
+      transition: transform .16s ease, opacity .2s ease;
+    }
+    .onb-back svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .onb-back:active { transform: scale(.94); }
+    .onb-back.hidden { opacity: 0; pointer-events: none; }
+
+    .onb-progress { flex: 1; height: 5px; border-radius: 999px; background: rgba(23,26,22,.07); overflow: hidden; }
+    .onb-progress-fill { height: 100%; border-radius: 999px; background: #171a16; width: 11%; transition: width .5s cubic-bezier(.22,1,.36,1); }
+
+    .onb-skip { flex: 0 0 auto; min-width: 44px; text-align: right; border: 0; background: none; cursor: pointer;
+      font-family: "General Sans", sans-serif; font-size: 13px; font-weight: 500; letter-spacing: .2px; color: rgba(23,26,22,.45); transition: color .15s ease; }
+    .onb-skip:active { color: rgba(23,26,22,.85); }
+    .onb-skip.hidden { display: none; }
+    .onb-count { flex: 0 0 auto; min-width: 44px; text-align: right;
+      font-family: "General Sans", sans-serif; font-size: 12px; font-weight: 500; letter-spacing: .4px; color: rgba(23,26,22,.4); }
+    .onb-count.hidden { display: none; }
+
+    /* ── Slides ── */
+    .onb-track { position: absolute; inset: 0; display: flex; width: 100%; height: 100%; transition: transform .55s cubic-bezier(.22,1,.36,1); will-change: transform; }
+    .slide { position: relative; min-width: 100%; height: 100%; display: flex; flex-direction: column; }
+    .slide-inner { flex: 1; min-height: 0; overflow-y: auto; scrollbar-width: none; padding: 126px 26px 132px; display: flex; flex-direction: column; justify-content: center; }
+    .slide-inner::-webkit-scrollbar { display: none; }
+    .slide-inner.center { align-items: center; justify-content: center; text-align: center; }
+    .slide-cta { display: none; flex: 0 0 auto; padding: 14px 26px 42px; position: relative; z-index: 5; }
+
+    .statement-slide .slide-inner {
+      padding: 0 32px;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      overflow: hidden;
+    }
+    .statement-slide .onb-head {
+      max-width: 340px;
+      font-family: "HelvenaLight", "General Sans", sans-serif;
+      font-size: 34px;
+      line-height: 1.08;
+      font-weight: 300;
+      letter-spacing: -.65px;
+      transform: scaleY(.94);
+      transform-origin: center center;
+    }
+
+    .onb-bottom {
+      position: absolute;
+      left: 54px;
+      right: 24px;
+      bottom: 38px;
+      z-index: 50;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 18px;
+      pointer-events: none;
+      transition: opacity .3s ease;
+    }
+    .phone.is-intro .onb-bottom,
+    .phone.is-intro-leaving .onb-bottom { opacity: 0; pointer-events: none; }
+    .onb-logo {
+      position: absolute;
+      top: 78px;
+      left: 24px;
+      z-index: 50;
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      background: #101110;
+      border: 1px solid rgba(23,26,22,.08);
+      display: grid;
+      place-items: center;
+      color: #fff;
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.12),
+        inset 0 -1px 0 rgba(0,0,0,.18),
+        0 4px 16px rgba(0,0,0,.12);
+      pointer-events: none;
+      transition: opacity .3s ease;
+    }
+    .onb-logo svg {
+      width: 22px;
+      height: 22px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 1.65;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    .phone.is-intro .onb-logo,
+    .phone.is-intro-leaving .onb-logo { opacity: 0; }
+    .onb-dots {
+      position: absolute;
+      left: 24px;
+      right: auto;
+      bottom: 70px;
+      z-index: 50;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-width: 0;
+      pointer-events: auto;
+      transition: opacity .3s ease;
+    }
+    .phone.is-intro .onb-dots,
+    .phone.is-intro-leaving .onb-dots { opacity: 0; pointer-events: none; }
+    .onb-dot {
+      width: 11px;
+      height: 11px;
+      border-radius: 999px;
+      border: 0;
+      padding: 0;
+      background: rgba(255,255,255,.96);
+      box-shadow: 0 1px 5px rgba(23,26,22,.14);
+      transition: width .28s cubic-bezier(.22,1,.36,1), background .28s ease, opacity .28s ease, box-shadow .28s ease;
+    }
+    .onb-dot.is-active {
+      width: 39px;
+      background: #171a16;
+      box-shadow: none;
+    }
+    .onb-nav {
+      flex: 0 0 auto;
+      display: flex;
+      align-items: center;
+      height: 76px;
+      padding: 6px;
+      border-radius: 999px;
+      background: #050505;
+      box-shadow: 0 14px 30px rgba(12,14,12,.2);
+      pointer-events: auto;
+    }
+    .onb-nav-btn {
+      width: 58px;
+      height: 58px;
+      border: 0;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+      color: #fff;
+      background: #252525;
+      transition: transform .16s ease, opacity .2s ease, background .2s ease;
+    }
+    .onb-nav-btn + .onb-nav-btn { margin-left: 12px; }
+    .onb-nav-btn.next { background: #ffffff; color: #171a16; }
+    .onb-nav-btn:active { transform: scale(.94); }
+    .onb-nav-btn:disabled { opacity: .34; cursor: default; transform: none; }
+    .onb-nav-btn svg {
+      display: block;
+      width: 20px;
+      height: 20px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 1.55;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .intro-overlay {
+      position: absolute;
+      inset: 0;
+      z-index: 80;
+      border: 0;
+      padding: 0 26px;
+      cursor: pointer;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      background:
+        radial-gradient(ellipse 110% 78% at 72% 78%, rgba(231,151,119,.9) 0%, rgba(182,101,99,.68) 34%, rgba(50,46,65,.38) 62%, rgba(9,16,31,0) 82%),
+        radial-gradient(ellipse 86% 72% at 22% 22%, rgba(18,30,57,.96) 0%, rgba(13,22,42,.76) 45%, rgba(13,22,42,0) 78%),
+        linear-gradient(150deg, #07111f 0%, #16233c 45%, #e5a07d 100%);
+      opacity: 1;
+      transform: scale(1);
+      filter: blur(0) saturate(1);
+      transition:
+        opacity .78s cubic-bezier(.22, 1, .36, 1),
+        transform .9s cubic-bezier(.22, 1, .36, 1),
+        filter .9s cubic-bezier(.22, 1, .36, 1);
+      will-change: opacity, transform, filter;
+    }
+    .phone.is-intro-leaving .intro-overlay {
+      opacity: 0;
+      transform: scale(1.018);
+      filter: blur(10px) saturate(1.08);
+      pointer-events: none;
+    }
+    .phone:not(.is-intro):not(.is-intro-leaving) .intro-overlay {
+      display: none;
+    }
+    .intro-wordmark {
+      position: relative;
+      z-index: 1;
+      width: min(300px, 78vw);
+      height: auto;
+      overflow: visible;
+      display: block;
+      animation: introMarkIn .36s ease both;
+    }
+    .intro-wordmark text {
+      font-family: "Kurdis", sans-serif;
+      font-size: 33px;
+      font-weight: 400;
+      text-transform: uppercase;
+    }
+    .intro-wordmark .word-font {
+      fill: rgba(255,255,255,0);
+      stroke: rgba(255,255,255,.96);
+      stroke-width: .9;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-dasharray: 1200;
+      stroke-dashoffset: 1200;
+      animation:
+        introTrimPath 1.28s cubic-bezier(.22, 1, .36, 1) .14s forwards,
+        introFontFill .66s ease 1.05s forwards,
+        introStrokeFade .52s ease 1.38s forwards;
+    }
+    .phone.is-intro-leaving .intro-wordmark { animation: introMarkOut .72s cubic-bezier(.22, 1, .36, 1) both; }
+    @keyframes introMarkIn { from { opacity: 0; transform: translateY(7px) scale(.985); } to { opacity: 1; transform: translateY(0) scale(1); } }
+    @keyframes introTrimPath { to { stroke-dashoffset: 0; } }
+    @keyframes introStrokeFade { to { stroke: rgba(255,255,255,0); } }
+    @keyframes introFontFill { to { fill: rgba(255,255,255,.92); } }
+    @keyframes introMarkOut { to { opacity: 0; transform: translateY(-5px) scale(.985); } }
+
+    /* ── COMMONS Gradient-Glow ── */
+    .glow { display: none; position: absolute; left: 50%; top: 34%; transform: translate(-50%, -50%); width: 320px; height: 320px; border-radius: 50%; z-index: 0; pointer-events: none;
+      background:
+        radial-gradient(ellipse 92% 82% at 70% 78%, rgba(228,151,124,.85) 0%, rgba(184,107,102,.62) 38%, rgba(99,74,83,.34) 64%, rgba(7,14,28,0) 86%),
+        radial-gradient(ellipse 74% 58% at 46% 48%, rgba(30,41,66,.55) 0%, rgba(7,14,28,0) 72%),
+        linear-gradient(180deg, #0b162a, #15213a);
+      filter: blur(34px); opacity: .9;
+      animation: glowPulse 7s ease-in-out infinite;
+    }
+    .glow.soft { width: 260px; height: 260px; top: 26%; opacity: .55; filter: blur(46px); }
+    @keyframes glowPulse { 0%,100% { transform: translate(-50%, -50%) scale(1); } 50% { transform: translate(-50%, -50%) scale(1.07); } }
+
+    /* ── Typografie ── */
+    .onb-kicker { font-family: "Kurdis", sans-serif; font-size: 13px; font-weight: 400; letter-spacing: 4px; color: rgba(23,26,22,.55); text-transform: uppercase; }
+    .onb-eyebrow { font-family: "General Sans", sans-serif; font-size: 10px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: rgba(23,26,22,.38); margin-bottom: 12px; }
+    .onb-display { font-family: "Kurdis", sans-serif; font-size: 38px; font-weight: 400; line-height: 1.06; letter-spacing: -1px; color: #171a16; margin: 0; }
+    .onb-head { font-family: "General Sans", sans-serif; font-size: 25px; font-weight: 600; line-height: 1.18; letter-spacing: -.5px; color: #171a16; margin: 0; }
+    .onb-sub { font-family: "HelvenaLight", "General Sans", sans-serif; font-size: 15px; font-weight: 300; line-height: 1.5; letter-spacing: .2px; color: rgba(23,26,22,.6); margin: 14px 0 0; }
+    .onb-sub.tight { font-size: 14px; margin-top: 10px; }
+
+    /* ── Brand-Mark ── */
+    .brand-mark { position: relative; width: 66px; height: 66px; border-radius: 50%; background: #101110; display: grid; place-items: center; margin-bottom: 22px;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.12), inset 0 -1px 0 rgba(0,0,0,.18), 0 10px 28px rgba(11,16,32,.28); }
+    .brand-mark svg { width: 28px; height: 28px; stroke: #fff; fill: none; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+
+    /* ── Dezentes Glasmorphism ── */
+    .glass { position: relative; z-index: 1; border-radius: 22px; padding: 20px;
+      background: rgba(255,255,255,.55);
+      border: 1px solid rgba(255,255,255,.7);
+      backdrop-filter: blur(22px) saturate(150%); -webkit-backdrop-filter: blur(22px) saturate(150%);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.85), 0 10px 28px rgba(30,32,30,.06); }
+    .glass-solid { border-radius: 22px; padding: 18px 20px;
+      background: linear-gradient(180deg, rgba(255,255,255,.94), rgba(247,248,245,.78)), rgba(232,235,230,.85);
+      border: 1px solid rgba(23,26,22,.08);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.85), 0 8px 24px rgba(30,32,30,.06); }
+
+    /* ── Icon-Bubble (App-Stil) ── */
+    .ob-bubble { width: 46px; height: 46px; flex: 0 0 auto; border-radius: 50%; display: grid; place-items: center;
+      background: linear-gradient(180deg, rgba(255,255,255,.80), rgba(255,255,255,.22)), rgba(232,233,232,.74);
+      box-shadow: inset 0 0 0 1px rgba(20,22,20,.04), 0 4px 12px rgba(30,32,30,.04); }
+    .ob-bubble svg { width: 21px; height: 21px; stroke: rgba(23,26,22,.78); stroke-width: 1.65; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+    .ob-bubble.dark { background: #101110; box-shadow: 0 6px 16px rgba(11,16,32,.22); }
+    .ob-bubble.dark svg { stroke: #fff; }
+
+    /* ── Flow-Illustration (Screen 1) ── */
+    .flow { position: relative; z-index: 1; display: flex; align-items: center; justify-content: center; gap: 6px; margin: 6px 0 22px; }
+    .flow .ob-bubble { width: 56px; height: 56px; }
+    .flow .ob-bubble svg { width: 25px; height: 25px; }
+    .flow-line { width: 26px; height: 2px; border-radius: 2px; background: rgba(23,26,22,.16); position: relative; }
+    .flow-line::after { content: ""; position: absolute; right: -1px; top: -2.5px; width: 6px; height: 6px; border-right: 2px solid rgba(23,26,22,.22); border-top: 2px solid rgba(23,26,22,.22); transform: rotate(45deg); }
+
+    /* ── Punkte-Liste (Screen 2) ── */
+    .point { display: flex; align-items: center; gap: 14px; padding: 14px 16px; border-radius: 18px; margin-bottom: 10px;
+      background: rgba(255,255,255,.5); border: 1px solid rgba(255,255,255,.66);
+      backdrop-filter: blur(18px) saturate(140%); -webkit-backdrop-filter: blur(18px) saturate(140%);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.8), 0 6px 18px rgba(30,32,30,.05); }
+    .point .ob-bubble { width: 40px; height: 40px; }
+    .point .ob-bubble svg { width: 19px; height: 19px; }
+    .point p { margin: 0; font-family: "General Sans", sans-serif; font-size: 13.5px; font-weight: 400; line-height: 1.35; letter-spacing: .1px; color: rgba(23,26,22,.78); }
+
+    /* ── Formular ── */
+    .field { margin-bottom: 14px; }
+    .field label { display: block; font-family: "General Sans", sans-serif; font-size: 11.5px; font-weight: 600; letter-spacing: .6px; text-transform: uppercase; color: rgba(23,26,22,.42); margin: 0 0 7px 4px; }
+    .field input { width: 100%; padding: 15px 16px; border-radius: 16px; border: 1px solid rgba(23,26,22,.1);
+      background: rgba(255,255,255,.85); color: #171a16; font-family: "General Sans", sans-serif; font-size: 15px; font-weight: 400; letter-spacing: .1px;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.9); outline: none; transition: border-color .18s ease, box-shadow .18s ease; }
+    .field input::placeholder { color: rgba(23,26,22,.32); }
+    .field input:focus { border-color: rgba(23,26,22,.4); box-shadow: inset 0 1px 0 rgba(255,255,255,.9), 0 0 0 3px rgba(23,26,22,.06); }
+    .field-row { display: grid; grid-template-columns: 1.4fr 1fr; gap: 12px; }
+    .field-hint { font-family: "General Sans", sans-serif; font-size: 11.5px; font-weight: 300; color: rgba(23,26,22,.4); margin: 6px 0 0 4px; line-height: 1.35; }
+
+    /* ── Status / Trafo-Check ── */
+    .status { display: flex; align-items: center; gap: 13px; padding: 16px 18px; border-radius: 18px; margin-top: 4px;
+      background: rgba(255,255,255,.55); border: 1px solid rgba(255,255,255,.7);
+      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.85), 0 8px 22px rgba(30,32,30,.05); }
+    .status-ic { width: 40px; height: 40px; flex: 0 0 auto; border-radius: 50%; display: grid; place-items: center; background: rgba(23,26,22,.05); }
+    .spin { width: 19px; height: 19px; border-radius: 50%; border: 2.4px solid rgba(23,26,22,.16); border-top-color: #171a16; animation: spin 1s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .status-ic svg { width: 20px; height: 20px; stroke: var(--green); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .status-tt { font-family: "General Sans", sans-serif; font-size: 14px; font-weight: 500; color: #171a16; letter-spacing: -.1px; }
+    .status-st { font-family: "General Sans", sans-serif; font-size: 12px; font-weight: 300; color: rgba(23,26,22,.55); margin-top: 2px; line-height: 1.35; }
+    .status.ok { border-color: rgba(74,124,89,.28); }
+    .status.ok .status-ic { background: rgba(74,124,89,.12); }
+
+    /* ── Benefits-Liste (Screen 5) ── */
+    .benefit { display: flex; align-items: flex-start; gap: 11px; padding: 9px 0; }
+    .benefit:not(:last-child) { border-bottom: 1px solid rgba(23,26,22,.06); }
+    .benefit-ic { width: 24px; height: 24px; flex: 0 0 auto; border-radius: 50%; background: #171a16; display: grid; place-items: center; margin-top: 1px; }
+    .benefit-ic svg { width: 13px; height: 13px; stroke: #fff; fill: none; stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; }
+    .benefit p { margin: 0; font-family: "General Sans", sans-serif; font-size: 13.5px; font-weight: 400; line-height: 1.4; color: rgba(23,26,22,.78); }
+    .benefit p strong { font-weight: 600; color: #171a16; }
+
+    /* ── Trust-Zeile (Screen 6) ── */
+    .trust { display: inline-flex; align-items: center; gap: 7px; margin-top: 16px; padding: 8px 13px; border-radius: 999px;
+      background: rgba(23,26,22,.05); color: rgba(23,26,22,.6);
+      font-family: "General Sans", sans-serif; font-size: 11.5px; font-weight: 500; letter-spacing: .2px; }
+    .trust svg { width: 13px; height: 13px; stroke: currentColor; fill: none; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; }
+
+    /* ── Auswahl-Karten (Screen 7) ── */
+    .opt { display: flex; align-items: center; gap: 15px; padding: 18px; border-radius: 20px; margin-bottom: 12px; cursor: pointer;
+      background: rgba(255,255,255,.6); border: 1.5px solid rgba(23,26,22,.08);
+      backdrop-filter: blur(18px) saturate(140%); -webkit-backdrop-filter: blur(18px) saturate(140%);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.85), 0 8px 22px rgba(30,32,30,.05);
+      transition: border-color .2s ease, transform .15s ease, box-shadow .2s ease; }
+    .opt:active { transform: scale(.99); }
+    .opt.selected { border-color: #171a16; box-shadow: inset 0 1px 0 rgba(255,255,255,.85), 0 10px 26px rgba(30,32,30,.1); }
+    .opt-body { flex: 1; min-width: 0; }
+    .opt-title { font-family: "General Sans", sans-serif; font-size: 16px; font-weight: 600; color: #171a16; letter-spacing: -.2px; }
+    .opt-desc { font-family: "General Sans", sans-serif; font-size: 12.5px; font-weight: 300; color: rgba(23,26,22,.55); margin-top: 2px; line-height: 1.35; }
+    .opt-check { width: 24px; height: 24px; flex: 0 0 auto; border-radius: 50%; border: 1.5px solid rgba(23,26,22,.18); display: grid; place-items: center; transition: background .2s ease, border-color .2s ease; }
+    .opt-check svg { width: 13px; height: 13px; stroke: #fff; fill: none; stroke-width: 2.8; stroke-linecap: round; stroke-linejoin: round; opacity: 0; transition: opacity .2s ease; }
+    .opt.selected .opt-check { background: #171a16; border-color: #171a16; }
+    .opt.selected .opt-check svg { opacity: 1; }
+
+    /* ── Abschluss-Check ── */
+    .done-mark { position: relative; z-index: 1; width: 88px; height: 88px; border-radius: 50%; display: grid; place-items: center; margin-bottom: 26px;
+      background: linear-gradient(180deg, #1c2030, #0b162a);
+      box-shadow: 0 14px 36px rgba(11,16,32,.32), inset 0 1px 0 rgba(255,255,255,.16); }
+    .done-mark svg { width: 38px; height: 38px; stroke: #fff; fill: none; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+    .done-pill { position: relative; z-index: 1; display: inline-flex; align-items: center; gap: 8px; margin-top: 22px; padding: 9px 16px; border-radius: 999px;
+      background: rgba(255,255,255,.55); border: 1px solid rgba(255,255,255,.7);
+      backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.85), 0 6px 16px rgba(30,32,30,.05);
+      font-family: "General Sans", sans-serif; font-size: 12px; font-weight: 500; letter-spacing: .2px; color: rgba(23,26,22,.6); }
+    .done-pill svg { width: 13px; height: 13px; stroke: var(--green); fill: none; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+
+    /* ── CTA-Button (App-Stil) ── */
+    .onb-cta { width: 100%; padding: 16px; border-radius: 16px; border: 0; cursor: pointer;
+      background: #171a16; color: #fff; font-family: "General Sans", sans-serif; font-size: 15.5px; font-weight: 500; letter-spacing: .1px;
+      display: flex; align-items: center; justify-content: center; gap: 9px;
+      box-shadow: 0 10px 26px rgba(23,26,22,.18); transition: transform .16s ease, opacity .2s ease; }
+    .onb-cta:active { transform: scale(.985); }
+    .onb-cta svg { width: 17px; height: 17px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .onb-cta.is-disabled { opacity: .38; pointer-events: none; }
+
+    /* ── Reveal-Animationen ── */
+    @keyframes float-up { 0% { transform: translateY(18px); opacity: 0; } 100% { transform: translateY(0); opacity: 1; } }
+    .s-reveal { opacity: 0; }
+    .slide.is-active .s-reveal { animation: float-up .66s cubic-bezier(.22,1,.36,1) forwards; }
+    .slide.is-active .s-d1 { animation-delay: .04s; }
+    .slide.is-active .s-d2 { animation-delay: .13s; }
+    .slide.is-active .s-d3 { animation-delay: .22s; }
+    .slide.is-active .s-d4 { animation-delay: .31s; }
+    .slide.is-active .s-d5 { animation-delay: .40s; }
+    .slide.is-active .s-d6 { animation-delay: .49s; }
+    .slide.is-active .s-d7 { animation-delay: .58s; }
+
+    @media (max-width: 380px) {
+      .onb-bottom { left: 18px; right: 18px; gap: 14px; }
+      .onb-dots { left: 18px; bottom: 70px; gap: 6px; }
+      .onb-dot { width: 8px; height: 8px; }
+      .onb-dot.is-active { width: 28px; }
+      .onb-nav { height: 76px; padding: 6px; }
+      .onb-nav-btn { width: 58px; height: 58px; }
+      .onb-nav-btn svg { width: 20px; height: 20px; }
+    }
+
+    @media (max-width: 540px) {
+      body { padding: 0; background: var(--bg); }
+      .phone { width: 100vw; height: auto; min-height: 0; border-radius: 0; box-shadow: none; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="phone is-intro">
+
+  <div class="statusbar" aria-hidden="true">
+    <div class="time">9:41</div>
+    <div class="status-icons">
+      <div class="signal"><span></span><span></span><span></span><span></span></div>
+      <div class="wifi"></div>
+      <div class="battery"></div>
+    </div>
+  </div>
+
+  <!-- Top-Leiste -->
+  <div class="onb-top">
+    <button class="onb-back hidden" type="button" id="obBack" aria-label="Zurück">
+      <svg viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg>
+    </button>
+    <div class="onb-progress" aria-hidden="true"><div class="onb-progress-fill" id="obProgress"></div></div>
+    <button class="onb-skip" type="button" id="obSkip">Skip</button>
+    <span class="onb-count hidden" id="obCount">1 / 8</span>
+  </div>
+
+  <button class="intro-overlay" id="introOverlay" type="button" aria-label="Onboarding starten">
+    <svg class="intro-wordmark" viewBox="0 0 420 86" aria-hidden="true">
+      <text class="word-font" x="210" y="52" text-anchor="middle" textLength="318" lengthAdjust="spacing">COMMONS</text>
+    </svg>
+  </button>
+
+  <div class="onb-logo" aria-hidden="true">
+    <svg viewBox="0 0 24 24"><path d="M13 2 4 14h7l-1 8 10-13h-7l0-7Z"/></svg>
+  </div>
+
+  <div class="onb-dots" id="obDots" aria-hidden="true"></div>
+
+  <div class="onb-bottom" aria-label="Onboarding Navigation">
+    <div class="onb-nav">
+      <button class="onb-nav-btn prev" type="button" id="obPrev" aria-label="Zurück">
+        <svg viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg>
+      </button>
+      <button class="onb-nav-btn next" type="button" id="obNext" aria-label="Weiter">
+        <svg viewBox="0 0 24 24"><path d="m9 6 6 6-6 6"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Slides -->
+  <div class="onb-track" id="obTrack">
+
+    <!-- 1 · Mehrwert -->
+    <section class="slide statement-slide" data-step="0">
+      <div class="slide-inner center">
+        <h2 class="onb-head s-reveal s-d1">Deine Sonne kann mehr.<br>Sie bringt Schatten, Wärme und neue Energie in dein Viertel.</h2>
+      </div>
+      <div class="slide-cta">
+        <button class="onb-cta" type="button" data-next>Verstanden</button>
+      </div>
+    </section>
+
+    <!-- 2 · Was Überschuss bedeutet -->
+    <section class="slide" data-step="1">
+      <div class="slide-inner">
+        <div class="onb-eyebrow s-reveal s-d1">So funktioniert es</div>
+        <h2 class="onb-head s-reveal s-d2" style="margin-bottom:18px;">In wenigen Schritten erklärt.</h2>
+
+        <div class="point s-reveal s-d3">
+          <div class="ob-bubble"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 3v2m0 14v2m9-9h-2M5 12H3"/></svg></div>
+          <p>Überschuss ist Energie, die du gerade nicht selbst verbrauchst.</p>
+        </div>
+        <div class="point s-reveal s-d4">
+          <div class="ob-bubble"><svg viewBox="0 0 24 24"><path d="M4 12h11"/><path d="M12 7l5 5-5 5"/><path d="M20 5v14"/></svg></div>
+          <p>COMMONS leitet diese Energie sinnvoll weiter.</p>
+        </div>
+        <div class="point s-reveal s-d5">
+          <div class="ob-bubble"><svg viewBox="0 0 24 24"><path d="M12 3 14 9l6 .5-4.6 3.9L17 19l-5-3.2L7 19l1.6-5.6L4 9.5 10 9Z"/></svg></div>
+          <p>Mit dem Autopilot passiert das ganz automatisch.</p>
+        </div>
+        <div class="point s-reveal s-d6">
+          <div class="ob-bubble"><svg viewBox="0 0 24 24"><path d="M19.5 12.6 12 20l-7.5-7.4a5 5 0 0 1 7.1-7.1l.4.4.4-.4a5 5 0 0 1 7.1 7.1Z"/></svg></div>
+          <p>Wenn du spendest, siehst du direkt, was bewirkt wurde.</p>
+        </div>
+        <div class="point s-reveal s-d7">
+          <div class="ob-bubble dark"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></div>
+          <p>Du erhältst eine klare Rückmeldung wie: <strong style="font-weight:600;color:#171a16;">Energie gespendet</strong>.</p>
+        </div>
+      </div>
+      <div class="slide-cta">
+        <button class="onb-cta" type="button" data-next>Weiter</button>
+      </div>
+    </section>
+
+    <!-- 3 · Persönliche Daten -->
+    <section class="slide" data-step="2">
+      <div class="slide-inner">
+        <div class="onb-eyebrow s-reveal s-d1">Dein Profil</div>
+        <h2 class="onb-head s-reveal s-d2" style="margin-bottom:20px;">Erzähl uns kurz von dir.</h2>
+
+        <div class="s-reveal s-d3">
+          <div class="field">
+            <label for="fName">Name</label>
+            <input type="text" id="fName" placeholder="z. B. Nici Schmidt" autocomplete="name" />
+          </div>
+          <div class="field">
+            <label for="fInit">Profil-Initialen</label>
+            <input type="text" id="fInit" placeholder="NS" maxlength="3" style="text-transform:uppercase;" />
+            <p class="field-hint">Wird automatisch aus deinem Namen erzeugt &ndash; du kannst sie anpassen.</p>
+          </div>
+          <div class="field">
+            <label for="fAddr">Adresse</label>
+            <input type="text" id="fAddr" placeholder="Straße & Hausnummer" autocomplete="street-address" />
+          </div>
+          <div class="field">
+            <label for="fPlz">PLZ</label>
+            <input type="text" id="fPlz" placeholder="1010" inputmode="numeric" maxlength="5" autocomplete="postal-code" />
+          </div>
+        </div>
+      </div>
+      <div class="slide-cta">
+        <button class="onb-cta is-disabled" type="button" data-next data-validate="form">Weiter</button>
+      </div>
+    </section>
+
+    <!-- 4 · Trafo-Quick-Check -->
+    <section class="slide" data-step="3">
+      <div class="slide-inner">
+        <div class="glow soft" style="top:22%;opacity:.4;"></div>
+        <div class="onb-eyebrow s-reveal s-d1" style="position:relative;z-index:1;">Netz-Check</div>
+        <h2 class="onb-head s-reveal s-d2" style="position:relative;z-index:1;">Wir prüfen kurz dein Netz.</h2>
+        <p class="onb-sub s-reveal s-d3" style="position:relative;z-index:1;">Im Hintergrund fragen wir beim Netzbetreiber an, ob an deinem Transformator bereits eine registrierte COMMONS-Schule oder Kita hängt.</p>
+
+        <div class="status s-reveal s-d4" id="trafoStatus" style="margin-top:22px;">
+          <div class="status-ic" id="trafoIcon"><div class="spin"></div></div>
+          <div>
+            <div class="status-tt" id="trafoTitle">Transformator wird geprüft &hellip;</div>
+            <div class="status-st" id="trafoSub">Sichere Abfrage über den Netzbetreiber</div>
+          </div>
+        </div>
+      </div>
+      <div class="slide-cta">
+        <button class="onb-cta is-disabled" type="button" data-next data-validate="trafo">Weiter</button>
+      </div>
+    </section>
+
+    <!-- 5 · Vereinsbeitritt -->
+    <section class="slide" data-step="4">
+      <div class="slide-inner">
+        <div class="onb-eyebrow s-reveal s-d1">Gemeinschaft</div>
+        <h2 class="onb-head s-reveal s-d2">Werde Teil von COMMONS.</h2>
+        <p class="onb-sub s-reveal s-d3">Damit deine Energie gezielt Gutes bewirken kann, wirst du Teil des COMMONS-Vereins &ndash; kostenlos und jederzeit kündbar.</p>
+
+        <div class="glass s-reveal s-d4" style="margin-top:20px;">
+          <div class="benefit">
+            <div class="benefit-ic"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></div>
+            <p>Deine Spenden fließen <strong>gezielt</strong> an lokale Einrichtungen.</p>
+          </div>
+          <div class="benefit">
+            <div class="benefit-ic"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></div>
+            <p><strong>Volle Transparenz</strong> über jede gespendete Kilowattstunde.</p>
+          </div>
+          <div class="benefit">
+            <div class="benefit-ic"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></div>
+            <p>Mitbestimmung bei <strong>Projekten</strong> in deinem Viertel.</p>
+          </div>
+        </div>
+      </div>
+      <div class="slide-cta">
+        <button class="onb-cta" type="button" data-next>Beitreten und weiter</button>
+      </div>
+    </section>
+
+    <!-- 6 · Smart-Meter / EDA -->
+    <section class="slide" data-step="5">
+      <div class="slide-inner">
+        <div class="onb-eyebrow s-reveal s-d1">Verbindung</div>
+        <h2 class="onb-head s-reveal s-d2">Verbinde dein Smart Meter.</h2>
+        <p class="onb-sub s-reveal s-d3">Gib deine Zählernummer ein und autorisiere COMMONS über das sichere Login des österreichischen EDA-Portals, deine 15-Minuten-Werte auszulesen.</p>
+
+        <div class="s-reveal s-d4" style="margin-top:20px;">
+          <div class="field">
+            <label for="fMeter">Zählernummer / Marktlokations-ID</label>
+            <input type="text" id="fMeter" placeholder="AT00 1000 0000 0000 0000 0000 0000" inputmode="text" />
+          </div>
+          <span class="trust">
+            <svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>
+            Sichere Autorisierung über das EDA-Portal
+          </span>
+        </div>
+      </div>
+      <div class="slide-cta">
+        <button class="onb-cta is-disabled" type="button" data-next data-validate="meter">Mit EDA verbinden</button>
+      </div>
+    </section>
+
+    <!-- 7 · Hardware-Profil -->
+    <section class="slide" data-step="6">
+      <div class="slide-inner">
+        <div class="onb-eyebrow s-reveal s-d1">Deine Anlage</div>
+        <h2 class="onb-head s-reveal s-d2" style="margin-bottom:20px;">Welche Anlage hast du?</h2>
+
+        <div class="opt s-reveal s-d3" data-opt="balkon">
+          <div class="ob-bubble"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="11" rx="1"/><path d="M3 9h18M9 5v11M15 5v11M7 20h10M12 16v4"/></svg></div>
+          <div class="opt-body">
+            <div class="opt-title">Balkonkraftwerk</div>
+            <div class="opt-desc">Steckerfertige Mini-PV bis ca. 800 W</div>
+          </div>
+          <div class="opt-check"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></div>
+        </div>
+
+        <div class="opt s-reveal s-d4" data-opt="pv">
+          <div class="ob-bubble"><svg viewBox="0 0 24 24"><path d="M4 14h16l-1.6-7H5.6L4 14Z"/><path d="M4 14v3h16v-3M9 7v7M15 7v7M3 14h18"/></svg></div>
+          <div class="opt-body">
+            <div class="opt-title">PV-Anlage</div>
+            <div class="opt-desc">Fest installierte Dachanlage</div>
+          </div>
+          <div class="opt-check"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></div>
+        </div>
+      </div>
+      <div class="slide-cta">
+        <button class="onb-cta is-disabled" type="button" data-next data-validate="opt">Weiter</button>
+      </div>
+    </section>
+
+    <!-- 8 · Abschluss -->
+    <section class="slide" data-step="7">
+      <div class="slide-inner center">
+        <div class="glow"></div>
+        <div class="done-mark s-reveal s-d1">
+          <svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>
+        </div>
+        <h1 class="onb-display s-reveal s-d2">Alles bereit.</h1>
+        <p class="onb-sub s-reveal s-d3" style="max-width:300px;">Dein Überschuss kann jetzt Wirkung entfalten.</p>
+        <div class="done-pill s-reveal s-d4">
+          <svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>
+          Onboarding abgeschlossen &middot; Weiterleitung zu Home
+        </div>
+      </div>
+      <div class="slide-cta">
+        <button class="onb-cta" type="button" id="obFinish">Zur Startseite</button>
+      </div>
+    </section>
+
+  </div>
+</div>
+
+<script>
+  // ── Uhrzeit ──
+  (function() {
+    const el = document.querySelector('.time');
+    if (!el) return;
+    const update = () => { const n = new Date(); el.textContent = String(n.getHours()).padStart(2,'0') + ':' + String(n.getMinutes()).padStart(2,'0'); };
+    update(); setInterval(update, 10000);
+  })();
+
+  const track    = document.getElementById('obTrack');
+  const phone    = document.querySelector('.phone');
+  const intro    = document.getElementById('introOverlay');
+  const slides   = Array.from(track.querySelectorAll('.slide'));
+  const dotsEl   = document.getElementById('obDots');
+  const prevBtn  = document.getElementById('obPrev');
+  const nextBtn  = document.getElementById('obNext');
+  const TOTAL    = slides.length;
+  let current = 0;
+  let trafoDone = false;
+  let selectedOpt = null;
+  let initialsEdited = false;
+  let introTimer = null;
+  let introDone = false;
+
+  // ── Validierung pro Pflichtschritt ──
+  function canAdvance(step) {
+    // Testmodus: Sperren sind nur auskommentiert, damit du frei durchklicken kannst.
+    return true;
+
+    /*
+    if (step === 2) {
+      return document.getElementById('fName').value.trim() !== ''
+          && document.getElementById('fAddr').value.trim() !== ''
+          && document.getElementById('fPlz').value.trim() !== '';
+    }
+    if (step === 3) return trafoDone;
+    if (step === 5) return document.getElementById('fMeter').value.trim() !== '';
+    if (step === 6) return selectedOpt !== null;
+    return true;
+    */
+  }
+
+  function refreshCta() {
+    const slide = slides[current];
+    const cta = slide.querySelector('.onb-cta[data-validate]');
+    if (cta) cta.classList.toggle('is-disabled', !canAdvance(current));
+    nextBtn.disabled = !canAdvance(current);
+    prevBtn.disabled = current === 0;
+  }
+
+  function buildDots() {
+    dotsEl.innerHTML = '';
+    slides.forEach((_, i) => {
+      const dot = document.createElement('span');
+      dot.className = 'onb-dot';
+      dot.setAttribute('aria-hidden', 'true');
+      dotsEl.appendChild(dot);
+    });
+  }
+
+  function updateDots() {
+    dotsEl.querySelectorAll('.onb-dot').forEach((dot, i) => {
+      dot.classList.toggle('is-active', i === current);
+    });
+  }
+
+  // ── Navigation ──
+  function goTo(step) {
+    current = Math.max(0, Math.min(TOTAL - 1, step));
+    track.style.transform = 'translateX(' + (-current * 100) + '%)';
+
+    slides.forEach((s, i) => s.classList.toggle('is-active', i === current));
+    updateDots();
+
+    if (current === 3) runTrafoCheck();
+    if (current === 2) setTimeout(() => document.getElementById('fName').focus({ preventScroll: true }), 420);
+
+    refreshCta();
+  }
+
+  function finishIntro() {
+    if (introDone) return;
+    introDone = true;
+    window.clearTimeout(introTimer);
+    phone.classList.add('is-intro-leaving');
+    intro.setAttribute('aria-hidden', 'true');
+    window.setTimeout(() => {
+      phone.classList.remove('is-intro', 'is-intro-leaving');
+    }, 820);
+  }
+
+  function next() {
+    if (!canAdvance(current)) return;
+    if (current === TOTAL - 1) { finish(); return; }
+    goTo(current + 1);
+  }
+
+  track.addEventListener('click', (e) => {
+    const btn = e.target.closest('[data-next]');
+    if (btn) next();
+  });
+
+  prevBtn.addEventListener('click', () => goTo(current - 1));
+  nextBtn.addEventListener('click', next);
+  intro.addEventListener('click', finishIntro);
+
+  // ── Trafo-Check (Screen 4) ──
+  function runTrafoCheck() {
+    if (trafoDone) return;
+    const box   = document.getElementById('trafoStatus');
+    const icon  = document.getElementById('trafoIcon');
+    const title = document.getElementById('trafoTitle');
+    const sub   = document.getElementById('trafoSub');
+    icon.innerHTML = '<div class="spin"></div>';
+    box.classList.remove('ok');
+    title.textContent = 'Transformator wird geprüft …';
+    sub.textContent = 'Sichere Abfrage über den Netzbetreiber';
+    setTimeout(() => {
+      trafoDone = true;
+      box.classList.add('ok');
+      icon.innerHTML = '<svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>';
+      title.textContent = 'Treffer gefunden';
+      sub.textContent = 'Gemeinschaftsschule Nord hängt am selben Transformator.';
+      refreshCta();
+    }, 2100);
+  }
+
+  // ── Formular (Screen 3) ──
+  const nameI = document.getElementById('fName');
+  const initI = document.getElementById('fInit');
+  function deriveInitials() {
+    if (initialsEdited) return;
+    const parts = nameI.value.trim().split(/\s+/).filter(Boolean);
+    let t = '';
+    if (parts.length >= 2) t = (parts[0][0] + parts[parts.length - 1][0]);
+    else if (parts.length === 1) t = parts[0].slice(0, 2);
+    initI.value = t.toUpperCase();
+  }
+  ['fName', 'fAddr', 'fPlz', 'fMeter'].forEach(id => {
+    document.getElementById(id).addEventListener('input', () => { if (id === 'fName') deriveInitials(); refreshCta(); });
+  });
+  initI.addEventListener('input', () => { initialsEdited = true; });
+
+  // ── Auswahl-Karten (Screen 7) ──
+  document.querySelectorAll('.opt').forEach(opt => {
+    opt.addEventListener('click', () => {
+      document.querySelectorAll('.opt').forEach(o => o.classList.remove('selected'));
+      opt.classList.add('selected');
+      selectedOpt = opt.dataset.opt;
+      refreshCta();
+    });
+  });
+
+  // ── Abschluss: Daten sichern + zur Startseite ──
+  function finish() {
+    const name = nameI.value.trim();
+    if (name) {
+      localStorage.setItem('commons_user_name', name);
+      const parts = name.split(/\s+/).filter(Boolean);
+      localStorage.setItem('commons_user_avatar_type', parts.length >= 2 ? '__initials_full__' : '__initials_first__');
+    }
+    if (document.getElementById('fMeter').value.trim()) localStorage.setItem('commons_meter_id', document.getElementById('fMeter').value.trim());
+    if (selectedOpt) localStorage.setItem('commons_hardware', selectedOpt);
+    localStorage.setItem('commons_onboarding_done', '1');
+    window.location.href = 'Homepage.html';
+  }
+  document.getElementById('obFinish').addEventListener('click', finish);
+
+  // Start
+  buildDots();
+  goTo(0);
+  introTimer = window.setTimeout(finishIntro, 2300);
+</script>
+</body>
+</html>

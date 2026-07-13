@@ -1,0 +1,188 @@
+:root {
+  --app-safe-top: env(safe-area-inset-top, 0px);
+  --app-safe-right: env(safe-area-inset-right, 0px);
+  --app-safe-bottom: env(safe-area-inset-bottom, 0px);
+  --app-safe-left: env(safe-area-inset-left, 0px);
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+/* Keep every navigation glyph on the exact visual centre of its circle. */
+.tabbar .tab {
+  display: grid !important;
+  place-items: center !important;
+  padding: 0 !important;
+}
+
+.tabbar .tab svg {
+  display: block !important;
+  margin: 0 !important;
+}
+
+.tabbar .tab[aria-label="Homepage"] svg {
+  --nav-icon-x: 0px !important;
+  --nav-icon-y: -1px !important;
+}
+
+.tabbar .tab[aria-label="Community"] svg {
+  --nav-icon-x: -0.25px !important;
+  --nav-icon-y: 0px !important;
+}
+
+.tabbar .tab[aria-label="Projekte"] svg {
+  --nav-icon-x: 0px !important;
+  --nav-icon-y: -1px !important;
+}
+
+.tabbar .tab[aria-label="Dashboard"] svg {
+  --nav-icon-x: -1px !important;
+  --nav-icon-y: 0px !important;
+}
+
+@media (max-width: 540px) {
+  html,
+  body {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+  }
+
+  body {
+    padding: 0 !important;
+    overflow-x: hidden;
+  }
+
+  body > .phone {
+    width: 100% !important;
+    max-width: 100% !important;
+    height: 100vh !important;
+    height: 100dvh !important;
+    min-height: 100vh !important;
+    min-height: 100svh !important;
+    max-height: 100vh !important;
+    max-height: 100dvh !important;
+    aspect-ratio: auto !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+  }
+
+  .app-header {
+    padding-top: max(78px, calc(var(--app-safe-top) + 16px)) !important;
+  }
+
+  .topbar,
+  .detail-back,
+  .detail-share {
+    top: max(78px, calc(var(--app-safe-top) + 16px)) !important;
+  }
+
+.tabbar {
+  bottom: max(38px, calc(var(--app-safe-bottom) + 4px)) !important;
+}
+
+  .fab {
+    bottom: max(28px, calc(var(--app-safe-bottom) + 8px)) !important;
+  }
+
+  .notifications-modal {
+    position: fixed !important;
+    inset: 0 !important;
+    border-radius: 0 !important;
+  }
+
+  .modal-sheet {
+    --app-modal-bottom: max(20px, var(--app-safe-bottom));
+    bottom: var(--app-modal-bottom) !important;
+    height: min(540px, calc(100dvh - var(--app-safe-top) - var(--app-modal-bottom) - 16px)) !important;
+    max-height: none !important;
+  }
+
+  .comment-input-bar {
+    padding-bottom: max(14px, var(--app-safe-bottom)) !important;
+  }
+
+  .comment-input-field,
+  .reply-field,
+  .field-input,
+  .create-input,
+  .create-input-wrap input,
+  .create-textarea,
+  .message-input,
+  .ed-message-input {
+    font-size: 16px !important;
+  }
+
+  .bt-scroll {
+    padding-bottom: max(28px, var(--app-safe-bottom)) !important;
+  }
+
+  .bottom-sheet {
+    padding-bottom: max(28px, var(--app-safe-bottom)) !important;
+  }
+
+  .save-bar {
+    padding-bottom: max(32px, var(--app-safe-bottom)) !important;
+  }
+
+  .create-footer {
+    padding-bottom: max(18px, var(--app-safe-bottom)) !important;
+  }
+
+  .avatar-sheet,
+  .privacy-sheet {
+    padding-bottom: max(16px, var(--app-safe-bottom)) !important;
+  }
+
+  .onb-top {
+    top: max(64px, calc(var(--app-safe-top) + 8px)) !important;
+  }
+
+  .intro-top {
+    padding-top: max(60px, calc(var(--app-safe-top) + 8px)) !important;
+  }
+
+  .onb-bottom {
+    bottom: max(32px, calc(var(--app-safe-bottom) + 8px)) !important;
+  }
+
+  .phone.map-fullscreen .map-hint,
+  .phone.map-fullscreen .map-tools,
+  .phone.map-fullscreen .map-floating-close {
+    top: max(58px, calc(var(--app-safe-top) + 8px)) !important;
+  }
+
+  .phone.map-fullscreen .map-filter-bar {
+    bottom: max(24px, calc(var(--app-safe-bottom) + 8px)) !important;
+  }
+
+  .phone.map-fullscreen .map-attr,
+  .phone.map-fullscreen .map-attr-left {
+    bottom: calc(var(--app-safe-bottom) + 4px) !important;
+  }
+}
+
+@media (max-width: 400px) {
+  .mini-label,
+  .mini-copy,
+  .eda-title {
+    white-space: normal !important;
+  }
+}
+
+@media (max-width: 359px) {
+  .tabbar {
+    left: 20px !important;
+    right: 20px !important;
+  }
+
+  .header-title {
+    font-size: 28px !important;
+  }
+
+  .seg-btn {
+    font-size: 10.5px !important;
+  }
+}

@@ -1,0 +1,2264 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>Location — Commons Map verbessert</title>
+
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="Location" />
+<meta name="theme-color" content="#ECECEC" />
+<meta name="format-detection" content="telephone=no" />
+
+<link rel="apple-touch-icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect width='180' height='180' rx='40' fill='%231A1A1A'/><circle cx='90' cy='90' r='34' fill='%232BD83C'/><path d='M82 76 L82 104 L106 90 Z' fill='%23000'/></svg>" />
+
+<style>
+  * {
+    margin: 0; padding: 0;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+  }
+
+  :root {
+    --bg: #ECECEC;
+    --card-bg: #FFFFFF;
+    --black: #1A1A1A;
+    --green: #34D041;       /* solid green, no glow */
+    --text-secondary: #8E8E93;
+    --emergency-red: #FF3B30;
+
+    /* Map palette — grayscale like the screenshot */
+    --map-base:   #F2F2F2;
+    --map-area:   #EAEAEA;
+    --map-road:   #D6D6D6;
+    --map-road2:  #DEDEDE;
+    --map-water:  #E4E8EA;
+    --map-label:  #6B6B6B;
+    --map-label2: #9A9A9A;
+  }
+
+  html, body {
+    height: 100%;
+    width: 100%;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", system-ui, sans-serif;
+    color: var(--black);
+    -webkit-font-smoothing: antialiased;
+    -webkit-text-size-adjust: 100%;
+    overflow-x: hidden;
+  }
+
+  body {
+    background: radial-gradient(circle at 50% 30%, #2a2a2a 0%, #0a0a0a 100%);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+  }
+
+  /* iPhone MOCKUP FRAME */
+  .iphone {
+    position: relative;
+    width: 393px;
+    height: 852px;
+    background: #0a0a0a;
+    border-radius: 55px;
+    padding: 12px;
+    box-shadow:
+      0 0 0 2px #2a2a2a,
+      0 0 0 4px #1a1a1a,
+      0 30px 80px rgba(0,0,0,0.6);
+  }
+
+  .iphone::before {
+    content: "";
+    position: absolute;
+    right: -3px; top: 200px;
+    width: 4px; height: 90px;
+    background: #1a1a1a;
+    border-radius: 2px;
+  }
+
+  .iphone .volume {
+    position: absolute;
+    left: -3px;
+    width: 4px;
+    background: #1a1a1a;
+    border-radius: 2px;
+  }
+  .iphone .volume.v1 { top: 215px; height: 55px; }
+  .iphone .volume.v2 { top: 285px; height: 55px; }
+
+  .screen {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background: var(--bg);
+    border-radius: 44px;
+    overflow: hidden;
+  }
+
+  .status-bar {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 54px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 32px 0;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--black);
+    z-index: 10;
+    pointer-events: none;
+  }
+  .status-bar .time {
+    letter-spacing: -0.3px;
+    font-feature-settings: "tnum";
+  }
+  .status-icons { display: flex; align-items: center; gap: 5px; }
+
+  .dynamic-island {
+    position: absolute;
+    top: 11px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 124px;
+    height: 36px;
+    background: #000;
+    border-radius: 20px;
+    z-index: 20;
+  }
+
+  /* APP */
+  .app {
+    position: absolute;
+    top: 54px;
+    left: 0; right: 0; bottom: 0;
+    padding: 14px 18px 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 4px 4px;
+  }
+
+  .header h1 {
+    font-size: 26px;
+    font-weight: 700;
+    letter-spacing: -0.6px;
+  }
+
+  .header-icons { display: flex; gap: 18px; align-items: center; }
+
+  .icon-btn {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+    display: flex;
+    color: var(--black);
+    transition: opacity 0.15s;
+  }
+  .icon-btn:active { opacity: 0.4; }
+
+  /* Map */
+  .map-card {
+    --source-extra: 64px;
+    position: relative;
+    z-index: 5;
+    background: var(--card-bg);
+    border-radius: 26px;
+    padding: 12px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    transition: margin-bottom 0.55s cubic-bezier(0.65, 0, 0.35, 1),
+                box-shadow 0.4s ease;
+  }
+  .map-card.expanded {
+    box-shadow: 0 8px 28px rgba(0,0,0,0.12);
+  }
+  .map-card.source-mode {
+    z-index: 9;
+  }
+
+  .map {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1 / 1.02;
+    border-radius: 18px;
+    overflow: hidden;
+    background: var(--map-base);
+    cursor: grab;
+    touch-action: none;
+    user-select: none;
+    transition: height 0.55s cubic-bezier(0.65, 0, 0.35, 1);
+  }
+  .map:active { cursor: grabbing; }
+  /* While JS animates height we suppress the aspect-ratio rule */
+  .map.is-fixed-height { aspect-ratio: auto; }
+
+  .map-pan-layer {
+    position: absolute;
+    top: -6%;
+    left: -9%;
+    width: 118%;
+    height: auto;
+    aspect-ratio: 400 / 760;
+    transform: translate3d(var(--map-pan-x, 0px), var(--map-pan-y, 0px), 0);
+    transition: transform 0.18s ease-out;
+    will-change: transform;
+    z-index: 0;
+  }
+  .map.is-dragging .map-pan-layer { transition: none; }
+
+  .map svg.map-bg {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  /* Glassmorphism hint pill */
+  .map-hint {
+    position: absolute;
+    top: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(255, 255, 255, 0.32);
+    backdrop-filter: blur(22px) saturate(190%);
+    -webkit-backdrop-filter: blur(22px) saturate(190%);
+    border: 1px solid rgba(255, 255, 255, 0.52);
+    border-top-color: rgba(255, 255, 255, 0.68);
+    border-bottom-color: rgba(255, 255, 255, 0.32);
+    border-radius: 999px;
+    padding: 10px 20px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1.2px;
+    color: rgba(34, 34, 34, 0.88);
+    box-shadow:
+      0 10px 24px rgba(0,0,0,0.08),
+      0 2px 8px rgba(255,255,255,0.22) inset,
+      0 -1px 3px rgba(255,255,255,0.14) inset;
+    z-index: 5;
+    user-select: none;
+    pointer-events: none;
+    white-space: nowrap;
+  }
+
+  /* Solid green marker, anchored to the map artwork — moves with the map like Google Maps pins */
+  .marker {
+    position: absolute;
+    left: 50%;
+    top: 14.8%;
+    width: 30px;
+    height: 30px;
+    border: none;
+    border-radius: 50%;
+    background: var(--green);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.12);
+    z-index: 7;
+    cursor: pointer;
+    pointer-events: auto;
+  }
+  .marker:focus-visible {
+    outline: 3px solid rgba(52, 208, 65, 0.36);
+    outline-offset: 4px;
+  }
+  .marker::after {
+    content: "";
+    position: absolute;
+    inset: -42px -34px -14px;
+    border-radius: 28px;
+  }
+  .marker::before {
+    content: "Du";
+    position: absolute;
+    left: 50%;
+    top: calc(100% + 6px);
+    transform: translateX(-50%);
+    color: rgba(20, 20, 20, 0.9);
+    font-size: 10px;
+    font-weight: 500;
+    line-height: 1;
+    letter-spacing: -0.04px;
+    text-align: center;
+    z-index: 8;
+    pointer-events: none;
+    white-space: nowrap;
+    padding: 4px 8px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.30);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    border-top-color: rgba(255, 255, 255, 0.68);
+    border-bottom-color: rgba(255, 255, 255, 0.28);
+    box-shadow:
+      0 10px 24px rgba(0,0,0,0.09),
+      0 2px 8px rgba(255,255,255,0.22) inset,
+      0 -1px 3px rgba(255,255,255,0.12) inset;
+    backdrop-filter: blur(18px) saturate(185%);
+    -webkit-backdrop-filter: blur(18px) saturate(185%);
+  }
+
+  /* Subtile Pulse-Ringe: laufen nur, wenn das Haus aktiv/angeklickt ist */
+  .marker-rings {
+    position: absolute;
+    inset: 50%;
+    width: 30px;
+    height: 30px;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: -1;
+    opacity: 0;
+  }
+  .marker-rings span {
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    border: 1.5px solid rgba(52, 208, 65, 0.46);
+    background: rgba(52, 208, 65, 0.10);
+    transform: scale(1);
+    opacity: 0;
+  }
+  .marker.active .marker-rings {
+    opacity: 1;
+  }
+  .marker.active .marker-rings span {
+    animation: markerPulse 3.8s ease-out infinite;
+  }
+  .marker.active .marker-rings span:nth-child(2) { animation-delay: 1.25s; }
+  .marker.active .marker-rings span:nth-child(3) { animation-delay: 2.5s; }
+
+  @keyframes markerPulse {
+    0%   { transform: scale(1);   opacity: 0.36; }
+    55%  { opacity: 0.18; }
+    100% { transform: scale(2.1); opacity: 0; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .marker.active .marker-rings span,
+    .poi.active .poi-rings span {
+      animation: none;
+      transform: scale(1.75);
+      opacity: 0.18;
+    }
+  }
+
+  .marker svg {
+    width: 13px;
+    height: 13px;
+    color: #000;
+    position: relative;
+    z-index: 2;
+  }
+
+  .marker.active {
+    background: #34D041; /* dunkleres Grün */
+  }
+
+  .marker.active svg {
+    color: #111; /* dunkleres Haus-Icon */
+  }
+
+ .destination {
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  bottom: 12px;
+  z-index: 6;
+  min-height: 93px;
+  background: #1A1A1A;
+  color: #fff;
+  border-radius: 16px;
+  padding: 13px 16px;
+  overflow: hidden;
+  transition:
+    min-height 0.55s cubic-bezier(0.65, 0, 0.35, 1),
+    border-radius 0.55s cubic-bezier(0.65, 0, 0.35, 1),
+    padding 0.55s cubic-bezier(0.65, 0, 0.35, 1),
+    box-shadow 0.35s ease;
+}
+
+  scrollbar-width: none;
+    transition:
+      min-height 0.55s cubic-bezier(0.65, 0, 0.35, 1),
+      border-radius 0.55s cubic-bezier(0.65, 0, 0.35, 1),
+      padding 0.55s cubic-bezier(0.65, 0, 0.35, 1),
+      box-shadow 0.35s ease;
+  }
+  .map-card.source-mode .destination {
+    min-height: calc(93px + var(--source-extra));
+    border-radius: 22px;
+    padding: 18px 18px;
+    box-shadow: 0 18px 42px rgba(0,0,0,0.18);
+  }
+  /* Institution-Box: extra Höhe für Spendenziel + Message-Bereich */
+  .map-card.source-mode .destination:has(.destination-source.institution-active) {
+    min-height: calc(93px + var(--source-extra) + 40px);
+  }
+  /* Aufgeklappt (Chips + Textfeld sichtbar) braucht es mehr Platz */
+.map-card.source-mode .destination:has(.destination-source.institution-active .message-panel.expanded) {
+  min-height: calc(93px + var(--source-extra) + 270px);
+}
+  /* Bei "Dein Haus" (kein Institution-Modus) das Spendenziel/Progressbar komplett ausblenden */
+  .destination-source:not(.institution-active) .donation-goal {
+    display: none;
+  }
+  .destination-route,
+  .destination-source {
+    transition:
+      opacity 0.34s ease,
+      transform 0.55s cubic-bezier(0.65, 0, 0.35, 1);
+  }
+  .destination-route {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  .map-card.source-mode .destination-route {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.96);
+    pointer-events: none;
+  }
+  .destination .name {
+    font-size: 16px; font-weight: 700;
+    margin-bottom: 2px; letter-spacing: -0.2px;
+  }
+  .destination .address {
+    font-size: 12px; color: #B0B0B0;
+    margin-bottom: 10px;
+  }
+  .progress-row {
+    display: flex; align-items: center; gap: 10px;
+    font-size: 11.5px; color: #E5E5E5; font-weight: 500;
+  }
+  .progress-track {
+    flex: 1; height: 4px;
+    background: #3A3A3A; border-radius: 4px;
+    overflow: hidden; position: relative;
+  }
+  .progress-fill {
+    position: absolute; left: 0; top: 0;
+    height: 100%; width: 55%;
+    background: #fff; border-radius: 4px;
+  }
+  .destination-source {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transform: translateY(18px);
+    pointer-events: none;
+    padding: 18px 18px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .map-card.source-mode .destination-source {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+  .source-close {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    border: 1px solid rgba(255,255,255,0.16);
+    border-radius: 999px;
+    background: rgba(255,255,255,0.10);
+    color: rgba(255,255,255,0.86);
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+    opacity: 0;
+    transform: scale(0.88);
+    backdrop-filter: blur(14px) saturate(160%);
+    -webkit-backdrop-filter: blur(14px) saturate(160%);
+    transition: opacity 0.25s ease, transform 0.35s ease, background 0.25s ease, border-color 0.25s ease;
+  }
+  .source-close svg {
+    width: 11.5px;
+    height: 11.5px;
+    display: block;
+    stroke-width: 2;
+  }
+  .source-close:active {
+    background: rgba(255,255,255,0.18);
+    border-color: rgba(255,255,255,0.24);
+  }
+  .map-card.source-mode .source-close {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  .poi-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 24px;
+    height: 24px;
+    border-radius: 999px;
+    border: 1px solid rgba(255,255,255,0.18);
+    background: rgba(255,255,255,0.08);
+    color: rgba(255,255,255,0.82);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+  }
+
+  .poi-close svg {
+    width: 10px;
+    height: 10px;
+    stroke-width: 1.8;
+  }
+
+  .poi-close:hover {
+    transform: scale(1.05);
+  }
+
+  .source-title {
+    max-width: 214px;
+    font-size: 20px;
+    line-height: 1.08;
+    font-weight: 700;
+    letter-spacing: -0.28px;
+  }
+  .source-copy {
+    max-width: 220px;
+    margin-top: 8px;
+    color: rgba(255,255,255,0.7);
+    font-size: 12.5px;
+    line-height: 1.28;
+    font-weight: 500;
+    letter-spacing: -0.12px;
+  }
+  .source-power {
+    display: flex;
+    align-items: baseline;
+    gap: 9px;
+  }
+  .source-number {
+    color: #fff;
+    font-size: 42px;
+    line-height: 0.94;
+    font-weight: 500;
+    letter-spacing: -1.1px;
+  }
+
+  .donation-goal {
+    margin-top: 13px;
+  }
+
+  .donation-goal-top {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 7px;
+    color: rgba(255,255,255,0.78);
+    font-size: 11px;
+    font-weight: 650;
+    letter-spacing: -0.08px;
+  }
+
+  .donation-progress-track {
+    width: 100%;
+    height: 5px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.18);
+    overflow: hidden;
+  }
+
+  .donation-progress-fill {
+    height: 100%;
+    width: 0%;
+    border-radius: inherit;
+    background: #FFFFFF;
+    transition: width 0.45s ease;
+  }
+
+
+
+  .message-panel {
+    margin-top: 13px;
+    display: none;
+  }
+
+  .destination-source.institution-active .message-panel {
+    display: block;
+    margin-top: 18px;
+  }
+
+  /* Bei Institutionen die kW-Anzeige rechts unten ausblenden, nur bei "Dein Haus" sichtbar */
+  .destination-source.institution-active .source-power {
+    display: none;
+  }
+
+  .message-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    color: rgba(255,255,255,0.92);
+    font-size: 11.5px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    letter-spacing: -0.08px;
+    cursor: pointer;
+    user-select: none;
+    -webkit-user-select: none;
+    /* Pille mit Rahmen, damit klar ist dass es klickbar ist */
+    background: rgba(255,255,255,0.10);
+    border: 1px solid rgba(255,255,255,0.20);
+    border-radius: 999px;
+    padding: 7px 13px;
+    transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+  }
+  .message-label:hover {
+    background: rgba(255,255,255,0.16);
+    border-color: rgba(255,255,255,0.28);
+  }
+  .message-label:active {
+    transform: scale(0.97);
+  }
+  /* Chevron, der mit-rotiert wenn aufgeklappt */
+  .message-label::after {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-right: 1.5px solid currentColor;
+    border-bottom: 1.5px solid currentColor;
+    transform: rotate(45deg) translate(-1px, -1px);
+    transition: transform 0.3s ease;
+  }
+  .message-panel.expanded .message-label::after {
+    transform: rotate(-135deg) translate(-1px, -1px);
+  }
+
+  /* Chips: immer flex, aber per max-height/opacity sanft ein-/ausblenden */
+  .message-options {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 8px;
+    max-height: 0;
+    opacity: 0;
+    margin-bottom: 0;
+    overflow: hidden;
+    transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+                opacity 0.25s ease,
+                margin-bottom 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .message-panel.expanded .message-options {
+    max-height: 44px;
+    opacity: 1;
+    margin-bottom: 18px;
+    transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+                opacity 0.3s ease 0.1s,
+                margin-bottom 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .message-chip {
+    flex: 0 1 auto;
+    border: 1px solid rgba(255,255,255,0.16);
+    background: rgba(255,255,255,0.08);
+    color: rgba(255,255,255,0.88);
+    border-radius: 999px;
+    padding: 7px 11px;
+    font-size: 10.5px;
+    font-weight: 650;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+
+  .message-chip:active {
+    transform: scale(0.96);
+  }
+
+  /* Textarea: immer block, mit max-height/opacity ein-/ausblenden */
+  .message-input {
+    display: block;
+    width: 100%;
+    max-height: 0;
+    min-height: 0;
+    opacity: 0;
+    resize: none;
+    border: 1px solid rgba(255,255,255,0);
+    outline: none;
+    border-radius: 12px;
+    background: rgba(255,255,255,0.08);
+    color: #FFFFFF;
+    padding: 0 10px;
+    font: inherit;
+    font-size: 11.5px;
+    line-height: 1.25;
+    overflow: hidden;
+    box-sizing: border-box;
+    transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+                min-height 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+                opacity 0.25s ease,
+                padding 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+                border-color 0.4s ease;
+  }
+  .message-panel.expanded .message-input {
+    max-height: 72px;
+    min-height: 56px;
+    margin-bottom: 20px;
+    opacity: 1;
+    padding: 9px 10px;
+    border-color: rgba(255,255,255,0.14);
+    transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+                min-height 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+                opacity 0.3s ease 0.12s,
+                padding 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+                border-color 0.4s ease 0.1s;
+  }
+
+  .message-input::placeholder {
+    color: rgba(255,255,255,0.42);
+  }
+
+.donate-energy-btn {
+  margin-top: 0;
+  margin-bottom: 9px;
+  width: 100%;
+  height: 40px;
+  border: none;
+  border-radius: 999px;
+  background: #FFFFFF;
+  color: #111111;
+  font-size: 12.5px;
+  font-weight: 800;
+  letter-spacing: -0.12px;
+  cursor: pointer;
+  transition: transform 0.18s ease, opacity 0.18s ease;
+}
+
+.donate-energy-btn:active {
+  transform: scale(0.985);
+  opacity: 0.92;
+}
+  /* Loading-Overlay: blurrt den ganzen Screen, Häkchen in der Mitte */
+.loading-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 100;
+  background: rgba(20, 20, 20, 0.45);
+  backdrop-filter: blur(22px) saturate(140%);
+  -webkit-backdrop-filter: blur(22px) saturate(140%);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 18px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.loading-overlay.show {
+  display: flex;
+  opacity: 1;
+}
+
+.loader {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  border: 5px solid rgba(255, 255, 255, 0.18);
+  border-top-color: #FFFFFF;
+  animation: lo-spin 0.8s linear infinite;
+}
+
+.check {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: #FFFFFF;
+  color: #111111;
+  display: none;
+  place-items: center;
+  font-size: 34px;
+  font-weight: 900;
+  line-height: 1;
+  box-shadow: 0 8px 20px rgba(255,255,255,0.08);
+}
+
+.loading-overlay.done .loader {
+  display: none;
+}
+
+.loading-overlay.done .check {
+  display: grid;
+  animation: lo-check-pop 0.34s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.loading-text {
+  font-size: 14px;
+  font-weight: 800;
+  color: #FFFFFF;
+  letter-spacing: -0.14px;
+  text-align: center;
+  padding: 0 24px;
+  transition: color 0.2s ease;
+}
+
+.loading-overlay.done .loading-text {
+  color: #FFFFFF;
+}
+
+@keyframes lo-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes lo-check-pop {
+  from {
+    opacity: 0;
+    transform: scale(0.7);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+  .source-unit {
+    color: rgba(255,255,255,0.68);
+    font-size: 13px;
+    font-weight: 750;
+    letter-spacing: -0.16px;
+  }
+  .map-card.source-mode .map-hint {
+    opacity: 0;
+    transform: translate(-50%, -12px);
+  }
+
+  .map-floating-close {
+    position: absolute;
+    top: 22px;
+    right: 16px;
+    width: auto;
+    height: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    background: transparent;
+    color: rgba(20,20,20,0.58);
+    z-index: 9;
+    cursor: pointer;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.22s ease;
+    padding: 2px;
+  }
+
+  .map-floating-close svg {
+    width: 10px;
+    height: 10px;
+    stroke-width: 1.15;
+  }
+
+  .map-card.expanded .map-floating-close,
+  .map-card.source-mode .map-floating-close {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+
+
+
+  /* Public institution markers on the map */
+  .commons-flow-layer {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 3;
+    opacity: 0;
+    transition: opacity 0.35s ease;
+  }
+  .commons-flow-layer path {
+    fill: none;
+    stroke: rgba(52, 208, 65, 0.58);
+    stroke-width: 2.2;
+    stroke-linecap: round;
+    stroke-dasharray: 7 10;
+    animation: commonsFlow 3.4s linear infinite;
+    filter: drop-shadow(0 2px 4px rgba(52,208,65,0.16));
+  }
+  .commons-flow-layer .route-muted {
+    stroke: rgba(26,26,26,0.20);
+    stroke-width: 1.4;
+    stroke-dasharray: none;
+    animation: none;
+    filter: none;
+  }
+  .map[data-mode="flow"] .commons-flow-layer,
+  .map[data-mode="routes"] .commons-flow-layer,
+  .map[data-mode="priority"] .commons-flow-layer {
+    opacity: 1;
+  }
+  .map[data-mode="routes"] .commons-flow-layer path {
+    stroke: rgba(26,26,26,0.34);
+    stroke-dasharray: none;
+    animation: none;
+    filter: none;
+  }
+  .map[data-mode="routes"] .commons-flow-layer .route-muted {
+    stroke: rgba(26,26,26,0.16);
+  }
+  .map[data-mode="priority"] .commons-flow-layer path:not(.priority-route) {
+    opacity: 0.08;
+    animation: none;
+  }
+  .map[data-mode="priority"] .commons-flow-layer .priority-route {
+    stroke: rgba(52,208,65,0.72);
+  }
+  @keyframes commonsFlow {
+    to { stroke-dashoffset: -34; }
+  }
+
+
+  .commons-hub {
+    --hub-color: #34D041;
+    position: absolute;
+    left: var(--x);
+    top: var(--y);
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    color: #111;
+    background: #FFFFFF;
+    border: 2px solid rgba(52,208,65,0.86);
+    box-shadow: 0 10px 24px rgba(0,0,0,0.14), 0 0 0 7px rgba(52,208,65,0.10);
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    z-index: 6;
+  }
+
+  .commons-hub svg {
+    width: 18px;
+    height: 18px;
+    stroke-width: 1.75;
+  }
+
+  .commons-hub::after {
+    content: attr(data-label);
+    position: absolute;
+    left: 50%;
+    top: calc(100% + 6px);
+    transform: translateX(-50%);
+    padding: 4px 8px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.62);
+    border: 1px solid rgba(255,255,255,0.76);
+    color: rgba(26,26,26,0.84);
+    font-size: 8.5px;
+    font-weight: 750;
+    line-height: 1;
+    white-space: nowrap;
+    backdrop-filter: blur(14px) saturate(170%);
+    -webkit-backdrop-filter: blur(14px) saturate(170%);
+    box-shadow: 0 6px 14px rgba(0,0,0,0.08);
+  }
+
+  .poi {
+    --poi-color: #B7B7B7;
+    position: absolute;
+    left: var(--x);
+    top: var(--y);
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    color: #111;
+    background: color-mix(in srgb, var(--poi-color) 74%, white 26%);
+    /* Kein zweiter halbtransparenter Außenkreis mehr */
+    box-shadow: 0 8px 18px rgba(0,0,0,0.12);
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+    pointer-events: auto;
+    cursor: pointer;
+    z-index: 5;
+    transition: opacity 0.32s ease, transform 0.32s ease, filter 0.32s ease, box-shadow 0.32s ease;
+  }
+  .poi:focus-visible {
+    outline: 3px solid color-mix(in srgb, var(--poi-color) 42%, transparent);
+    outline-offset: 5px;
+  }
+  .poi svg {
+    width: 16px;
+    height: 16px;
+    stroke-width: 1.65;
+    position: relative;
+    z-index: 2;
+  }
+  .poi-rings {
+    position: absolute;
+    inset: 50%;
+    width: 34px;
+    height: 34px;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: -1;
+    opacity: 0;
+  }
+  .poi-rings span {
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    border: 1.5px solid color-mix(in srgb, var(--poi-color) 56%, transparent);
+    background: color-mix(in srgb, var(--poi-color) 18%, transparent);
+    transform: scale(1);
+    opacity: 0;
+  }
+  .poi.active .poi-rings { opacity: 1; }
+  .poi.active .poi-rings span { animation: markerPulse 3.8s ease-out infinite; }
+  .poi.active .poi-rings span:nth-child(2) { animation-delay: 1.25s; }
+  .poi.active .poi-rings span:nth-child(3) { animation-delay: 2.5s; }
+  .poi::after {
+    content: attr(data-label);
+    position: absolute;
+    left: 50%;
+    bottom: calc(100% + 6px);
+    transform: translateX(-50%);
+    padding: 4px 8px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.56);
+    border: 1px solid rgba(255,255,255,0.72);
+    color: rgba(26,26,26,0.78);
+    font-size: 8.5px;
+    font-weight: 650;
+    line-height: 1;
+    white-space: nowrap;
+    backdrop-filter: blur(14px) saturate(170%);
+    -webkit-backdrop-filter: blur(14px) saturate(170%);
+    box-shadow: 0 6px 14px rgba(0,0,0,0.08);
+  }
+  .poi.kindergarten { --poi-color: #FF8AC7; }
+  .poi.hospital     { --poi-color: #9ED7FF; }
+  .poi.library      { --poi-color: #D7C7FF; }
+  .poi.school       { --poi-color: #FFD98A; }
+  .map[data-mode="priority"] .poi.hospital {
+    transform: translate(-50%, -50%) scale(1.08);
+    filter: saturate(1.1);
+  }
+  .map[data-mode="priority"] .poi:not(.hospital),
+  .map[data-mode="radar"] .poi {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  .radar-zone {
+    position: absolute;
+    left: var(--x);
+    top: var(--y);
+    width: 112px;
+    height: 112px;
+    border-radius: 50%;
+    transform: translate(-50%, -50%) scale(0.6);
+    background: radial-gradient(circle, rgba(52,208,65,0.16), rgba(52,208,65,0.03) 54%, transparent 70%);
+    opacity: 0;
+    pointer-events: none;
+    z-index: 2;
+    transition: opacity 0.35s ease, transform 0.45s ease;
+  }
+  .map[data-mode="radar"] .radar-zone {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+    animation: radarBreathe 4s ease-in-out infinite;
+  }
+  @keyframes radarBreathe {
+    50% { transform: translate(-50%, -50%) scale(1.12); opacity: 0.62; }
+  }
+
+  /* Grid — bleibt statisch, wird einfach von der Karte überdeckt */
+  .grid {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+  }
+  .tile {
+    aspect-ratio: 1 / 1;
+    border-radius: 22px;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 10px;
+    cursor: pointer;
+    transition: transform 0.15s ease, background 0.25s ease, color 0.25s ease, box-shadow 0.25s ease;
+  }
+  .tile:active { transform: scale(0.95); }
+  .tile.active {
+    background: #111111;
+    color: #FFFFFF;
+    box-shadow: 0 10px 24px rgba(0,0,0,0.10);
+  }
+  .tile.dark  { background: #1A1A1A; color: #FFFFFF; }
+  .tile.light { background: #FFFFFF;  color: #1A1A1A; }
+  .tile .label {
+    font-size: 14.5px;
+    font-weight: 500;
+    letter-spacing: -0.1px;
+  }
+  .tile svg { width: 32px; height: 32px; }
+
+  /* Emergency */
+  .emergency {
+    background: #FFFFFF;
+    border-radius: 22px;
+    padding: 14px 16px;
+    display: flex; align-items: center; gap: 14px;
+  }
+  .emergency.auto-donate-on .emergency-icon {
+    background: rgba(52, 208, 65, 0.14);
+    color: #1A1A1A;
+  }
+  .emergency.auto-donate-on .slider { background: #34D041; }
+
+  .emergency-icon {
+    width: 36px; height: 36px;
+    border-radius: 10px;
+    background: #FCE4E4;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--emergency-red);
+    flex-shrink: 0;
+  }
+  .emergency-text { flex: 1; }
+  .emergency-text .title {
+    font-size: 16px; font-weight: 700;
+    color: #1A1A1A; letter-spacing: -0.2px;
+  }
+  .emergency-text .sub {
+    font-size: 12px; color: var(--text-secondary); margin-top: 2px;
+  }
+
+  .switch {
+    position: relative;
+    width: 51px; height: 31px;
+    flex-shrink: 0;
+  }
+  .switch input { opacity: 0; width: 0; height: 0; }
+  .slider {
+    position: absolute; inset: 0;
+    background: #E9E9EA; border-radius: 31px;
+    cursor: pointer; transition: background 0.25s ease;
+  }
+  .slider::before {
+    content: "";
+    position: absolute;
+    height: 27px; width: 27px;
+    left: 2px; top: 2px;
+    background: #fff;
+    border-radius: 50%;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2), 0 0 1px rgba(0,0,0,0.1);
+    transition: transform 0.25s ease;
+  }
+  .switch input:checked + .slider { background: #1A1A1A; }
+  .switch input:checked + .slider::before { transform: translateX(20px); }
+
+  .map-attr {
+    position: absolute;
+    bottom: 4px; right: 8px;
+    z-index: 2;
+    font-size: 9px; color: #6b6b6b; font-weight: 500;
+  }
+  .map-attr-left {
+    position: absolute;
+    bottom: 4px; left: 8px;
+    z-index: 2;
+    font-size: 9px; color: #6b6b6b; font-weight: 600;
+  }
+
+  /* Mobile fullscreen */
+  @media (max-width: 500px) {
+    body {
+      background: var(--bg);
+      padding: 0;
+      align-items: stretch;
+      justify-content: stretch;
+    }
+    .iphone {
+      width: 100%;
+      height: 100vh;
+      height: 100dvh;
+      border-radius: 0;
+      padding: 0;
+      box-shadow: none;
+    }
+    .iphone::before, .iphone .volume { display: none; }
+    .screen { border-radius: 0; }
+    .dynamic-island { display: none; }
+    .status-bar { display: none; }
+    .app {
+      top: env(safe-area-inset-top, 0);
+      padding: 14px 18px calc(28px + env(safe-area-inset-bottom, 0));
+    }
+  }
+</style>
+</head>
+<body>
+
+  <div class="iphone">
+    <div class="volume v1"></div>
+    <div class="volume v2"></div>
+
+    <div class="screen">
+
+      <div class="dynamic-island"></div>
+
+      <div class="status-bar">
+        <div class="time">9:41</div>
+        <div class="status-icons">
+          <svg width="17" height="11" viewBox="0 0 17 11" fill="currentColor">
+            <rect x="0"  y="7" width="3" height="4" rx="0.5"/>
+            <rect x="4.5" y="5" width="3" height="6" rx="0.5"/>
+            <rect x="9"  y="3" width="3" height="8" rx="0.5"/>
+            <rect x="13.5" y="0" width="3" height="11" rx="0.5"/>
+          </svg>
+          <svg width="16" height="11" viewBox="0 0 16 11" fill="currentColor">
+            <path d="M8 11l2-2.5a3 3 0 0 0-4 0L8 11z"/>
+            <path d="M8 6.5a5.5 5.5 0 0 1 4 1.7l1.2-1.4a7.5 7.5 0 0 0-10.4 0L4 8.2A5.5 5.5 0 0 1 8 6.5z"/>
+            <path d="M8 2.5a9.5 9.5 0 0 1 6.8 2.9l1.2-1.4A11.5 11.5 0 0 0 0 4l1.2 1.4A9.5 9.5 0 0 1 8 2.5z"/>
+          </svg>
+          <svg width="27" height="12" viewBox="0 0 27 12" fill="none">
+            <rect x="0.5" y="0.5" width="22" height="11" rx="3" stroke="currentColor" opacity="0.4"/>
+            <rect x="2" y="2" width="19" height="8" rx="1.5" fill="currentColor"/>
+            <rect x="23.5" y="3.5" width="2" height="5" rx="1" fill="currentColor" opacity="0.4"/>
+          </svg>
+        </div>
+      </div>
+
+      <div class="app">
+
+        <header class="header">
+          <h1>Location</h1>
+          <div class="header-icons">
+            <button class="icon-btn" aria-label="Voice">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="9" y="2" width="6" height="12" rx="3"/>
+                <path d="M5 10v2a7 7 0 0 0 14 0v-2"/>
+                <line x1="12" y1="19" x2="12" y2="22"/>
+              </svg>
+            </button>
+            <button class="icon-btn" aria-label="Search">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="7"/>
+                <line x1="21" y1="21" x2="16.5" y2="16.5"/>
+              </svg>
+            </button>
+          </div>
+        </header>
+
+        <section class="map-card">
+          <div class="map" data-mode="sources">
+            <!-- Grayscale map: this whole layer moves, including the fixed map marker -->
+            <div class="map-pan-layer" id="mapPanLayer">
+            <svg class="map-bg" viewBox="0 0 400 760" preserveAspectRatio="xMinYMin meet" xmlns="http://www.w3.org/2000/svg">
+              <!-- Base -->
+              <rect width="400" height="760" fill="#F2F2F2"/>
+
+              <!-- Soft area shapes (slightly darker gray) -->
+              <path d="M0 0 L160 0 L130 90 L60 130 L0 110 Z" fill="#EAEAEA"/>
+              <path d="M250 0 L400 0 L400 140 L320 130 L260 70 Z" fill="#ECECEC"/>
+              <path d="M0 250 L80 230 L120 300 L60 380 L0 360 Z" fill="#EAEAEA"/>
+              <path d="M280 280 L360 260 L400 320 L400 460 L300 450 Z" fill="#ECECEC"/>
+              <path d="M0 430 L90 410 L150 470 L120 560 L0 590 Z" fill="#ECECEC"/>
+              <path d="M240 470 L340 450 L400 520 L400 675 L280 650 Z" fill="#EAEAEA"/>
+              <path d="M40 610 L160 585 L235 640 L190 740 L55 760 Z" fill="#ECECEC"/>
+
+              <!-- Subtle water hint -->
+              <path d="M340 380 Q380 360 400 380 L400 760 L315 760 Q300 690 335 635 T340 520 Q360 455 340 380 Z" fill="#E4E8EA" opacity="0.6"/>
+
+              <!-- Main roads -->
+              <g stroke="#D6D6D6" stroke-width="2" fill="none" stroke-linecap="round">
+                <path d="M-10 200 Q60 180 120 200 T260 180 T410 200"/>
+                <path d="M50 -10 Q70 80 110 160 T160 320 T200 430"/>
+                <path d="M-10 320 Q80 310 160 330 T320 320 T410 340"/>
+                <path d="M260 -10 Q270 90 290 180 T310 360 T320 430"/>
+                <path d="M-10 90 Q90 100 170 90 T340 100 T410 90"/>
+                <path d="M180 -10 Q200 60 220 130 T260 280 T280 430"/>
+                <path d="M340 -10 Q350 80 370 160 T390 340 T400 430"/>
+                <path d="M-10 455 Q70 435 145 455 T300 450 T410 470"/>
+                <path d="M-10 560 Q85 545 170 565 T335 555 T410 580"/>
+                <path d="M60 420 Q85 500 120 585 T165 770"/>
+                <path d="M245 400 Q260 490 285 585 T310 770"/>
+                <path d="M-10 690 Q85 675 170 695 T330 685 T410 705"/>
+              </g>
+
+              <!-- Secondary roads -->
+              <g stroke="#DEDEDE" stroke-width="1" fill="none" stroke-linecap="round" opacity="0.9">
+                <path d="M30 50 L100 70 L140 50 L200 80"/>
+                <path d="M200 250 L240 270 L280 250"/>
+                <path d="M70 380 L130 390 L180 380"/>
+                <path d="M310 50 L340 80 L370 60"/>
+                <path d="M120 220 L160 240 L200 220"/>
+                <path d="M25 485 L95 500 L150 485 L210 510"/>
+                <path d="M205 610 L245 630 L295 610"/>
+                <path d="M70 720 L145 730 L210 715"/>
+                <path d="M315 505 L350 535 L380 515"/>
+              </g>
+
+              <!-- Labels -->
+              <g font-family="-apple-system, sans-serif" fill="#6B6B6B" font-weight="600">
+                <text x="105" y="118" font-size="11">Dawsonville</text>
+                <text x="195" y="138" font-size="9" fill="#9A9A9A">Darnestown Rd</text>
+                <text x="245" y="215" font-size="10">Darnestown</text>
+                <text x="320" y="172" font-size="10">ANCI</text>
+                <text x="320" y="184" font-size="10">OAK ST</text>
+                <text x="320" y="210" font-size="10">ANCIE</text>
+                <text x="320" y="222" font-size="10">ANCIENT</text>
+                <text x="320" y="234" font-size="10">OAK WEST</text>
+                <text x="350" y="80" font-size="9" fill="#9A9A9A" transform="rotate(-65 350 80)">Riffe Ford Rd</text>
+                <text x="220" y="80" font-size="9" fill="#9A9A9A" transform="rotate(-70 220 80)">Germantown Rd</text>
+                <text x="265" y="180" font-size="9" fill="#9A9A9A" transform="rotate(-65 265 180)">Darnestown</text>
+                <text x="365" y="280" font-size="9" fill="#9A9A9A" transform="rotate(-65 365 280)">Turkey Foot Rd</text>
+                <text x="82" y="494" font-size="10">Seneca Creek</text>
+                <text x="215" y="520" font-size="9" fill="#9A9A9A" transform="rotate(-62 215 520)">River Rd</text>
+                <text x="275" y="625" font-size="10">Oakview</text>
+                <text x="86" y="675" font-size="9" fill="#9A9A9A" transform="rotate(-7 86 675)">West Branch Pkwy</text>
+              </g>
+            </svg>
+
+            <svg class="commons-flow-layer" viewBox="0 0 400 760" preserveAspectRatio="xMinYMin meet" aria-hidden="true">
+              <path class="priority-route" d="M200 112 C222 154 263 181 302 215"/>
+              <path d="M200 112 C162 160 124 205 96 258"/>
+              <path d="M200 112 C214 252 226 335 248 440"/>
+              <path d="M200 112 C166 296 132 394 111 536"/>
+              <path class="route-muted" d="M96 258 C150 292 206 316 302 215"/>
+              <path class="route-muted" d="M111 536 C152 500 198 472 248 440"/>
+            </svg>
+
+            <div class="commons-hub" style="--x: 50%; --y: 25%;" data-label="Commons Speicher" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M6 7.5h12a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2z"/>
+                <path d="M20 11h1.5v2H20"/>
+                <path d="M8 12h3"/>
+                <path d="M13 12h3"/>
+              </svg>
+            </div>
+
+            <div class="radar-zone" style="--x: 50%; --y: 25%;" aria-hidden="true"></div>
+            <div class="radar-zone" style="--x: 62%; --y: 58%; animation-delay: 1.2s;" aria-hidden="true"></div>
+
+            <div class="poi kindergarten" role="button" tabindex="0" data-info="kita" aria-label="Kita anzeigen" aria-pressed="false" style="--x: 24%; --y: 34%;" data-label="Kita">
+              <div class="poi-rings" aria-hidden="true"><span></span><span></span><span></span></div>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19h16"/><path d="M7 19V9l5-4 5 4v10"/><path d="M10 19v-5h4v5"/></svg>
+            </div>
+            <div class="poi hospital" role="button" tabindex="0" data-info="clinic" aria-label="Clinic anzeigen" aria-pressed="false" style="--x: 75.5%; --y: 28.2%;" data-label="Clinic">
+              <div class="poi-rings" aria-hidden="true"><span></span><span></span><span></span></div>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h16"/><path d="M6 20V7h12v13"/><path d="M12 10v6"/><path d="M9 13h6"/></svg>
+            </div>
+            <div class="poi library" role="button" tabindex="0" data-info="library" aria-label="Library anzeigen" aria-pressed="false" style="--x: 62%; --y: 58%;" data-label="Library">
+              <div class="poi-rings" aria-hidden="true"><span></span><span></span><span></span></div>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M5 19V6.5A2.5 2.5 0 0 1 7.5 4H20v15H7.5A2.5 2.5 0 0 0 5 21"/><path d="M8 8h8"/><path d="M8 12h6"/></svg>
+            </div>
+            <div class="poi school" role="button" tabindex="0" data-info="school" aria-label="School anzeigen" aria-pressed="false" style="--x: 28%; --y: 70.5%;" data-label="School">
+              <div class="poi-rings" aria-hidden="true"><span></span><span></span><span></span></div>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-4 9 4-9 4-9-4z"/><path d="M7 11v5c2 2 8 2 10 0v-5"/><path d="M21 9v5"/></svg>
+            </div>
+
+
+            <div class="marker" id="fixedHomeMarker" role="button" tabindex="0" aria-label="Du — Source anzeigen" aria-pressed="false">
+              <div class="marker-rings" aria-hidden="true">
+                <span></span>
+                <span></span>
+                <span></span>
+              </div>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.15" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M7 11.4 12 7.3l5 4.1"/>
+                <path d="M8.9 10.9V17h6.2v-6.1"/>
+              </svg>
+            </div>
+            </div>
+
+            <div class="map-attr-left">rte</div>
+            <div class="map-attr">Map data ©202_</div>
+
+
+            <button class="map-floating-close" id="mapFloatingClose" aria-label="Close map">
+              <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-linecap="round">
+                <path d="M3 3L11 11"/>
+                <path d="M11 3L3 11"/>
+              </svg>
+            </button>
+
+            <!-- Glassmorphism hint pill -->
+
+            <div class="map-hint" id="mapHint">TAP MAP FOR OVERVIEW</div>
+
+            <div class="destination">
+              <div class="destination-route" aria-hidden="false">
+                <div class="name">Commons Speicher</div>
+                <div class="address">Lokaler Energiepool für Kita, Schule & Klinik</div>
+                <div class="progress-row">
+                  <span>73%</span>
+                  <div class="progress-track"><div class="progress-fill" style="width:73%"></div></div>
+                  <span>14.8 kWh</span>
+                </div>
+              </div>
+
+              <div class="destination-source" aria-hidden="true">
+                <button class="source-close poi-close" id="sourceClose" type="button" aria-label="Source schließen">
+                  <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-linecap="round" aria-hidden="true">
+                    <path d="M3.3 3.3 10.7 10.7"/>
+                    <path d="M10.7 3.3 3.3 10.7"/>
+                  </svg>
+                </button>
+                <div>
+                  <div class="source-title" id="sourceTitle">Dein Haus</div>
+                  <div class="source-copy" id="sourceCopy">Dein Überschuss fließt in lokale öffentliche Einrichtungen.</div>
+
+                  <div class="donation-goal" id="donationGoal" aria-hidden="true">
+                    <div class="donation-goal-top">
+                      <span id="goalLabel">Spendenziel</span>
+                      <span id="goalStatus">0 kWh bis zum Ziel</span>
+                    </div>
+                    <div class="donation-progress-track">
+                      <div class="donation-progress-fill" id="goalProgressFill"></div>
+                    </div>
+                  </div>
+
+                  <div class="message-panel" id="messagePanel">
+                    <div class="message-label">Nachricht schreiben</div>
+                    <div class="message-options">
+                      <button class="message-chip" type="button" data-message="Für heute">Für heute</button>
+                      <button class="message-chip" type="button" data-message="Licht & Wärme">Licht & Wärme</button>
+                      <button class="message-chip" type="button" data-message="Nächste Stunde">Nächste Stunde</button>
+                    </div>
+                    <textarea class="message-input" id="donationMessage" rows="2" placeholder="Eigene Nachricht schreiben …"></textarea>
+                    <button class="donate-energy-btn" id="donateEnergyBtn" type="button">Jetzt Energie spenden</button>
+                  </div>
+                </div>
+                <div class="source-power">
+                  <span class="source-number" id="sourceNumber">3.2</span>
+                  <span class="source-unit" id="sourceUnit">kW into Commons</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- MAP MODES — lokale Commons-Verteilung -->
+        <section class="grid">
+
+          <div class="tile dark active" role="button" data-mode="sources" aria-label="Energiequellen anzeigen">
+            <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M8 15 16 8l8 7"/>
+              <path d="M10.5 14v10h11V14"/>
+              <path d="M16 18l-2 4h4l-2 4"/>
+            </svg>
+            <div class="label">Sources</div>
+          </div>
+
+          <div class="tile dark" role="button" data-mode="flow" aria-label="Live Energiefluss anzeigen">
+            <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M6 17c5-7 10 7 15 0 2.1-3 3.7-3.5 5-3"/>
+              <path d="M22 10h5v5"/>
+              <circle cx="8" cy="17" r="1.4" fill="currentColor" stroke="none"/>
+              <circle cx="24" cy="14" r="1.4" fill="currentColor" stroke="none"/>
+            </svg>
+            <div class="label">Flow</div>
+          </div>
+
+          <div class="tile light" role="button" data-mode="priority" aria-label="Priorisierte Einrichtungen anzeigen">
+            <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M16 4 25 8v7c0 6-4 10.5-9 13-5-2.5-9-7-9-13V8z"/>
+              <path d="M16 10v8"/>
+              <path d="M12 14h8"/>
+            </svg>
+            <div class="label">Priority</div>
+          </div>
+
+          <div class="tile light" role="button" data-mode="routes" aria-label="Verteilungsrouten anzeigen">
+            <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="8" cy="24" r="2"/>
+              <circle cx="16" cy="8" r="2"/>
+              <circle cx="24" cy="22" r="2"/>
+              <path d="M9.5 22.2 15 10"/>
+              <path d="M17.6 9.8 23 20"/>
+            </svg>
+            <div class="label">Routes</div>
+          </div>
+
+          <div class="tile light" role="button" data-mode="radar" aria-label="Netzaktivität anzeigen">
+            <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="16" cy="16" r="11"/>
+              <path d="M16 16 L23 9"/>
+              <circle cx="23" cy="9" r="1.3" fill="currentColor" stroke="none"/>
+              <path d="M16 7 a9 9 0 0 1 9 9" stroke-dasharray="1.5 2.5" opacity="0.7"/>
+              <circle cx="16" cy="16" r="1.1" fill="currentColor" stroke="none"/>
+            </svg>
+            <div class="label">Radar</div>
+          </div>
+
+          <div class="tile dark" role="button" data-mode="institutions" aria-label="Öffentliche Einrichtungen anzeigen">
+            <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M5 27h22"/>
+              <path d="M8 27V12l8-5 8 5v15"/>
+              <path d="M12 27v-7h8v7"/>
+              <path d="M13 14h6"/>
+              <path d="M16 11v6"/>
+            </svg>
+            <div class="label">Institutions</div>
+          </div>
+
+        </section>
+
+        <section class="emergency">
+          <div class="emergency-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 2 L20 5 V12 C20 17 16 21 12 22 C8 21 4 17 4 12 V5 Z"/>
+              <line x1="12" y1="8"  x2="12" y2="13"/>
+              <circle cx="12" cy="16" r="0.9" fill="currentColor" stroke="none"/>
+            </svg>
+          </div>
+          <div class="emergency-text">
+            <div class="title">Auto Donate</div>
+            <div class="sub" id="donationStatus">Emergency share is active</div>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="emergencyToggle" checked>
+            <span class="slider"></span>
+          </label>
+        </section>
+
+      </div>
+
+      <!-- Full-Screen Loading-Overlay: blurrt den ganzen Bildschirm -->
+      <div class="loading-overlay" id="loadingOverlay">
+        <div class="loader"></div>
+        <div class="check">✓</div>
+        <div class="loading-text" id="loadingText">Buche Spende…</div>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    function tap() { if (navigator.vibrate) navigator.vibrate(8); }
+
+    document.querySelectorAll('.icon-btn').forEach(el => {
+      el.addEventListener('click', tap);
+    });
+
+    const modeCopy = {
+      sources: 'SOURCES: HOMES WITH SURPLUS',
+      flow: 'LIVE FLOW: ENERGY TO COMMONS',
+      priority: 'PRIORITY: CLINICS FIRST',
+      routes: 'ROUTES: SMART DISTRIBUTION',
+      radar: 'RADAR: GRID ACTIVITY',
+      institutions: 'INSTITUTIONS: KITA · SCHOOL · CLINIC'
+    };
+
+    document.querySelectorAll('.tile').forEach(tile => {
+      tile.addEventListener('click', () => {
+        tap();
+        document.querySelectorAll('.tile').forEach(t => t.classList.remove('active'));
+        tile.classList.add('active');
+        const mode = tile.dataset.mode;
+        if (modeCopy[mode]) hint.textContent = modeCopy[mode];
+        mapEl?.setAttribute('data-mode', mode);
+        // Institutionen bleiben immer sichtbar. Die Haus-Pulse hängen nur an der geöffneten „Dein Haus“-Ansicht.
+        syncHomeMarkerState();
+      });
+    });
+
+    const emergencyToggle = document.getElementById('emergencyToggle');
+    const donationStatus = document.getElementById('donationStatus');
+    const emergencyCard = document.querySelector('.emergency');
+
+    function syncAutoDonate() {
+      const active = emergencyToggle.checked;
+      emergencyCard?.classList.toggle('auto-donate-on', active);
+      if (donationStatus) donationStatus.textContent = active
+        ? 'Emergency share is active'
+        : 'Automatic sharing is paused';
+      console.log('Auto Donate:', active ? 'ON' : 'OFF');
+    }
+
+    emergencyToggle.addEventListener('change', () => {
+      tap();
+      syncAutoDonate();
+    });
+    syncAutoDonate();
+
+    /* ===== Map slide-over (map expands downward over the grid first; source mode only covers Emergency) ===== */
+    const mapCard    = document.querySelector('.map-card');
+    const mapEl      = document.querySelector('.map');
+    const mapPanLayer = document.getElementById('mapPanLayer');
+    const grid       = document.querySelector('.grid');
+    const emergency  = document.querySelector('.emergency');
+    const hint       = document.getElementById('mapHint');
+    const destination = document.querySelector('.destination');
+    const homeMarker = document.getElementById('fixedHomeMarker');
+    const sourceClose = document.getElementById('sourceClose');
+    const poiMarkers = Array.from(document.querySelectorAll('.poi[data-info]'));
+    const sourceTitle = document.getElementById('sourceTitle');
+    const sourceCopy = document.getElementById('sourceCopy');
+    const sourceNumber = document.getElementById('sourceNumber');
+    const sourceUnit = document.getElementById('sourceUnit');
+    const donationGoal = document.getElementById('donationGoal');
+    const goalLabel = document.getElementById('goalLabel');
+    const goalStatus = document.getElementById('goalStatus');
+    const goalProgressFill = document.getElementById('goalProgressFill');
+    const messagePanel = document.getElementById('messagePanel');
+    const donationMessage = document.getElementById('donationMessage');
+    const donateEnergyBtn = document.getElementById('donateEnergyBtn');
+    const destinationRoute = document.querySelector('.destination-route');
+    const destinationSource = document.querySelector('.destination-source');
+
+    let isExpanded = false;
+    let isAnimating = false;
+
+
+    /* ===== Draggable map background. Marker stays fixed above it. ===== */
+    let panX = 0;
+    let panY = 0;
+    let startX = 0;
+    let startY = 0;
+    let startPanX = 0;
+    let startPanY = 0;
+    let activePointerId = null;
+    let hasDraggedMap = false;
+    let suppressMapClick = false;
+
+    function clamp(value, min, max) {
+      return Math.max(min, Math.min(max, value));
+    }
+
+    function getClampedPan(nextX, nextY) {
+      if (!mapPanLayer) return { x: nextX, y: nextY };
+
+      const mapW = mapEl.clientWidth;
+      const mapH = mapEl.clientHeight;
+      const layerW = mapPanLayer.offsetWidth;
+      const layerH = mapPanLayer.offsetHeight;
+      const layerLeft = mapPanLayer.offsetLeft;
+      const layerTop = mapPanLayer.offsetTop;
+
+      // Keep the oversized map layer covering the whole visible map area.
+      const minX = Math.min(0, mapW - layerW - layerLeft);
+      const maxX = Math.max(0, -layerLeft);
+      const minY = Math.min(0, mapH - layerH - layerTop);
+      const maxY = Math.max(0, -layerTop);
+
+      return {
+        x: clamp(nextX, minX, maxX),
+        y: clamp(nextY, minY, maxY)
+      };
+    }
+
+    function setMapPan(nextX, nextY) {
+      const clamped = getClampedPan(nextX, nextY);
+      panX = clamped.x;
+      panY = clamped.y;
+      if (mapPanLayer) {
+        mapPanLayer.style.setProperty('--map-pan-x', `${panX}px`);
+        mapPanLayer.style.setProperty('--map-pan-y', `${panY}px`);
+      }
+    }
+
+    function keepPanInsideBounds() {
+      setMapPan(panX, panY);
+    }
+
+    mapEl.addEventListener('pointerdown', e => {
+      if (destination && destination.contains(e.target)) return;
+      if (e.target.closest?.('.marker, .poi')) return;
+      if (e.pointerType === 'mouse' && e.button !== 0) return;
+
+      activePointerId = e.pointerId;
+      hasDraggedMap = false;
+      startX = e.clientX;
+      startY = e.clientY;
+      startPanX = panX;
+      startPanY = panY;
+      mapEl.classList.add('is-dragging');
+      mapEl.setPointerCapture?.(e.pointerId);
+    });
+
+    mapEl.addEventListener('pointermove', e => {
+      if (activePointerId !== e.pointerId) return;
+
+      const dx = e.clientX - startX;
+      const dy = e.clientY - startY;
+      if (Math.abs(dx) + Math.abs(dy) > 3) hasDraggedMap = true;
+
+      if (hasDraggedMap) {
+        e.preventDefault();
+        setMapPan(startPanX + dx, startPanY + dy);
+      }
+    });
+
+    function endMapDrag(e) {
+      if (activePointerId !== e.pointerId) return;
+      mapEl.classList.remove('is-dragging');
+      mapEl.releasePointerCapture?.(e.pointerId);
+      activePointerId = null;
+
+      if (hasDraggedMap) {
+        suppressMapClick = true;
+        setTimeout(() => { suppressMapClick = false; }, 250);
+      }
+    }
+
+    mapEl.addEventListener('pointerup', endMapDrag);
+    mapEl.addEventListener('pointercancel', endMapDrag);
+
+    window.addEventListener('resize', () => {
+      keepPanInsideBounds();
+      if (mapCard.classList.contains('source-mode')) getSourceExtraHeight();
+    });
+
+    // The marker sits inside `.map-pan-layer`.
+    // Dragging moves the map artwork and the green marker together, so the marker stays pinned to its map location.
+
+    function getAppGap() {
+      const app = document.querySelector('.app');
+      const gap = app ? parseFloat(getComputedStyle(app).gap) : 18;
+      return Number.isFinite(gap) ? gap : 18;
+    }
+
+    function getExpandedCoverHeight() {
+      // Normal map tap: grow downward over the grid only, so Emergency stays visible.
+      const gap = getAppGap();
+      const gridH = grid ? grid.offsetHeight : 0;
+      return gridH + gap;
+    }
+
+    function getSourceExtraHeight() {
+      // House tap in expanded mode: extend slightly past the Emergency card,
+      // so the source panel really covers it while the page height stays unchanged.
+      const emergencyH = emergency ? emergency.offsetHeight : 64;
+      const overlap = getAppGap() + 18;
+      const extra = Math.max(0, emergencyH + overlap);
+      mapCard.style.setProperty('--source-extra', `${extra}px`);
+      return extra;
+    }
+
+    const placeInfo = {
+      home: {
+        title: 'Dein Haus',
+        copy: 'Dein Überschuss fließt in lokale öffentliche Einrichtungen.',
+        number: '3.2',
+        unit: 'kW into Commons',
+        isInstitution: false,
+        goalNow: 0,
+        goalTotal: 0,
+        goalText: '',
+        hintOpen: 'TAP HOUSE TO CLOSE',
+        hintClosed: 'TAP HOUSE FOR SOURCE'
+      },
+      kita: {
+        title: 'Kita',
+        copy: 'Spendenziel: sichere Betreuung bis 17 Uhr.',
+        number: '1.4',
+        unit: 'kW aus Commons',
+        isInstitution: true,
+        goalNow: 8.6,
+        goalTotal: 12,
+        goalText: '3.4 kWh bis zum Ziel',
+        hintOpen: 'TAP KITA TO CLOSE',
+        hintClosed: 'TAP INSTITUTION FOR INFO'
+      },
+      clinic: {
+        title: 'Clinic',
+        copy: 'Spendenziel: Notfallreserve für die nächsten 2 Stunden.',
+        number: '4.8',
+        unit: 'kW priority supply',
+        isInstitution: true,
+        goalNow: 18.2,
+        goalTotal: 24,
+        goalText: '5.8 kWh bis zum Ziel',
+        hintOpen: 'TAP CLINIC TO CLOSE',
+        hintClosed: 'TAP INSTITUTION FOR INFO'
+      },
+      library: {
+        title: 'Library',
+        copy: 'Spendenziel: Arbeitsplätze und Lernräume bis abends offen halten.',
+        number: '0.9',
+        unit: 'kW shared locally',
+        isInstitution: true,
+        goalNow: 4.1,
+        goalTotal: 7,
+        goalText: '2.9 kWh bis zum Ziel',
+        hintOpen: 'TAP LIBRARY TO CLOSE',
+        hintClosed: 'TAP INSTITUTION FOR INFO'
+      },
+      school: {
+        title: 'School',
+        copy: 'Spendenziel: Unterrichtsräume für den Nachmittagsbetrieb.',
+        number: '2.6',
+        unit: 'kW aus Commons',
+        isInstitution: true,
+        goalNow: 11.7,
+        goalTotal: 16,
+        goalText: '4.3 kWh bis zum Ziel',
+        hintOpen: 'TAP SCHOOL TO CLOSE',
+        hintClosed: 'TAP INSTITUTION FOR INFO'
+      }
+    };
+
+    let activePlace = null;
+
+    function updateSourceContent(placeKey = 'home') {
+      const info = placeInfo[placeKey] || placeInfo.home;
+      if (sourceTitle) sourceTitle.textContent = info.title;
+      if (sourceCopy) sourceCopy.textContent = info.copy;
+      if (sourceNumber) sourceNumber.textContent = info.number;
+      if (sourceUnit) sourceUnit.textContent = info.unit;
+
+      const isInstitution = !!info.isInstitution;
+      destinationSource?.classList.toggle('institution-active', isInstitution);
+      if (donationGoal) donationGoal.setAttribute('aria-hidden', isInstitution ? 'false' : 'true');
+
+      // Beim Wechsel zwischen Institutionen/Haus immer eingeklappt starten
+      messagePanel?.classList.remove('expanded');
+
+      if (isInstitution) {
+        const progress = info.goalTotal ? Math.min(100, Math.round((info.goalNow / info.goalTotal) * 100)) : 0;
+        if (goalLabel) goalLabel.textContent = `Spendenziel ${info.goalNow}/${info.goalTotal} kWh`;
+        if (goalStatus) goalStatus.textContent = info.goalText;
+        if (goalProgressFill) goalProgressFill.style.width = `${progress}%`;
+        if (donationMessage) donationMessage.value = '';
+      } else {
+        if (goalProgressFill) goalProgressFill.style.width = '0%';
+      }
+    }
+
+    function syncActiveMarkers() {
+      homeMarker?.classList.toggle('active', activePlace === 'home' && mapCard.classList.contains('source-mode'));
+      homeMarker?.setAttribute('aria-pressed', activePlace === 'home' && mapCard.classList.contains('source-mode') ? 'true' : 'false');
+      poiMarkers.forEach(poi => {
+        const active = poi.dataset.info === activePlace && mapCard.classList.contains('source-mode');
+        poi.classList.toggle('active', active);
+        poi.setAttribute('aria-pressed', active ? 'true' : 'false');
+      });
+    }
+
+    function applySourceContent(active, placeKey = activePlace || 'home') {
+      mapCard.classList.toggle('source-mode', active);
+      if (active) {
+        activePlace = placeKey;
+        updateSourceContent(placeKey);
+      } else {
+        activePlace = null;
+      }
+      destinationRoute?.setAttribute('aria-hidden', active ? 'true' : 'false');
+      destinationSource?.setAttribute('aria-hidden', active ? 'false' : 'true');
+      syncActiveMarkers();
+    }
+
+    function setSourceCard(active, adjustMap = true, placeKey = activePlace || 'home') {
+      const isSourceActive = mapCard.classList.contains('source-mode');
+      if (isSourceActive === active) {
+        applySourceContent(active, placeKey);
+        return;
+      }
+
+      if (!isExpanded || !adjustMap) {
+        applySourceContent(active, placeKey);
+        return;
+      }
+
+      // Keep the top of the black card visually fixed:
+      // the destination card grows, and the map grows by the same amount downward.
+      const currentH = mapEl.offsetHeight;
+      const sourceExtra = getSourceExtraHeight();
+      const coverH = getExpandedCoverHeight();
+      const nextH = active ? currentH + sourceExtra : Math.max(0, currentH - sourceExtra);
+
+      mapEl.classList.add('is-fixed-height');
+      mapEl.style.height = currentH + 'px';
+      void mapEl.offsetHeight;
+
+      requestAnimationFrame(() => {
+        applySourceContent(active, placeKey);
+        mapEl.style.height = nextH + 'px';
+        mapCard.style.marginBottom = `-${coverH + (active ? sourceExtra : 0)}px`;
+        keepPanInsideBounds();
+      });
+    }
+
+
+    function closeSourceCard() {
+      const closingPlace = activePlace;
+      setSourceCard(false);
+      const info = closingPlace ? placeInfo[closingPlace] : null;
+      hint.textContent = isExpanded ? (info?.hintClosed || 'TAP MARKER FOR INFO') : 'TAP MAP FOR OVERVIEW';
+    }
+
+    function toggleMap(e) {
+      // Don't toggle when the user dragged the map.
+      if (suppressMapClick) {
+        suppressMapClick = false;
+        return;
+      }
+
+      // Don't toggle when interacting with the destination card itself
+      if (destination && destination.contains(e.target)) return;
+      if (isAnimating) return;
+      isAnimating = true;
+      tap();
+
+      if (!isExpanded) {
+        // Step 1: freeze current map height; the marker is anchored inside the moving map layer.
+        const currentH = mapEl.offsetHeight;
+        const coverH = getExpandedCoverHeight();
+        const targetH = currentH + coverH; // grow downward over the grid only
+
+        mapEl.style.height = currentH + 'px';
+        mapEl.classList.add('is-fixed-height');
+
+        // Keep Emergency in place while the enlarged map visually covers only the grid.
+        mapCard.style.marginBottom = `-${coverH}px`;
+
+        // Step 2: next frame, animate downward to the expanded height
+        requestAnimationFrame(() => {
+          mapEl.style.height = targetH + 'px';
+          keepPanInsideBounds();
+        });
+
+        mapCard.classList.add('expanded');
+        setSourceCard(false, false);
+        hint.textContent = 'TAP HOUSE FOR SOURCE';
+
+        setTimeout(() => { isAnimating = false; }, 600);
+        isExpanded = true;
+
+      } else {
+        // Reverse: shrink the map back to natural size
+        // First: measure natural height by temporarily removing fixed height
+        const expandedH = mapEl.offsetHeight;
+        mapEl.classList.remove('is-fixed-height');
+        mapEl.style.height = '';
+        const naturalH = mapEl.offsetHeight;
+        // Reapply expanded height so we can animate from it
+        mapEl.classList.add('is-fixed-height');
+        mapEl.style.height = expandedH + 'px';
+
+        // Force reflow so the browser registers the starting value
+        void mapEl.offsetHeight;
+
+        // Animate down
+        requestAnimationFrame(() => {
+          mapEl.style.height = naturalH + 'px';
+          mapCard.style.marginBottom = '0px';
+          keepPanInsideBounds();
+        });
+
+        mapCard.classList.remove('expanded');
+        setSourceCard(false, false);
+        
+    const mapFloatingClose = document.getElementById('mapFloatingClose');
+
+    mapFloatingClose?.addEventListener('click', e => {
+      e.preventDefault();
+      e.stopPropagation();
+
+      homeMarker?.classList.remove('active');
+      homeMarker?.setAttribute('aria-pressed', 'false');
+
+      document.querySelectorAll('.poi.active').forEach(poi => {
+        poi.classList.remove('active');
+      });
+
+      if (isExpanded) {
+        toggleMap(new Event('click'));
+      }
+
+      setSourceCard(false, false);
+      hint.textContent = 'TAP MAP FOR OVERVIEW';
+    });
+
+
+    hint.textContent = 'TAP MAP FOR OVERVIEW';
+
+    document.querySelectorAll('.poi-close').forEach(btn => {
+      btn.addEventListener('click', e => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        document.querySelectorAll('.poi.active').forEach(poi => {
+          poi.classList.remove('active');
+        });
+
+        if (homeMarker) {
+          homeMarker.classList.remove('active');
+          homeMarker.setAttribute('aria-pressed', 'false');
+        }
+
+        setSourceCard(false);
+        hint.textContent = 'TAP MAP FOR OVERVIEW';
+      });
+    });
+
+
+        setTimeout(() => {
+          mapEl.classList.remove('is-fixed-height');
+          mapEl.style.height = '';
+          mapCard.style.marginBottom = '';
+          isAnimating = false;
+        }, 600);
+
+        isExpanded = false;
+      }
+    }
+
+    function openSourceFromMarker(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      if (suppressMapClick) {
+        suppressMapClick = false;
+        return;
+      }
+      if (isAnimating) return;
+
+      tap();
+
+      // Wenn das Haus bereits aktiv ist: zweiter Tap schließt die Haus-Ansicht und stoppt die Kreise.
+      if (activePlace === 'home' && mapCard.classList.contains('source-mode')) {
+        closeSourceCard();
+        return;
+      }
+
+      homeMarker.classList.add('active');
+      homeMarker.setAttribute('aria-pressed', 'true');
+
+      // House tap always opens the "Dein Haus" state immediately.
+      // If the map is still small, expand it and activate the source panel in the same interaction.
+      if (!isExpanded) {
+        isAnimating = true;
+
+        const currentH = mapEl.offsetHeight;
+        const coverH = getExpandedCoverHeight();
+        const sourceExtra = getSourceExtraHeight();
+        const targetH = currentH + coverH + sourceExtra;
+
+        mapEl.style.height = currentH + 'px';
+        mapEl.classList.add('is-fixed-height');
+        mapCard.style.marginBottom = `-${coverH + sourceExtra}px`;
+
+        requestAnimationFrame(() => {
+          mapCard.classList.add('expanded');
+          applySourceContent(true, 'home');
+          mapEl.style.height = targetH + 'px';
+          keepPanInsideBounds();
+        });
+
+        hint.textContent = 'TAP HOUSE TO CLOSE';
+        isExpanded = true;
+        setTimeout(() => { isAnimating = false; }, 600);
+        return;
+      }
+
+      setSourceCard(true, true, 'home');
+      hint.textContent = placeInfo.home.hintOpen;
+    }
+
+
+    function openInfoFromPoi(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      if (suppressMapClick) {
+        suppressMapClick = false;
+        return;
+      }
+      if (isAnimating) return;
+
+      const poi = e.currentTarget;
+      const placeKey = poi?.dataset?.info;
+      if (!placeKey || !placeInfo[placeKey]) return;
+
+      tap();
+
+      if (activePlace === placeKey && mapCard.classList.contains('source-mode')) {
+        closeSourceCard();
+        return;
+      }
+
+      if (!isExpanded) {
+        isAnimating = true;
+
+        const currentH = mapEl.offsetHeight;
+        const coverH = getExpandedCoverHeight();
+        const sourceExtra = getSourceExtraHeight();
+        const targetH = currentH + coverH + sourceExtra;
+
+        mapEl.style.height = currentH + 'px';
+        mapEl.classList.add('is-fixed-height');
+        mapCard.style.marginBottom = `-${coverH + sourceExtra}px`;
+
+        requestAnimationFrame(() => {
+          mapCard.classList.add('expanded');
+          applySourceContent(true, placeKey);
+          mapEl.style.height = targetH + 'px';
+          keepPanInsideBounds();
+        });
+
+        hint.textContent = placeInfo[placeKey].hintOpen;
+        isExpanded = true;
+        setTimeout(() => { isAnimating = false; }, 600);
+        return;
+      }
+
+      setSourceCard(true, true, placeKey);
+      hint.textContent = placeInfo[placeKey].hintOpen;
+    }
+
+    homeMarker?.addEventListener('click', openSourceFromMarker);
+    homeMarker?.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') openSourceFromMarker(e);
+    });
+
+    poiMarkers.forEach(poi => {
+      poi.addEventListener('click', openInfoFromPoi);
+      poi.addEventListener('keydown', e => {
+        if (e.key === 'Enter' || e.key === ' ') openInfoFromPoi(e);
+      });
+    });
+
+   sourceClose?.addEventListener('click', e => {
+  e.preventDefault();
+  e.stopPropagation();
+  tap();
+
+  closeSourceCard();
+});
+    // Normal map taps keep the original behavior: small map expands over the grid, enlarged map shrinks again.
+    // Only a tap on the house while the map is already enlarged morphs Empire State Building into Source.
+    mapEl.addEventListener('click', e => {
+      if (e.target.closest?.('.marker, .poi')) return;
+      toggleMap(e);
+    });
+
+    hint.textContent = 'TAP MAP FOR OVERVIEW';
+
+    document.querySelectorAll('.poi-close').forEach(btn => {
+      btn.addEventListener('click', e => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        document.querySelectorAll('.poi.active').forEach(poi => {
+          poi.classList.remove('active');
+        });
+
+        if (homeMarker) {
+          homeMarker.classList.remove('active');
+          homeMarker.setAttribute('aria-pressed', 'false');
+        }
+
+        setSourceCard(false);
+        hint.textContent = 'TAP MAP FOR OVERVIEW';
+      });
+    });
+
+
+
+    document.querySelectorAll('.message-chip').forEach(chip => {
+      chip.addEventListener('click', e => {
+        e.preventDefault();
+        e.stopPropagation();
+        if (donationMessage) donationMessage.value = chip.dataset.message || chip.textContent.trim();
+        tap();
+      });
+    });
+
+    // "Nachricht schreiben" toggelt das aufklappbare Panel (Chips + Textfeld)
+    const messageLabel = messagePanel?.querySelector('.message-label');
+    messageLabel?.addEventListener('click', e => {
+      e.preventDefault();
+      e.stopPropagation();
+      messagePanel?.classList.toggle('expanded');
+      tap();
+    });
+
+    donateEnergyBtn?.addEventListener('click', e => {
+      e.preventDefault();
+      e.stopPropagation();
+      tap();
+
+      if (!activePlace || activePlace === 'home') return;
+
+      const info = placeInfo[activePlace];
+      if (!info) return;
+
+      const overlay = document.getElementById('loadingOverlay');
+      const loadingText = document.getElementById('loadingText');
+      const msg = donationMessage?.value?.trim() || '';
+
+      // Loading-Animation starten
+      overlay?.classList.remove('done');
+      if (loadingText) {
+        loadingText.textContent = msg
+          ? 'Sende Gruß & buche Spende…'
+          : 'Buche Spende…';
+      }
+      overlay?.classList.add('show');
+
+      // Nach 950ms: Spinner → Häkchen
+      setTimeout(() => {
+        overlay?.classList.add('done');
+        if (loadingText) {
+          loadingText.textContent = msg
+            ? 'Gruß gesendet & Spende gebucht'
+            : 'Spende gebucht';
+        }
+
+        // Spendenziel im Hintergrund aktualisieren
+        info.goalNow = Math.min(info.goalTotal, +(info.goalNow + 0.8).toFixed(1));
+        const remaining = Math.max(0, +(info.goalTotal - info.goalNow).toFixed(1));
+        info.goalText = remaining === 0 ? 'Ziel erreicht' : `${remaining} kWh bis zum Ziel`;
+      }, 950);
+
+      // Nach 1900ms: Overlay aus + Info-Box schließen
+      setTimeout(() => {
+        overlay?.classList.remove('show');
+        overlay?.classList.remove('done');
+        closeSourceCard();
+      }, 1900);
+    });
+
+    function updateClock() {
+      const el = document.querySelector('.status-bar .time');
+      if (!el) return;
+      const d = new Date();
+      el.textContent = d.getHours() + ':' + String(d.getMinutes()).padStart(2, '0');
+    }
+    updateClock();
+    setInterval(updateClock, 30000);
+
+    let lastTouch = 0;
+    document.addEventListener('touchend', e => {
+      const now = Date.now();
+      if (now - lastTouch <= 300) e.preventDefault();
+      lastTouch = now;
+    }, { passive: false });
+  </script>
+</body>
+</html>

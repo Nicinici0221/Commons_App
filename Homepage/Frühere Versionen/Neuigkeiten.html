@@ -1,0 +1,1208 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Neuigkeiten</title>
+  <script src="page-transition-head.js"></script>
+  <link rel="stylesheet" href="page-transitions.css" />
+  <style>
+    @font-face { font-family: "Kurdis"; src: url("Kurdis Family Delivderables/WOFF2/Kurdis-Wide.woff2") format("woff2"), url("Kurdis Family Delivderables/WOFF/Kurdis-Wide.woff") format("woff"), url("Kurdis Family Delivderables/TTF/Kurdis-Wide.ttf") format("truetype"); font-weight: 400; font-style: normal; font-display: swap; }
+    @font-face { font-family: "HelvenaLight"; src: url("helvena-grotesk-modern-bold-brand-identity-font-2026-04-07-06-20-11-utc/Helvena Font File/WOFF2/Helvena-Light.woff2") format("woff2"), url("helvena-grotesk-modern-bold-brand-identity-font-2026-04-07-06-20-11-utc/Helvena Font File/WOFF/Helvena-Light.woff") format("woff"), url("helvena-grotesk-modern-bold-brand-identity-font-2026-04-07-06-20-11-utc/Helvena Font File/TTF/Helvena-Light.ttf") format("truetype"); font-weight: 300; font-style: normal; font-display: swap; }
+    @font-face { font-family: "General Sans"; src: url("GeneralSans_Complete/GeneralSans_Complete/Fonts/WEB/fonts/GeneralSans-Variable.woff2") format("woff2"); font-weight: 200 700; font-style: normal; font-display: swap; }
+
+    :root { --text: #171a16; --muted: rgba(23,26,22,.45); }
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; margin: 0; padding: 0; }
+
+    html, body {
+      width: 100%; min-height: 100%;
+      background: #e2e5df;
+      font-family: "General Sans", -apple-system, BlinkMacSystemFont, sans-serif;
+      color: var(--text); -webkit-font-smoothing: antialiased;
+    }
+    body { display: grid; place-items: center; padding: 20px; }
+
+    /* ── Phone frame ── */
+    .phone {
+      position: relative;
+      width: min(440px, calc(100vw - 40px));
+      aspect-ratio: 440 / 956;
+      overflow: hidden;
+      border-radius: 32px;
+      background: #f9f9f9;
+      box-shadow: 0 28px 80px rgba(35,42,36,.18);
+      isolation: isolate;
+    }
+    .phone::before {
+      content: ""; position: absolute; top: 16px; left: 50%;
+      width: 128px; height: 31px; border-radius: 18px;
+      transform: translateX(-50%); background: #0a1020; z-index: 40;
+    }
+    .phone::after {
+      content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 72px;
+      pointer-events: none; z-index: 4;
+      background: linear-gradient(to top, rgba(249,249,249,.88) 0%, rgba(249,249,249,0) 100%);
+    }
+
+    /* ── Status bar ── */
+    .statusbar { position: absolute; top: 25px; left: 0; right: 0; height: 20px; z-index: 30; pointer-events: none; }
+    .time { position: absolute; left: 45px; top: -1px; color: var(--text); font-size: 17px; font-weight: 600; letter-spacing: -.15px; }
+    .status-icons { position: absolute; right: 43px; top: 0; display: flex; align-items: center; gap: 6px; color: var(--text); }
+    .signal { display: flex; align-items: flex-end; gap: 2px; height: 12px; }
+    .signal span { width: 3px; background: currentColor; border-radius: 2px; }
+    .signal span:nth-child(1) { height: 4px; opacity: .7; }
+    .signal span:nth-child(2) { height: 6px; opacity: .8; }
+    .signal span:nth-child(3) { height: 9px; opacity: .9; }
+    .signal span:nth-child(4) { height: 12px; }
+    .wifi { width: 17px; height: 12px; position: relative; }
+    .wifi::before, .wifi::after { content: ""; position: absolute; left: 50%; border: 2px solid currentColor; border-bottom: 0; border-left-color: transparent; border-right-color: transparent; transform: translateX(-50%); }
+    .wifi::before { top: 1px; width: 16px; height: 8px; border-radius: 16px 16px 0 0; opacity: .9; }
+    .wifi::after { top: 6px; width: 8px; height: 5px; border-radius: 10px 10px 0 0; }
+    .battery { width: 23px; height: 12px; border: 1.7px solid currentColor; border-radius: 4px; position: relative; }
+    .battery::before { content: ""; position: absolute; right: -4px; top: 3px; width: 2px; height: 5px; border-radius: 2px; background: currentColor; }
+    .battery::after { content: ""; position: absolute; inset: 2px 3px 2px 2px; border-radius: 2px; background: currentColor; }
+
+    /* ── Topbar ── */
+    .topbar {
+      position: absolute; top: 78px; left: 24px; right: 24px; z-index: 5;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .icon-button {
+      width: 48px; height: 48px; border-radius: 50%;
+      border: 1px solid rgba(23,26,22,.08);
+      background: linear-gradient(180deg, rgba(255,255,255,.92), rgba(240,241,238,.75));
+      display: grid; place-items: center; text-decoration: none; color: var(--text);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.85), 0 4px 12px rgba(30,32,30,.06);
+      cursor: pointer;
+    }
+    .icon-button svg { width: 20px; height: 20px; stroke: currentColor; fill: none; stroke-width: 1.55; stroke-linecap: round; stroke-linejoin: round; }
+
+    /* ── FAB ── */
+    .fab {
+      position: absolute; bottom: 28px; right: 24px; z-index: 10;
+      width: 52px; height: 52px; border-radius: 50%;
+      background: #171a16; border: none; cursor: pointer;
+      display: grid; place-items: center;
+      box-shadow: 0 4px 20px rgba(23,26,22,.28);
+    }
+    .fab svg { width: 20px; height: 20px; stroke: #fff; fill: none; stroke-width: 2; stroke-linecap: round; }
+
+    /* ── Scrollable area ── */
+    .page-scroll {
+      position: absolute; inset: 144px 0 0; z-index: 2;
+      overflow-y: auto; scrollbar-width: none; padding: 0 24px 80px;
+    }
+    .page-scroll::-webkit-scrollbar { display: none; }
+
+    /* ── Heading ── */
+    h1 {
+      font-family: "HelvenaLight", sans-serif;
+      font-size: 36px; line-height: 1.08; font-weight: 300; letter-spacing: -.7px;
+      transform: scaleY(.93); transform-origin: left top;
+      margin-bottom: 22px; color: var(--text);
+    }
+
+    /* ── Calendar strip ── */
+    .cal-strip {
+      display: flex; align-items: center; justify-content: space-between; gap: 0;
+      background: transparent;
+      padding: 0 0 18px; margin-bottom: 4px;
+    }
+    .cal-strip-icon {
+      flex: 1; align-self: stretch; border-radius: 14px;
+      background: linear-gradient(180deg, rgba(255,255,255,.92), rgba(240,241,238,.75));
+      border: 1px solid rgba(23,26,22,.08);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.85), 0 4px 12px rgba(30,32,30,.06);
+      display: grid; place-items: center; margin-right: 14px;
+    }
+    .cal-strip-icon svg { width: 15px; height: 15px; stroke: #171a16; fill: none; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+    .cal-day {
+      flex: 1; display: flex; flex-direction: column; align-items: center;
+      justify-content: center; gap: 0;
+      padding: 12px 0; border-radius: 14px; cursor: pointer; position: relative;
+    }
+    .cal-day.today { background: #171a16; }
+    .cal-day-name { font-size: 11px; font-weight: 400; letter-spacing: .2px; text-transform: uppercase; color: rgba(23,26,22,.4); line-height: 1; margin-bottom: 11px; }
+    .cal-day.today .cal-day-name { color: rgba(255,255,255,.75); }
+    .cal-day-dots { display: flex; gap: 3px; align-items: center; }
+    .cal-dot { width: 4px; aspect-ratio: 1; border-radius: 50%; background: #171a16; flex: none; align-self: center; }
+    .cal-day.today .cal-dot { background: #ffffff; }
+
+    /* ── Featured hero card ── */
+    .feat-wrapper { position: relative; margin-bottom: 16px; height: 238px; }
+    .feat-card {
+      position: relative; border-radius: 22px; overflow: hidden;
+      height: 238px; margin-bottom: 0; cursor: pointer;
+    }
+    /* ── Full calendar slide-down ── */
+    .cal-full {
+      overflow: hidden; max-height: 0; opacity: 0; margin-bottom: 0;
+      border-radius: 22px;
+      background: rgba(255,255,255,.97); backdrop-filter: blur(32px) saturate(160%); -webkit-backdrop-filter: blur(32px) saturate(160%);
+      border: 1px solid rgba(255,255,255,.9);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,1), 0 8px 32px rgba(23,26,22,.10);
+      transition: max-height .38s cubic-bezier(.4,0,.2,1), opacity .28s ease, margin .38s cubic-bezier(.4,0,.2,1);
+    }
+    .cal-full.open { max-height: 340px; opacity: 1; margin-bottom: 16px; }
+    .cal-full-inner { padding: 14px 16px 16px; display: flex; flex-direction: column; }
+    .cal-full-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+    .cal-month-label { font-size: 13px; font-weight: 600; color: #171a16; letter-spacing: -.2px; }
+    .cal-nav { background: none; border: none; cursor: pointer; font-size: 17px; color: #171a16; padding: 0 6px; line-height: 1; opacity: .6; }
+    .cal-nav:hover { opacity: 1; }
+    .cal-full-grid { display: grid; grid-template-columns: repeat(7, 1fr); flex: 1; gap: 1px; align-content: start; }
+    .cal-full-dayname { font-size: 8.5px; font-weight: 600; letter-spacing: .8px; text-transform: uppercase; color: rgba(23,26,22,.45); text-align: center; padding-bottom: 6px; }
+    .cal-full-cell { aspect-ratio: 1; display: grid; place-items: center; font-size: 11.5px; font-weight: 400; color: #171a16; border-radius: 50%; cursor: pointer; transition: background .15s; position: relative; overflow: hidden; }
+    .cal-full-cell:hover { background: rgba(23,26,22,.06); }
+    .cal-full-cell.today { background: transparent; color: #171a16; font-weight: 600; }
+    .cal-full-cell.today::before { content: ''; position: absolute; inset: 22%; border-radius: 50%; border: 1.5px solid #171a16; background: transparent; z-index: 0; }
+    .cal-full-cell.today .cal-day-num,
+    .cal-full-cell.today:not(.has-event) { position: relative; }
+    .cal-full-cell.other-month { color: rgba(23,26,22,.22); }
+    .cal-full-cell.has-event img { position: absolute; inset: 15%; width: 70%; height: 70%; object-fit: cover; border-radius: 50%; filter: saturate(30%) brightness(0.6); opacity: .85; }
+    .cal-full-cell.has-event span { position: relative; z-index: 1; color: #fff; font-weight: 700; text-shadow: 0 1px 3px rgba(0,0,0,.55); }
+    .cal-full-cell.has-event.today { box-shadow: none; }
+    .cal-full-cell.has-event.today::before { display: block; content: ''; position: absolute; inset: 15%; border-radius: 50%; border: 2.5px solid #171a16; background: transparent; z-index: 2; }
+    .feat-card > img {
+      position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block;
+    }
+    .feat-gradient {
+      position: absolute; inset: 0;
+      background: linear-gradient(to bottom, rgba(0,0,0,.05) 0%, rgba(0,0,0,.15) 35%, rgba(0,0,0,.6) 100%);
+    }
+    .feat-label {
+      position: absolute; top: 14px; left: 16px;
+      font-size: 9.5px; font-weight: 700; letter-spacing: 1.4px;
+      text-transform: uppercase; color: rgba(255,255,255,.88);
+    }
+    .feat-bottom { position: absolute; bottom: 0; left: 0; right: 0; padding: 0 16px 16px; }
+    .feat-title { font-family: "Kurdis", sans-serif; font-size: 24px; font-weight: 400; color: #fff; letter-spacing: -.1px; line-height: 1.1; margin-bottom: 5px; }
+    .feat-desc { font-size: 12.5px; font-weight: 400; color: rgba(255,255,255,.78); line-height: 1.4; margin-bottom: 12px; }
+    .feat-footer { display: flex; align-items: center; justify-content: space-between; }
+    .feat-tags { display: flex; gap: 7px; }
+    .feat-tag {
+      display: inline-flex; align-items: center; gap: 5px;
+      background: rgba(255,255,255,.2); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,.22); border-radius: 999px;
+      padding: 6px 12px 6px 9px; font-size: 11.5px; font-weight: 500; color: #fff;
+    }
+    .feat-tag svg { width: 12px; height: 12px; stroke: rgba(255,255,255,.85); fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+    .feat-arrow {
+      width: 44px; height: 44px; border-radius: 50%; flex-shrink: 0;
+      background: linear-gradient(180deg, rgba(255,255,255,.92), rgba(240,241,238,.75));
+      border: 1px solid rgba(23,26,22,.08);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.85), 0 4px 12px rgba(30,32,30,.08);
+      display: grid; place-items: center;
+    }
+    .feat-arrow svg { width: 16px; height: 16px; stroke: #171a16; fill: none; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+
+    /* ── Segmented control (glassmorphism) ── */
+    .seg-control {
+      position: relative; display: flex;
+      background: rgba(255,255,255,.28);
+      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,.45);
+      border-radius: 999px; padding: 3px; margin-bottom: 20px;
+      box-shadow: 0 4px 16px rgba(23,26,22,.06);
+    }
+    .seg-indicator {
+      position: absolute; top: 3px; bottom: 3px; left: 0;
+      background: #171a16; border-radius: 999px;
+      transition: transform .28s cubic-bezier(.4,0,.2,1), width .28s cubic-bezier(.4,0,.2,1);
+      pointer-events: none;
+    }
+    .seg-btn {
+      flex: 1; padding: 8px 4px; border: none; background: transparent;
+      font-family: "General Sans", sans-serif; font-size: 12px; font-weight: 500;
+      color: rgba(23,26,22,.52); cursor: pointer; border-radius: 999px;
+      position: relative; z-index: 1; transition: color .2s ease; white-space: nowrap;
+    }
+    .seg-btn.active { color: #fff; }
+
+    /* ── Feed cards (matches Community.html) ── */
+    .feed-card {
+      display: flex; overflow: hidden; height: 118px;
+      background: linear-gradient(180deg, rgba(255,255,255,.96), rgba(248,249,246,.80));
+      border: 1px solid rgba(23,26,22,.07); border-radius: 22px;
+      margin-bottom: 13px;
+      box-shadow: 0 4px 22px rgba(30,32,30,.07), inset 0 1px 0 rgba(255,255,255,.9);
+      cursor: pointer; transition: transform .18s ease; text-decoration: none; color: inherit;
+    }
+    .feed-thumb { flex: 0 0 44%; height: 100%; overflow: hidden; border-radius: 0 14px 14px 0; }
+    .feed-thumb img { width: 100%; height: 100%; object-fit: cover; object-position: center; display: block; }
+    .thumb-delete {
+      position: absolute; bottom: 12px; right: 13px;
+      width: 26px; height: 26px; border-radius: 50%;
+      background: rgba(23,26,22,.07);
+      border: 1px solid rgba(23,26,22,.08);
+      display: grid; place-items: center; cursor: pointer;
+    }
+    .thumb-delete svg { width: 11px; height: 11px; stroke: rgba(23,26,22,.65); fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+    .feed-body { position: relative; flex: 1; padding: 12px 13px 12px; min-width: 0; display: flex; flex-direction: column; justify-content: space-between; }
+    .feed-body-top { display: flex; justify-content: space-between; align-items: flex-start; }
+    .feed-institution { font-size: 9.5px; font-weight: 600; letter-spacing: 1.8px; text-transform: uppercase; color: rgba(23,26,22,.55); margin-bottom: 1px; }
+    .feed-time { font-size: 11px; font-weight: 300; color: rgba(23,26,22,.52); }
+    .feed-text { font-size: 15px; font-weight: 500; color: #171a16; line-height: 1.2; letter-spacing: -.1px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    .feed-arrow { flex-shrink: 0; width: 28px; height: 28px; border-radius: 50%; background: #fff; border: 1px solid rgba(23,26,22,.08); box-shadow: 0 2px 6px rgba(30,32,30,.06); display: grid; place-items: center; }
+    .feed-arrow svg { width: 11px; height: 11px; stroke: #171a16; fill: none; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+    .feed-excerpt { font-size: 12.5px; font-weight: 300; color: rgba(23,26,22,.65); line-height: 1.4; margin-bottom: 10px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    .feed-footer { display: flex; align-items: center; justify-content: space-between; }
+    .feed-actions { display: flex; align-items: center; gap: 12px; }
+    .feed-like-btn, .feed-comment-btn { display: flex; align-items: center; gap: 4px; background: none; border: none; padding: 0; cursor: pointer; font-family: "General Sans", sans-serif; font-size: 12px; color: rgba(23,26,22,.55); }
+    .feed-like-btn svg, .feed-comment-btn svg { width: 13px; height: 13px; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+    .feed-like-btn.liked { color: #c0514a; }
+    .feed-like-btn.liked svg { fill: #c0514a; stroke: #c0514a; }
+    .feed-avs { display: flex; align-items: center; }
+    .feed-av { width: 20px; height: 20px; border-radius: 50%; overflow: hidden; border: 1.5px solid rgba(248,249,246,.95); margin-left: -5px; }
+    .feed-av:first-child { margin-left: 0; }
+    .feed-av img { width: 100%; height: 100%; object-fit: cover; object-position: center top; display: block; }
+    .feed-av-more { width: 20px; height: 20px; border-radius: 50%; background: rgba(255,255,255,.22); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,.30); margin-left: -5px; font-size: 7px; font-weight: 600; color: #171a16; display: grid; place-items: center; }
+
+    /* ── Animations ── */
+    .reveal-up { opacity: 0; transform: translateY(14px); transition: opacity .38s ease, transform .38s ease; }
+    .reveal-up.visible { opacity: 1; transform: translateY(0); }
+    @keyframes pageFadeIn { from { opacity: 0; } to { opacity: 1; } }
+    .page-scroll.fade-enter { animation: pageFadeIn .38s cubic-bezier(.4,0,.2,1) forwards; }
+
+    /* ── Create post overlay ── */
+    .create-overlay {
+      position: absolute; inset: 0; z-index: 50;
+      background: rgba(23,26,22,.24);
+      backdrop-filter: blur(5px);
+      -webkit-backdrop-filter: blur(5px);
+      display: flex; align-items: flex-end;
+      opacity: 0; pointer-events: none;
+      transition: opacity .28s ease;
+    }
+    .create-overlay.open { opacity: 1; pointer-events: all; }
+    .create-sheet {
+      width: 100%; max-height: 92%;
+      background: #fff; border-radius: 24px 24px 0 0;
+      display: flex; flex-direction: column;
+      transform: translateY(100%);
+      transition: transform .35s cubic-bezier(.4,0,.2,1);
+    }
+    .create-overlay.open .create-sheet { transform: translateY(0); }
+    .create-handle {
+      width: 36px; height: 4px; background: rgba(23,26,22,.15); border-radius: 99px;
+      margin: 10px auto 2px; flex-shrink: 0;
+    }
+    .create-header {
+      display: flex; justify-content: space-between; align-items: flex-start;
+      padding: 12px 24px 10px; flex-shrink: 0;
+    }
+    .create-title {
+      font-family: "HelvenaLight", sans-serif;
+      font-size: 26px; font-weight: 300; letter-spacing: -.4px; color: #171a16;
+      margin-bottom: 3px;
+    }
+    .create-sub { font-size: 12.5px; color: rgba(23,26,22,.52); }
+    .create-close {
+      width: 32px; height: 32px; border-radius: 50%;
+      background: rgba(23,26,22,.08); border: none; cursor: pointer;
+      display: grid; place-items: center; flex-shrink: 0; margin-top: 3px;
+    }
+    .create-close svg { width: 14px; height: 14px; stroke: #171a16; fill: none; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+    .create-form-scroll {
+      flex: 1; overflow-y: auto; scrollbar-width: none;
+      padding: 0 24px 8px;
+    }
+    .create-form-scroll::-webkit-scrollbar { display: none; }
+    .create-section-label {
+      font-size: 9.5px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase;
+      color: rgba(23,26,22,.48); margin: 16px 0 7px;
+    }
+    .create-img-area {
+      border: 1.5px dashed rgba(23,26,22,.2); border-radius: 16px;
+      min-height: 120px; display: flex; align-items: center; justify-content: center;
+      cursor: pointer; overflow: hidden; background: rgba(23,26,22,.02);
+    }
+    .create-img-placeholder { text-align: center; padding: 20px 24px; }
+    .create-img-icon {
+      width: 46px; height: 46px; border-radius: 50%; background: rgba(23,26,22,.07);
+      display: grid; place-items: center; margin: 0 auto 9px;
+    }
+    .create-img-icon svg { width: 20px; height: 20px; stroke: rgba(23,26,22,.5); fill: none; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+    .create-img-text { font-size: 13.5px; font-weight: 600; color: #171a16; margin-bottom: 3px; }
+    .create-img-sub { font-size: 11.5px; color: rgba(23,26,22,.42); }
+    .create-img-preview { width: 100%; height: 150px; object-fit: cover; display: none; }
+    .create-cats { display: flex; gap: 9px; }
+    .create-cat {
+      flex: 1; padding: 11px 4px; border-radius: 14px;
+      border: 1.5px solid rgba(23,26,22,.1); background: #fff;
+      display: flex; flex-direction: column; align-items: center; gap: 8px;
+      font-family: "General Sans", sans-serif; font-size: 11.5px; font-weight: 500;
+      color: rgba(23,26,22,.58); cursor: pointer; transition: all .18s ease;
+    }
+    .create-cat-icon {
+      width: 42px; height: 42px; border-radius: 50%;
+      background: linear-gradient(180deg, rgba(255,255,255,.92), rgba(240,241,238,.75));
+      border: 1px solid rgba(23,26,22,.08);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.85), 0 3px 8px rgba(30,32,30,.06);
+      display: grid; place-items: center; transition: all .18s ease; flex-shrink: 0;
+    }
+    .create-cat.active .create-cat-icon {
+      background: rgba(255,255,255,.18);
+      border-color: rgba(255,255,255,.22);
+      box-shadow: none;
+    }
+    .create-cat-icon svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+    .create-cat.active { background: #171a16; color: #fff; border-color: #171a16; }
+    .create-input {
+      width: 100%; padding: 11px 14px; border-radius: 12px;
+      border: 1.5px solid rgba(23,26,22,.12); background: rgba(23,26,22,.02);
+      font-family: "General Sans", sans-serif; font-size: 14px; color: #171a16;
+      outline: none; transition: border-color .2s;
+    }
+    .create-input:focus { border-color: rgba(23,26,22,.38); }
+    .create-input::placeholder { color: rgba(23,26,22,.32); }
+    .create-row-2 { display: flex; gap: 9px; }
+    .create-row-2 > div { flex: 1; min-width: 0; }
+    .create-input-wrap {
+      display: flex; align-items: center; gap: 7px;
+      padding: 10px 12px; border-radius: 12px;
+      border: 1.5px solid rgba(23,26,22,.12); background: rgba(23,26,22,.02);
+    }
+    .create-input-wrap svg { width: 13px; height: 13px; stroke: rgba(23,26,22,.42); fill: none; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; }
+    .create-input-wrap input {
+      flex: 1; border: none; background: transparent; outline: none;
+      font-family: "General Sans", sans-serif; font-size: 12.5px; color: #171a16; min-width: 0;
+    }
+    .create-input-wrap input::placeholder { color: rgba(23,26,22,.32); }
+    .create-textarea {
+      width: 100%; padding: 11px 14px; border-radius: 12px;
+      border: 1.5px solid rgba(23,26,22,.12); background: rgba(23,26,22,.02);
+      font-family: "General Sans", sans-serif; font-size: 13px; color: #171a16;
+      outline: none; resize: none; min-height: 90px; line-height: 1.5;
+      transition: border-color .2s;
+    }
+    .create-textarea:focus { border-color: rgba(23,26,22,.38); }
+    .create-textarea::placeholder { color: rgba(23,26,22,.32); }
+    .create-char-count { text-align: right; font-size: 10.5px; color: rgba(23,26,22,.38); margin-top: 4px; }
+    .create-footer { padding: 10px 20px 18px; border-top: 1px solid rgba(23,26,22,.06); flex-shrink: 0; }
+    .create-submit {
+      width: 100%; padding: 15px 18px; border-radius: 999px;
+      background: #171a16; border: none; cursor: pointer;
+      display: flex; align-items: center; justify-content: space-between;
+      font-family: "General Sans", sans-serif; font-size: 14.5px; font-weight: 600; color: #fff;
+    }
+    .create-submit-arrow {
+      width: 32px; height: 32px; border-radius: 50%; background: #ffffff;
+      display: grid; place-items: center; flex-shrink: 0;
+    }
+    .create-submit-arrow svg { width: 15px; height: 15px; stroke: #171a16; fill: none; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+    .feed-delete-btn {
+      width: 26px; height: 26px; border-radius: 50%;
+      background: rgba(192,81,74,.08); border: 1px solid rgba(192,81,74,.14);
+      display: grid; place-items: center; flex-shrink: 0; cursor: pointer;
+    }
+    .feed-delete-btn svg { width: 11px; height: 11px; stroke: #c0514a; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+    /* ── Label-select dropdown ── */
+    .create-label-wrap { position: relative; }
+    .create-label-select { display: inline-flex; align-items: center; gap: 3px; cursor: pointer; user-select: none; }
+    .create-label-arrow { width: 10px; height: 10px; stroke: rgba(23,26,22,.55); fill: none; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; transition: transform .18s ease; }
+    .create-label-wrap.open .create-label-arrow { transform: rotate(180deg); }
+    .create-label-options { position: absolute; top: calc(100% + 5px); left: 0; z-index: 50; display: none; flex-wrap: wrap; gap: 5px; padding: 8px 10px; background: #fff; border: 1px solid rgba(23,26,22,.1); border-radius: 12px; box-shadow: 0 6px 20px rgba(30,32,30,.13); min-width: 200px; }
+    .create-label-wrap.open .create-label-options { display: flex; }
+    .create-label-option { padding: 4px 9px; border-radius: 999px; border: 1.5px solid rgba(23,26,22,.12); background: #fff; font-family: "General Sans", sans-serif; font-size: 9px; font-weight: 700; color: rgba(23,26,22,.5); cursor: pointer; text-transform: uppercase; letter-spacing: .9px; transition: all .12s; }
+    .create-label-option:hover { border-color: rgba(23,26,22,.25); color: #171a16; }
+    .create-label-option.active { background: #171a16; color: #fff; border-color: #171a16; }
+
+    /* ── Custom date/time picker ── */
+    .dtpick { position: absolute; inset: 0; z-index: 100; display: flex; align-items: center; justify-content: center; padding: 56px 18px 96px; opacity: 0; pointer-events: none; transition: opacity .22s ease; }
+    .dtpick.open { opacity: 1; pointer-events: auto; }
+    .dtpick-card { width: 100%; background: rgba(255,255,255,.97); backdrop-filter: blur(32px) saturate(160%); -webkit-backdrop-filter: blur(32px) saturate(160%); border: 1px solid rgba(255,255,255,.9); box-shadow: inset 0 1px 0 rgba(255,255,255,1), 0 8px 32px rgba(23,26,22,.14); border-radius: 22px; padding: 14px 14px 12px; }
+    .dtpick-nav-row { display: flex; align-items: center; justify-content: space-between; }
+    .dtpick-nav { background: none; border: none; cursor: pointer; padding: 4px 10px; font-size: 17px; color: rgba(23,26,22,.45); line-height: 1; }
+    .dtpick-nav:hover { color: #171a16; }
+    .dtpick-year-lbl { font-size: 11.5px; font-weight: 600; color: rgba(23,26,22,.42); letter-spacing: .3px; }
+    .dtpick-month-lbl { font-size: 14px; font-weight: 700; color: #171a16; letter-spacing: -.1px; }
+    .dtpick-daynames { display: grid; grid-template-columns: repeat(7, 1fr); margin: 7px 0 3px; }
+    .dtpick-dayname { font-size: 8px; font-weight: 700; color: rgba(23,26,22,.35); text-align: center; letter-spacing: .7px; text-transform: uppercase; padding-bottom: 3px; }
+    .dtpick-grid { display: grid; grid-template-columns: repeat(7, 1fr); }
+    .dtpick-cell { height: 26px; display: grid; place-items: center; font-size: 11.5px; font-weight: 400; color: #171a16; border-radius: 50%; cursor: pointer; transition: background .12s; position: relative; }
+    .dtpick-cell:hover:not(.other-month) { background: rgba(23,26,22,.07); }
+    .dtpick-cell.other-month { color: rgba(23,26,22,.2); cursor: default; pointer-events: none; }
+    .dtpick-cell.today { font-weight: 600; }
+    .dtpick-cell.today::before { content: ''; position: absolute; inset: 11%; border-radius: 50%; border: 1.5px solid #171a16; pointer-events: none; }
+    .dtpick-cell.selected { background: #171a16 !important; color: #fff !important; }
+    .dtpick-cell.selected::before { display: none; }
+    .dtpick-divider { height: 1px; background: rgba(23,26,22,.07); margin: 10px 0 8px; }
+    .dtpick-time { display: flex; align-items: center; justify-content: center; gap: 10px; }
+    .dtpick-spin { display: flex; flex-direction: column; align-items: center; gap: 3px; }
+    .dtpick-spin-btn { background: none; border: 1px solid rgba(23,26,22,.1); border-radius: 7px; width: 32px; height: 20px; cursor: pointer; display: grid; place-items: center; color: rgba(23,26,22,.45); padding: 0; transition: background .12s, color .12s; }
+    .dtpick-spin-btn svg { width: 10px; height: 10px; stroke: currentColor; fill: none; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+    .dtpick-spin-btn:hover { background: rgba(23,26,22,.06); color: #171a16; }
+    .dtpick-time-val { font-size: 26px; font-weight: 600; color: #171a16; letter-spacing: -.5px; min-width: 40px; text-align: center; line-height: 1; }
+    .dtpick-colon { font-size: 24px; font-weight: 300; color: rgba(23,26,22,.45); line-height: 1; padding-bottom: 3px; }
+    .dtpick-ok { width: 100%; margin-top: 12px; padding: 12px; border-radius: 999px; background: #171a16; border: none; cursor: pointer; font-family: "General Sans", sans-serif; font-size: 13.5px; font-weight: 600; color: #fff; }
+  </style>
+</head>
+<body>
+<div class="phone">
+
+  <!-- Status bar -->
+  <div class="statusbar">
+    <span class="time">9:41</span>
+    <div class="status-icons">
+      <div class="signal"><span></span><span></span><span></span><span></span></div>
+      <div class="wifi"></div>
+      <div class="battery"></div>
+    </div>
+  </div>
+
+  <!-- Topbar -->
+  <div class="topbar">
+    <a href="Community.html" class="icon-button" aria-label="Zurück">
+      <svg viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg>
+    </a>
+    <a href="Homepage.html" class="icon-button" aria-label="Home">
+      <svg viewBox="0 0 24 24"><path d="M6.8 11.5c0-.45.2-.88.55-1.16l3.7-3.02a1.48 1.48 0 0 1 1.9 0l3.7 3.02c.35.28.55.71.55 1.16v5.58a2.02 2.02 0 0 1-2.02 2.02H8.82a2.02 2.02 0 0 1-2.02-2.02Z"/></svg>
+    </a>
+  </div>
+
+  <!-- FAB -->
+  <button class="fab" aria-label="Neu">
+    <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+  </button>
+
+  <!-- Scrollable content -->
+  <div class="page-scroll">
+
+    <!-- Heading -->
+    <h1 class="reveal-up">Aus Energie wird<br>Wirkung</h1>
+
+    <!-- Week calendar strip -->
+    <div class="cal-strip reveal-up" id="calStrip">
+      <div class="cal-strip-icon">
+        <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="3"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+      </div>
+    </div>
+
+    <!-- Full calendar (slides down from strip) -->
+    <div class="cal-full" id="calFull">
+      <div class="cal-full-inner">
+        <div class="cal-full-header">
+          <button class="cal-nav" id="calPrev">‹</button>
+          <span class="cal-month-label" id="calMonthLabel"></span>
+          <button class="cal-nav" id="calNext">›</button>
+        </div>
+        <div class="cal-full-grid" id="calGrid"></div>
+      </div>
+    </div>
+
+    <!-- Featured hero card -->
+    <div class="feat-wrapper reveal-up">
+    <div class="feat-card" data-category="neuigkeit" style="cursor:pointer;" onclick="smoothNavigate('SolarbankDetail.html')">
+      <img src="Icons/Bank.png" alt="Solarbank" style="object-position: center 50%;">
+      <div class="feat-gradient"></div>
+      <div class="feat-label">Neuigkeit · Heute, 10:15 Uhr</div>
+      <div class="feat-bottom">
+        <div class="feat-title">Solarbank fast fertig!</div>
+        <div class="feat-desc">Die ersten Bauten sind unterwegs –<br>dank euch wird das Wirklichkeit.</div>
+        <div class="feat-footer">
+          <div class="feat-tags">
+            <span class="feat-tag">
+              <svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+              67% erreicht
+            </span>
+            <span class="feat-tag">
+              <svg viewBox="0 0 24 24"><path d="M12 21c-4.5-4.5-6-8-6-11a6 6 0 1 1 12 0c0 3-1.5 6.5-6 11z"/><circle cx="12" cy="10" r="2"/></svg>
+              Seestadt
+            </span>
+          </div>
+          <div class="feat-arrow">
+            <svg viewBox="0 0 24 24"><path d="M7 17L17 7M10 7h7v7"/></svg>
+          </div>
+        </div>
+      </div>
+    </div>
+    </div><!-- end feat-wrapper -->
+
+    <!-- Segmented filter control -->
+    <div class="seg-control reveal-up">
+      <div class="seg-indicator"></div>
+      <button class="seg-btn active" data-filter="alle">Alle</button>
+      <button class="seg-btn" data-filter="neuigkeit">Neuigkeiten</button>
+      <button class="seg-btn" data-filter="event">Events</button>
+      <button class="seg-btn" data-filter="erfolg">Erfolge</button>
+    </div>
+
+    <!-- News items -->
+    <div id="newsList">
+
+      <a class="feed-card reveal-up" data-category="event" href="EventDetail_SolarRooftopParty.html">
+        <div class="feed-thumb"><img src="Icons/solar rooftop party weiß.png" alt=""></div>
+        <div class="feed-body">
+          <div class="feed-body-top">
+            <div><div class="feed-institution">Dachgarten · Event</div><div class="feed-time">Heute, 20:15 Uhr</div></div>
+            <div class="feed-arrow"><svg viewBox="0 0 24 24"><path d="M7 17L17 7M10 7h7v7"/></svg></div>
+          </div>
+          <div class="feed-text">Solar Rooftop Party</div>
+        </div>
+      </a>
+
+      <a class="feed-card reveal-up" data-category="erfolg" href="PostDetail_WienCommonsApp.html">
+        <div class="feed-thumb"><img src="https://picsum.photos/seed/commonsapp/400/300" alt=""></div>
+        <div class="feed-body">
+          <div class="feed-body-top">
+            <div><div class="feed-institution">Wien gesamt · Erfolg</div><div class="feed-time">Heute, 14:10 Uhr</div></div>
+            <div class="feed-arrow"><svg viewBox="0 0 24 24"><path d="M7 17L17 7M10 7h7v7"/></svg></div>
+          </div>
+          <div class="feed-text">Wien Commons App erfolgreich gestartet!</div>
+        </div>
+      </a>
+
+      <a class="feed-card reveal-up" data-category="event" href="EventDetail_PVMessen.html">
+        <div class="feed-thumb"><img src="https://picsum.photos/seed/pvworkshop/400/300" alt=""></div>
+        <div class="feed-body">
+          <div class="feed-body-top">
+            <div><div class="feed-institution">Seestadt · Event</div><div class="feed-time">Heute, 18:00 Uhr</div></div>
+            <div class="feed-arrow"><svg viewBox="0 0 24 24"><path d="M7 17L17 7M10 7h7v7"/></svg></div>
+          </div>
+          <div class="feed-text">PV-Anlage messen & verstehen</div>
+        </div>
+      </a>
+
+      <a class="feed-card reveal-up" data-category="event" href="EventDetail_SolarInfoDay.html">
+        <div class="feed-thumb"><img src="https://picsum.photos/seed/solarday22/400/300" alt=""></div>
+        <div class="feed-body">
+          <div class="feed-body-top">
+            <div><div class="feed-institution">2. Bezirk · Event</div><div class="feed-time">Morgen, 10:00 Uhr</div></div>
+            <div class="feed-arrow"><svg viewBox="0 0 24 24"><path d="M7 17L17 7M10 7h7v7"/></svg></div>
+          </div>
+          <div class="feed-text">Solar-Info-Day Wien 2026</div>
+        </div>
+      </a>
+
+      <a class="feed-card reveal-up" data-category="erfolg" href="PostDetail_50MWh.html">
+        <div class="feed-thumb"><img src="https://picsum.photos/seed/sonnwend50/400/300" alt=""></div>
+        <div class="feed-body">
+          <div class="feed-body-top">
+            <div><div class="feed-institution">Sonnwendviertel · Erfolg</div><div class="feed-time">Heute, 14:30 Uhr</div></div>
+            <div class="feed-arrow"><svg viewBox="0 0 24 24"><path d="M7 17L17 7M10 7h7v7"/></svg></div>
+          </div>
+          <div class="feed-text">Ziel erreicht: 50 MWh Solarstrom!</div>
+        </div>
+      </a>
+
+      <a class="feed-card reveal-up" data-category="neuigkeit" href="PostDetail_1000MWh.html">
+        <div class="feed-thumb"><img src="https://picsum.photos/seed/solarwien/400/300" alt=""></div>
+        <div class="feed-body">
+          <div class="feed-body-top">
+            <div><div class="feed-institution">Wien gesamt · Neuigkeit</div><div class="feed-time">Heute, 09:42 Uhr</div></div>
+            <div class="feed-arrow"><svg viewBox="0 0 24 24"><path d="M7 17L17 7M10 7h7v7"/></svg></div>
+          </div>
+          <div class="feed-text">1.000 MWh gemeinsam gespart!</div>
+        </div>
+      </a>
+
+      <a class="feed-card reveal-up" data-category="neuigkeit" href="PostDetail_PVFavoriten.html">
+        <div class="feed-thumb"><img src="https://picsum.photos/seed/pvfavoriten/400/300" alt=""></div>
+        <div class="feed-body">
+          <div class="feed-body-top">
+            <div><div class="feed-institution">Favoriten · Neuigkeit</div><div class="feed-time">Vorgestern, 11:00 Uhr</div></div>
+            <div class="feed-arrow"><svg viewBox="0 0 24 24"><path d="M7 17L17 7M10 7h7v7"/></svg></div>
+          </div>
+          <div class="feed-text">Neue PV-Anlage versorgt 80 Haushalte</div>
+        </div>
+      </a>
+
+    </div>
+  </div>
+
+  <!-- Create post overlay -->
+  <div class="create-overlay" id="createOverlay">
+    <div class="create-sheet">
+      <div class="create-handle"></div>
+      <div class="create-header">
+        <div>
+          <div class="create-title">Beitrag erstellen</div>
+          <div class="create-sub">Teile, was in deiner Community passiert.</div>
+        </div>
+        <button class="create-close" id="createClose">
+          <svg viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg>
+        </button>
+      </div>
+      <div class="create-form-scroll">
+        <div class="create-section-label">BILD</div>
+        <div class="create-img-area" id="createImgArea">
+          <input type="file" accept="image/*" id="createImgInput" style="display:none">
+          <div class="create-img-placeholder" id="createImgPlaceholder">
+            <div class="create-img-icon">
+              <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
+            </div>
+            <div class="create-img-text">Bild hochladen</div>
+            <div class="create-img-sub">oder hierher ziehen</div>
+          </div>
+          <img class="create-img-preview" id="createImgPreview" alt="">
+        </div>
+        <div class="create-section-label">KATEGORIE</div>
+        <div class="create-cats">
+          <button class="create-cat active" data-cat="neuigkeit">
+            <div class="create-cat-icon"><svg viewBox="0 0 24 24"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2"/><path d="M18 14h-8M15 18h-5M10 6h8v4h-8V6Z"/></svg></div>
+            Neuigkeiten
+          </button>
+          <button class="create-cat" data-cat="event">
+            <div class="create-cat-icon"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></div>
+            Events
+          </button>
+          <button class="create-cat" data-cat="erfolg">
+            <div class="create-cat-icon"><svg viewBox="0 0 24 24"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6M18 9h1.5a2.5 2.5 0 0 0 0-5H18M4 22h16M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg></div>
+            Erfolge
+          </button>
+        </div>
+        <div class="create-section-label">TITEL</div>
+        <input class="create-input" id="createTitle" placeholder="Titel eingeben" maxlength="80">
+        <div class="create-row-2">
+          <div>
+            <div class="create-section-label">ORT (OPTIONAL)</div>
+            <div class="create-input-wrap">
+              <svg viewBox="0 0 24 24"><path d="M12 21c-4.5-4.5-6-8-6-11a6 6 0 1 1 12 0c0 3-1.5 6.5-6 11z"/><circle cx="12" cy="10" r="2"/></svg>
+              <input id="createOrt" placeholder="Ort hinzufügen">
+            </div>
+          </div>
+          <div>
+            <div class="create-section-label">DATUM & UHRZEIT (OPTIONAL)</div>
+            <div class="create-input-wrap">
+              <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+              <input id="createDatum" placeholder="Datum & Uhrzeit" type="text" readonly style="cursor:pointer;">
+            </div>
+          </div>
+        </div>
+        <div class="create-row-2">
+          <div>
+            <div class="create-section-label">ADRESSE (OPTIONAL)</div>
+            <div class="create-input-wrap">
+              <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+              <input id="createAdresse" placeholder="Straße, PLZ Stadt">
+            </div>
+          </div>
+          <div class="create-label-wrap" id="veranstalterLabelWrap">
+            <div class="create-section-label"><span class="create-label-select" id="veranstalterLabelBtn"><span id="veranstalterLabelText">VERANSTALTER</span><svg class="create-label-arrow" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></span> <span style="opacity:.7">(OPTIONAL)</span></div>
+            <div class="create-label-options">
+              <button class="create-label-option active" type="button" data-label="VERANSTALTER" data-ph="Organisation oder Name">Veranstalter</button>
+              <button class="create-label-option" type="button" data-label="MITGLIEDER" data-ph="Anzahl oder Gruppe">Mitglieder</button>
+              <button class="create-label-option" type="button" data-label="REFERENT" data-ph="Name und Team">Referent</button>
+              <button class="create-label-option" type="button" data-label="BETEILIGUNG" data-ph="Anzahl Gemeinschaften">Beteiligung</button>
+              <button class="create-label-option" type="button" data-label="KAPAZITÄT" data-ph="kWp, MWh, Haushalte …">Kapazität</button>
+            </div>
+            <div class="create-input-wrap">
+              <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+              <input id="createVeranstalter" placeholder="Organisation oder Name">
+            </div>
+          </div>
+        </div>
+        <div class="create-section-label">KURZBESCHREIBUNG</div>
+        <textarea class="create-textarea" id="createDesc" placeholder="Erzähle mehr über deinen Beitrag..." maxlength="300"></textarea>
+        <div class="create-char-count"><span id="charCount">0</span> / 300</div>
+      </div>
+      <div class="create-footer">
+        <button class="create-submit" id="createSubmit">
+          Beitrag veröffentlichen
+          <span class="create-submit-arrow">
+            <svg viewBox="0 0 24 24"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg>
+          </span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Custom date/time picker -->
+  <div class="dtpick" id="dtPicker">
+    <div class="dtpick-card">
+      <!-- Year row -->
+      <div class="dtpick-nav-row" style="margin-bottom:2px;">
+        <button class="dtpick-nav" id="dtYearPrev">‹</button>
+        <span class="dtpick-year-lbl" id="dtYearLabel">2026</span>
+        <button class="dtpick-nav" id="dtYearNext">›</button>
+      </div>
+      <!-- Month row -->
+      <div class="dtpick-nav-row">
+        <button class="dtpick-nav" id="dtMonthPrev">‹</button>
+        <span class="dtpick-month-lbl" id="dtMonthLabel">Mai</span>
+        <button class="dtpick-nav" id="dtMonthNext">›</button>
+      </div>
+      <!-- Day headers -->
+      <div class="dtpick-daynames">
+        <div class="dtpick-dayname">MO</div>
+        <div class="dtpick-dayname">DI</div>
+        <div class="dtpick-dayname">MI</div>
+        <div class="dtpick-dayname">DO</div>
+        <div class="dtpick-dayname">FR</div>
+        <div class="dtpick-dayname">SA</div>
+        <div class="dtpick-dayname">SO</div>
+      </div>
+      <!-- Day grid -->
+      <div class="dtpick-grid" id="dtGrid"></div>
+      <!-- Divider -->
+      <div class="dtpick-divider"></div>
+      <!-- Time picker -->
+      <div class="dtpick-time">
+        <div class="dtpick-spin">
+          <button class="dtpick-spin-btn" id="dtHourUp" type="button"><svg viewBox="0 0 24 24"><path d="m18 15-6-6-6 6"/></svg></button>
+          <span class="dtpick-time-val" id="dtHourVal">12</span>
+          <button class="dtpick-spin-btn" id="dtHourDown" type="button"><svg viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></button>
+        </div>
+        <span class="dtpick-colon">:</span>
+        <div class="dtpick-spin">
+          <button class="dtpick-spin-btn" id="dtMinUp" type="button"><svg viewBox="0 0 24 24"><path d="m18 15-6-6-6 6"/></svg></button>
+          <span class="dtpick-time-val" id="dtMinVal">00</span>
+          <button class="dtpick-spin-btn" id="dtMinDown" type="button"><svg viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></button>
+        </div>
+      </div>
+      <button class="dtpick-ok" id="dtPickOk" type="button">Übernehmen</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  // Build week calendar strip
+  (function() {
+    const abbr = ['SO','MO','DI','MI','DO','FR','SA'];
+    const dotMap = [1, 2, 1, 3, 1, 2, 1]; // dots per weekday 0=Sun
+    const now = new Date();
+    const todayDow = now.getDay();
+    const todayDate = now.getDate();
+
+    // Find Monday of current week
+    const mon = new Date(now);
+    mon.setDate(now.getDate() - (todayDow === 0 ? 6 : todayDow - 1));
+
+    const strip = document.getElementById('calStrip');
+    if (!strip) return;
+
+    for (let i = 0; i < 7; i++) {
+      const d = new Date(mon);
+      d.setDate(mon.getDate() + i);
+      const dow = d.getDay();
+      const isToday = d.getDate() === todayDate && d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
+
+      const el = document.createElement('div');
+      el.className = 'cal-day' + (isToday ? ' today' : '');
+
+      const nameEl = document.createElement('div');
+      nameEl.className = 'cal-day-name';
+      nameEl.textContent = abbr[dow];
+
+      const dotsEl = document.createElement('div');
+      dotsEl.className = 'cal-day-dots';
+      const n = isToday ? 3 : (dotMap[dow] || 1);
+      for (let k = 0; k < n; k++) {
+        const dot = document.createElement('div');
+        dot.className = 'cal-dot';
+        dotsEl.appendChild(dot);
+      }
+
+      el.appendChild(nameEl);
+      el.appendChild(dotsEl);
+      strip.appendChild(el);
+    }
+  })();
+
+
+  // Segmented control with sliding indicator
+  const indicator = document.querySelector('.seg-indicator');
+  const segBtns = document.querySelectorAll('.seg-btn');
+
+  function moveIndicator(btn) {
+    indicator.style.width = btn.offsetWidth + 'px';
+    indicator.style.transform = 'translateX(' + btn.offsetLeft + 'px)';
+  }
+  requestAnimationFrame(() => moveIndicator(document.querySelector('.seg-btn.active')));
+
+  segBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      segBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      moveIndicator(btn);
+      const f = btn.dataset.filter;
+      // Hero card always stays visible
+      document.querySelectorAll('.feed-card').forEach(item => {
+        item.style.display = (f === 'alle' || item.dataset.category === f) ? 'flex' : 'none';
+      });
+    });
+  });
+
+  // Full calendar overlay
+  (function() {
+    const months = ['Januar','Februar','März','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember'];
+    const dayNames = ['MO','DI','MI','DO','FR','SA','SO'];
+    let viewDate = new Date();
+
+    // Event images per month (key: "YYYY-M", value: {day: imgSrc})
+    const eventImages = {
+      '2026-4': {
+        25: 'Icons/Rooftop.png',
+        22: 'https://picsum.photos/seed/pflanzaktion/200/200',
+        20: 'https://picsum.photos/seed/urbangarden/200/200',
+        28: 'Icons/Bank.png',
+        15: 'https://picsum.photos/seed/solarwien/200/200',
+      },
+      '2026-5': {
+        2:  'https://picsum.photos/seed/karmelitermarkt/200/200',
+        8:  'Icons/Bank.png',
+        14: 'https://picsum.photos/seed/urbangarden/200/200',
+        21: 'Icons/Rooftop.png',
+      }
+    };
+
+    function buildCalendar() {
+      const grid = document.getElementById('calGrid');
+      const label = document.getElementById('calMonthLabel');
+      if (!grid || !label) return;
+      const year = viewDate.getFullYear();
+      const month = viewDate.getMonth();
+      label.textContent = months[month] + ' ' + year;
+      grid.innerHTML = '';
+      dayNames.forEach(d => {
+        const el = document.createElement('div');
+        el.className = 'cal-full-dayname';
+        el.textContent = d;
+        grid.appendChild(el);
+      });
+      const firstDow = new Date(year, month, 1).getDay();
+      const offset = firstDow === 0 ? 6 : firstDow - 1;
+      const prevTotal = new Date(year, month, 0).getDate();
+      for (let i = offset - 1; i >= 0; i--) {
+        const el = document.createElement('div');
+        el.className = 'cal-full-cell other-month';
+        el.textContent = prevTotal - i;
+        grid.appendChild(el);
+      }
+      const daysInMonth = new Date(year, month + 1, 0).getDate();
+      const today = new Date();
+      const evts = eventImages[year + '-' + month] || {};
+      for (let d = 1; d <= daysInMonth; d++) {
+        const el = document.createElement('div');
+        el.className = 'cal-full-cell';
+        const isToday = d === today.getDate() && month === today.getMonth() && year === today.getFullYear();
+        if (isToday) el.classList.add('today');
+        if (evts[d]) {
+          el.classList.add('has-event');
+          const img = document.createElement('img');
+          img.src = evts[d];
+          el.appendChild(img);
+          const span = document.createElement('span');
+          span.textContent = d;
+          el.appendChild(span);
+        } else if (isToday) {
+          const span = document.createElement('span');
+          span.style.cssText = 'position:relative;z-index:1;';
+          span.textContent = d;
+          el.appendChild(span);
+        } else {
+          el.textContent = d;
+        }
+        grid.appendChild(el);
+      }
+      const remaining = (offset + daysInMonth) % 7;
+      if (remaining > 0) {
+        for (let d = 1; d <= 7 - remaining; d++) {
+          const el = document.createElement('div');
+          el.className = 'cal-full-cell other-month';
+          el.textContent = d;
+          grid.appendChild(el);
+        }
+      }
+    }
+
+    document.getElementById('calPrev').addEventListener('click', e => { e.stopPropagation(); viewDate.setMonth(viewDate.getMonth() - 1); buildCalendar(); });
+    document.getElementById('calNext').addEventListener('click', e => { e.stopPropagation(); viewDate.setMonth(viewDate.getMonth() + 1); buildCalendar(); });
+
+    const icon = document.querySelector('.cal-strip-icon');
+    const calFull = document.getElementById('calFull');
+    icon.addEventListener('click', () => {
+      const opening = !calFull.classList.contains('open');
+      calFull.classList.toggle('open');
+      if (opening) { viewDate = new Date(); buildCalendar(); }
+    });
+    document.addEventListener('click', e => {
+      if (!calFull.contains(e.target) && !icon.contains(e.target)) calFull.classList.remove('open');
+    });
+  })();
+
+  // Reveal / fade-in on return visits
+  const pageScroll = document.querySelector('.page-scroll');
+  const hasVisited = sessionStorage.getItem('nk_visited');
+  if (hasVisited) {
+    pageScroll.classList.add('fade-enter');
+    document.querySelectorAll('.reveal-up').forEach(el => el.classList.add('visible'));
+  } else {
+    sessionStorage.setItem('nk_visited', '1');
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
+    }, { threshold: 0.05 });
+    document.querySelectorAll('.reveal-up').forEach(el => obs.observe(el));
+  }
+
+
+  // Live clock
+  (function() {
+    const el = document.querySelector('.time');
+    if (!el) return;
+    const u = () => { const n = new Date(); el.textContent = n.getHours() + ':' + String(n.getMinutes()).padStart(2,'0'); };
+    u(); setInterval(u, 10000);
+  })();
+
+  // ── Create post overlay ──
+  (function() {
+    const overlay   = document.getElementById('createOverlay');
+    const closeBtn  = document.getElementById('createClose');
+    const imgArea   = document.getElementById('createImgArea');
+    const imgInput  = document.getElementById('createImgInput');
+    const imgPlaceholder = document.getElementById('createImgPlaceholder');
+    const imgPreview = document.getElementById('createImgPreview');
+    const catBtns   = document.querySelectorAll('.create-cat');
+    const titleInput       = document.getElementById('createTitle');
+    const datumInput        = document.getElementById('createDatum');
+    const ortInput         = document.getElementById('createOrt');
+    const adresseInput      = document.getElementById('createAdresse');
+    const veranstalterInput = document.getElementById('createVeranstalter');
+    const veranstalterLabelWrap = document.getElementById('veranstalterLabelWrap');
+    const veranstalterLabelBtn  = document.getElementById('veranstalterLabelBtn');
+    const veranstalterLabelText = document.getElementById('veranstalterLabelText');
+    let veranstalterLabelKey = 'VERANSTALTER';
+    const descInput         = document.getElementById('createDesc');
+    const charCountEl = document.getElementById('charCount');
+    const submitBtn = document.getElementById('createSubmit');
+    const list      = document.getElementById('newsList');
+
+    let selectedCat = 'neuigkeit';
+    let uploadedImgSrc = null;
+    const CAT_LABELS = { neuigkeit: 'Neuigkeit', event: 'Event', erfolg: 'Erfolg' };
+
+    // Open / close
+    document.querySelector('.fab').addEventListener('click', () => overlay.classList.add('open'));
+    closeBtn.addEventListener('click', () => overlay.classList.remove('open'));
+    overlay.addEventListener('click', e => { if (e.target === overlay) overlay.classList.remove('open'); });
+
+    // Image upload
+    imgArea.addEventListener('click', () => imgInput.click());
+    imgInput.addEventListener('change', e => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = ev => {
+        uploadedImgSrc = ev.target.result;
+        imgPreview.src = uploadedImgSrc;
+        imgPreview.style.display = 'block';
+        imgPlaceholder.style.display = 'none';
+      };
+      reader.readAsDataURL(file);
+    });
+
+    // Category toggle
+    catBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        catBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        selectedCat = btn.dataset.cat;
+      });
+    });
+
+    // Veranstalter label dropdown
+    veranstalterLabelBtn.addEventListener('click', e => { e.stopPropagation(); veranstalterLabelWrap.classList.toggle('open'); });
+    veranstalterLabelWrap.querySelectorAll('.create-label-option').forEach(btn => {
+      btn.addEventListener('click', e => {
+        e.stopPropagation();
+        veranstalterLabelWrap.querySelectorAll('.create-label-option').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        veranstalterLabelKey = btn.dataset.label;
+        veranstalterLabelText.textContent = btn.dataset.label;
+        veranstalterInput.placeholder = btn.dataset.ph;
+        veranstalterLabelWrap.classList.remove('open');
+      });
+    });
+    document.addEventListener('click', () => veranstalterLabelWrap.classList.remove('open'));
+
+    // Char counter
+    descInput.addEventListener('input', () => { charCountEl.textContent = descInput.value.length; });
+
+    // Persistence helpers
+    function loadPosts() { try { return JSON.parse(localStorage.getItem('nk_user_posts')) || []; } catch { return []; } }
+    function savePosts(p) { localStorage.setItem('nk_user_posts', JSON.stringify(p)); }
+
+    function buildCard(post) {
+      const el = document.createElement('div');
+      el.className = 'feed-card reveal-up visible';
+      el.dataset.category = post.cat;
+      el.style.cursor = 'pointer';
+      const label = (post.ort ? post.ort + ' · ' : '') + (CAT_LABELS[post.cat] || post.cat);
+      const imgSrc = post.imgSrc || ('https://picsum.photos/seed/' + post.seed + '/400/300');
+      el.innerHTML =
+        `<div class="feed-thumb"><img src="${imgSrc}" alt="" style="width:100%;height:100%;object-fit:cover;display:block;"></div>` +
+        `<div class="feed-body"><div class="feed-body-top"><div>` +
+        `<div class="feed-institution">${label}</div><div class="feed-time">${post.time}</div>` +
+        `</div><div class="feed-arrow"><svg viewBox="0 0 24 24"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg></div></div>` +
+        `<div class="feed-text">${post.title}</div>` +
+        `<button class="thumb-delete" type="button" aria-label="Löschen">` +
+        `<svg viewBox="0 0 24 24"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>` +
+        `</button></div>`;
+
+      el.querySelector('.thumb-delete').addEventListener('click', e => {
+        e.stopPropagation();
+        el.style.transition = 'opacity .2s ease, transform .2s ease';
+        el.style.opacity = '0'; el.style.transform = 'scale(.96)';
+        setTimeout(() => {
+          el.remove();
+          savePosts(loadPosts().filter(p => p.seed !== post.seed));
+        }, 200);
+      });
+
+      el.addEventListener('click', () => {
+        localStorage.setItem('nk_current_post', JSON.stringify(post));
+        if (window.smoothNavigate) { window.smoothNavigate('UserPostDetail.html'); return; }
+        window.location.href = 'UserPostDetail.html';
+      });
+
+      return el;
+    }
+
+    // Render persisted user posts above the default items
+    loadPosts().forEach(p => list.insertBefore(buildCard(p), list.firstChild));
+
+    // Submit
+    submitBtn.addEventListener('click', () => {
+      const title = titleInput.value.trim();
+      if (!title) { titleInput.style.borderColor = '#c0514a'; titleInput.focus(); return; }
+      titleInput.style.borderColor = '';
+
+      const post = {
+        cat: selectedCat,
+        title,
+        datum: datumInput.value.trim(),
+        ort: ortInput.value.trim(),
+        adresse: adresseInput.value.trim(),
+        veranstalter: veranstalterInput.value.trim(),
+        veranstalterLabel: veranstalterLabelKey,
+        desc: descInput.value.trim(),
+        imgSrc: uploadedImgSrc,
+        seed: 'up' + Date.now(),
+        time: 'Gerade eben',
+      };
+      const posts = loadPosts();
+      posts.unshift(post);
+      savePosts(posts);
+
+      const card = buildCard(post);
+      list.insertBefore(card, list.firstChild);
+
+      // Respect active filter
+      const f = document.querySelector('.seg-btn.active').dataset.filter;
+      if (f !== 'alle' && card.dataset.category !== f) card.style.display = 'none';
+
+      // Reset form
+      titleInput.value = ''; datumInput.value = ''; ortInput.value = ''; adresseInput.value = ''; veranstalterInput.value = ''; descInput.value = '';
+      veranstalterLabelKey = 'VERANSTALTER'; veranstalterLabelText.textContent = 'VERANSTALTER'; veranstalterInput.placeholder = 'Organisation oder Name';
+      veranstalterLabelWrap.querySelectorAll('.create-label-option').forEach((b,i) => b.classList.toggle('active', i===0));
+      veranstalterLabelWrap.classList.remove('open');
+      charCountEl.textContent = '0';
+      uploadedImgSrc = null;
+      imgPreview.style.display = 'none'; imgPlaceholder.style.display = '';
+      imgInput.value = '';
+      catBtns.forEach(b => b.classList.remove('active')); catBtns[0].classList.add('active');
+      selectedCat = 'neuigkeit';
+      overlay.classList.remove('open');
+    });
+  })();
+
+  // ── Custom date/time picker ──
+  (function() {
+    const MONTHS = ['Januar','Februar','März','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember'];
+    let pickYear, pickMonth, pickDay, pickHour, pickMin;
+
+    const dtPicker    = document.getElementById('dtPicker');
+    const dtGrid      = document.getElementById('dtGrid');
+    const dtYearLabel = document.getElementById('dtYearLabel');
+    const dtMonthLabel= document.getElementById('dtMonthLabel');
+    const dtHourVal   = document.getElementById('dtHourVal');
+    const dtMinVal    = document.getElementById('dtMinVal');
+    const datumInput  = document.getElementById('createDatum');
+
+    function initPick() {
+      const now = new Date();
+      pickYear  = now.getFullYear();
+      pickMonth = now.getMonth();
+      pickDay   = null;
+      pickHour  = now.getHours();
+      pickMin   = Math.round(now.getMinutes() / 5) * 5 % 60;
+    }
+
+    function buildGrid() {
+      dtYearLabel.textContent  = pickYear;
+      dtMonthLabel.textContent = MONTHS[pickMonth];
+      dtHourVal.textContent    = String(pickHour).padStart(2, '0');
+      dtMinVal.textContent     = String(pickMin).padStart(2, '0');
+      dtGrid.innerHTML = '';
+      const firstDow    = new Date(pickYear, pickMonth, 1).getDay();
+      const offset      = firstDow === 0 ? 6 : firstDow - 1;
+      const prevTotal   = new Date(pickYear, pickMonth, 0).getDate();
+      const daysInMonth = new Date(pickYear, pickMonth + 1, 0).getDate();
+      const today       = new Date();
+      for (let i = offset - 1; i >= 0; i--) {
+        const el = document.createElement('div');
+        el.className = 'dtpick-cell other-month';
+        el.textContent = prevTotal - i;
+        dtGrid.appendChild(el);
+      }
+      for (let d = 1; d <= daysInMonth; d++) {
+        const el = document.createElement('div');
+        el.className = 'dtpick-cell';
+        if (d === today.getDate() && pickMonth === today.getMonth() && pickYear === today.getFullYear()) el.classList.add('today');
+        if (d === pickDay) el.classList.add('selected');
+        el.textContent = d;
+        el.addEventListener('click', () => { pickDay = d; buildGrid(); });
+        dtGrid.appendChild(el);
+      }
+      const remaining = (offset + daysInMonth) % 7;
+      if (remaining > 0) {
+        for (let d = 1; d <= 7 - remaining; d++) {
+          const el = document.createElement('div');
+          el.className = 'dtpick-cell other-month';
+          el.textContent = d;
+          dtGrid.appendChild(el);
+        }
+      }
+    }
+
+    document.getElementById('dtYearPrev').addEventListener('click', e => { e.stopPropagation(); pickYear--; buildGrid(); });
+    document.getElementById('dtYearNext').addEventListener('click', e => { e.stopPropagation(); pickYear++; buildGrid(); });
+    document.getElementById('dtMonthPrev').addEventListener('click', e => {
+      e.stopPropagation();
+      pickMonth--;
+      if (pickMonth < 0) { pickMonth = 11; pickYear--; }
+      buildGrid();
+    });
+    document.getElementById('dtMonthNext').addEventListener('click', e => {
+      e.stopPropagation();
+      pickMonth++;
+      if (pickMonth > 11) { pickMonth = 0; pickYear++; }
+      buildGrid();
+    });
+    document.getElementById('dtHourUp').addEventListener('click',   e => { e.stopPropagation(); pickHour = (pickHour + 1) % 24; dtHourVal.textContent = String(pickHour).padStart(2,'0'); });
+    document.getElementById('dtHourDown').addEventListener('click', e => { e.stopPropagation(); pickHour = (pickHour + 23) % 24; dtHourVal.textContent = String(pickHour).padStart(2,'0'); });
+    document.getElementById('dtMinUp').addEventListener('click',    e => { e.stopPropagation(); pickMin = (pickMin + 5) % 60; dtMinVal.textContent = String(pickMin).padStart(2,'0'); });
+    document.getElementById('dtMinDown').addEventListener('click',  e => { e.stopPropagation(); pickMin = (pickMin - 5 + 60) % 60; dtMinVal.textContent = String(pickMin).padStart(2,'0'); });
+
+    datumInput.addEventListener('click', e => {
+      e.stopPropagation();
+      initPick();
+      buildGrid();
+      dtPicker.classList.add('open');
+    });
+
+    document.getElementById('dtPickOk').addEventListener('click', () => {
+      if (pickDay) {
+        datumInput.value = pickDay + '.' + (pickMonth + 1) + '.' + pickYear + ', ' + String(pickHour).padStart(2,'0') + ':' + String(pickMin).padStart(2,'0') + ' Uhr';
+      }
+      dtPicker.classList.remove('open');
+    });
+
+    dtPicker.addEventListener('click', e => { if (e.target === dtPicker) dtPicker.classList.remove('open'); });
+  })();
+</script>
+<script src="page-transition.js"></script>
+</body>
+</html>

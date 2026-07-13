@@ -1,0 +1,2184 @@
+/* ══════════════════════════════════════════
+   Dark Mode  ·  html.dark-mode
+   Palette: neutral dark, matches tab-bar (#040505 → #141515)
+   ══════════════════════════════════════════ */
+
+/* ── Outer page ── */
+html.dark-mode,
+html.dark-mode body {
+  background: #0c0c0c !important;
+  color: #f0f0f0 !important;
+  color-scheme: dark;
+}
+
+/* ── CSS Variables ── */
+html.dark-mode {
+  --bg:           #151515;
+  --panel:        #1e1e1e;
+  --panel-dark:   #191919;
+  --panel-mid:    #242424;
+  --circle:       #242424;
+  --text:         #f0f0f0;
+  --muted:        #f0f0f0;
+  --green:        #f0f0f0;
+  --green-bright: #ffffff;
+  --lime:         #f0f0f0;
+  --dark-dot:     rgba(255,255,255,.14);
+  --white:        #151515;
+  --border:       rgba(255,255,255,.09);
+  --border-soft:  rgba(255,255,255,.06);
+  --border-faint: rgba(255,255,255,.04);
+  --card-solid:   #1e1e1e;
+  --overlay:      rgba(0,0,0,.58);
+  --soft-panel:   rgba(255,255,255,.04);
+}
+
+/* ── Phone container ── */
+html.dark-mode .phone {
+  background: #151515 !important;
+  box-shadow: 0 32px 80px rgba(0,0,0,.65) !important;
+}
+
+html.dark-mode .phone::before {
+  background: #000 !important;
+}
+
+html.dark-mode .phone::after {
+  background: linear-gradient(to top, rgba(20,20,20,.88) 0%, rgba(20,20,20,0) 100%) !important;
+}
+
+/* ── Status bar ── */
+html.dark-mode .phone .time,
+html.dark-mode .phone .status-icons { color: #f0f0f0 !important; }
+
+/* ── Header & section labels ── */
+html.dark-mode .phone .header-title    { color: #f0f0f0 !important; }
+html.dark-mode .phone .header-eyebrow  { color: rgba(240,240,240,.42) !important; }
+html.dark-mode .phone .section-label   { color: rgba(240,240,240,.38) !important; }
+html.dark-mode .phone .section-label * { color: rgba(240,240,240,.38) !important; }
+
+/* ── App icon buttons (bell, dots, back, home, settings) ── */
+html.dark-mode .phone .app-icon-btn,
+html.dark-mode .phone .icon-button {
+  background: #000 !important;
+  border: 1px solid rgba(255,255,255,.10) !important;
+  color: #f0f0f0 !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.08),
+    0 4px 14px rgba(0,0,0,.5) !important;
+}
+html.dark-mode .phone .app-icon-btn .badge {
+  background: #f0f0f0 !important;
+  box-shadow: 0 0 0 2px rgba(20,20,20,.95) !important;
+}
+
+/* ── Metric cards (Homepage stat boxes) ── */
+html.dark-mode .phone .metric-card {
+  background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.015)), #1e1e1e !important;
+  border-color: rgba(255,255,255,.08) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.06),
+    0 8px 24px rgba(0,0,0,.32) !important;
+}
+
+/* icon circle inside metric card → dark */
+html.dark-mode .phone .metric-card .icon-bubble {
+  background: linear-gradient(180deg, #2e2e2e, #222222) !important;
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,.07),
+    0 4px 12px rgba(0,0,0,.4) !important;
+}
+html.dark-mode .phone .metric-card .icon {
+  stroke: rgba(255,255,255,.88) !important;
+}
+
+/* metric numbers + labels → white */
+html.dark-mode .phone .metric-number strong,
+html.dark-mode .phone .metric-number span { color: #f0f0f0 !important; }
+html.dark-mode .phone .metric-label { color: rgba(240,240,240,.72) !important; }
+
+/* ── CTA card (Energie spenden) → nav-bar black ── */
+html.dark-mode .phone .cta-card {
+  background: linear-gradient(180deg, rgba(20,21,21,.99), rgba(3,4,4,.99)), #040505 !important;
+  border-color: rgba(255,255,255,.12) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.10), 0 8px 24px rgba(0,0,0,.55) !important;
+}
+html.dark-mode .phone .cta-label { color: #f0f0f0 !important; }
+
+/* arrow circle → nav-bar black */
+html.dark-mode .phone .cta-arrow {
+  background: linear-gradient(180deg, rgba(20,21,21,.99), rgba(3,4,4,.99)), #040505 !important;
+  border-color: rgba(255,255,255,.12) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.10),
+    0 4px 14px rgba(0,0,0,.55) !important;
+}
+html.dark-mode .phone .cta-arrow svg { stroke: rgba(255,255,255,.92) !important; }
+
+/* ── Glass / surface cards ── */
+html.dark-mode .phone .glass-card,
+html.dark-mode .phone .inst-card,
+html.dark-mode .phone .msg-card,
+html.dark-mode .phone .notif-row {
+  background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.015)), #1e1e1e !important;
+  border: 1px solid rgba(255,255,255,.08) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.06),
+    0 8px 24px rgba(0,0,0,.3) !important;
+}
+
+/* ── Institution / project card internals ── */
+html.dark-mode .phone .inst-icon,
+html.dark-mode .phone .msg-avatar {
+  background: #242424 !important;
+  box-shadow: none !important;
+}
+html.dark-mode .phone .inst-icon svg,
+html.dark-mode .phone .msg-avatar svg { stroke: rgba(240,240,240,.7) !important; }
+
+html.dark-mode .phone .inst-name,
+html.dark-mode .phone .msg-sender    { color: #f0f0f0 !important; }
+html.dark-mode .phone .inst-desc,
+html.dark-mode .phone .msg-inst      { color: rgba(240,240,240,.48) !important; }
+html.dark-mode .phone .inst-amt strong { color: #f0f0f0 !important; }
+html.dark-mode .phone .inst-amt span  { color: rgba(240,240,240,.48) !important; }
+html.dark-mode .phone .msg-quote     { color: rgba(240,240,240,.72) !important; }
+html.dark-mode .phone .msg-date      { color: rgba(240,240,240,.36) !important; }
+
+/* ── Timeline ── */
+html.dark-mode .phone .timeline::before { background: rgba(255,255,255,.09) !important; }
+html.dark-mode .phone .tl-dot    { background: #f0f0f0 !important; box-shadow: 0 0 0 3px #151515, 0 2px 6px rgba(0,0,0,.45) !important; }
+html.dark-mode .phone .tl-amount { color: #f0f0f0 !important; }
+html.dark-mode .phone .tl-desc   { color: rgba(240,240,240,.5) !important; }
+
+/* ── Homepage stat card ── */
+html.dark-mode .phone .stat-card,
+html.dark-mode .phone .topf-card,
+html.dark-mode .phone .topf-card-inner {
+  background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.015)), #1e1e1e !important;
+  border-color: rgba(255,255,255,.08) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.06), 0 8px 24px rgba(0,0,0,.28) !important;
+}
+
+/* ── Projekte cards ── */
+html.dark-mode .phone .proj-card,
+html.dark-mode .phone .project-card,
+html.dark-mode .phone .archive-item {
+  background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.015)), #1e1e1e !important;
+  border-color: rgba(255,255,255,.08) !important;
+}
+
+/* Projekte text */
+html.dark-mode .phone .pot-amount        { color: #f0f0f0 !important; }
+html.dark-mode .phone .pot-desc          { color: rgba(240,240,240,.55) !important; }
+html.dark-mode .phone .pot-desc strong   { color: #f0f0f0 !important; }
+html.dark-mode .phone .vote-title        { color: #f0f0f0 !important; }
+html.dark-mode .phone .vote-desc         { color: rgba(240,240,240,.62) !important; }
+html.dark-mode .phone .vote-meta         { color: rgba(240,240,240,.52) !important; }
+html.dark-mode .phone .vote-meta strong  { color: #f0f0f0 !important; }
+html.dark-mode .phone .archive-status   { color: rgba(240,240,240,.6) !important; }
+html.dark-mode .phone .archive-title    { color: #f0f0f0 !important; }
+html.dark-mode .phone .archive-desc     { color: rgba(240,240,240,.5) !important; }
+
+/* Projekte vote button */
+html.dark-mode .phone .btn-action {
+  background: rgba(255,255,255,.12) !important;
+  border-color: rgba(255,255,255,.14) !important;
+  color: #f0f0f0 !important;
+}
+html.dark-mode .phone .btn-action.voted {
+  background: rgba(255,255,255,.05) !important;
+  color: rgba(240,240,240,.38) !important;
+}
+
+/* ── Neuigkeiten ── */
+html.dark-mode .phone .feed-card {
+  background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.015)), #1e1e1e !important;
+  border-color: rgba(255,255,255,.08) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.06), 0 4px 16px rgba(0,0,0,.24) !important;
+  color: #f0f0f0 !important;
+}
+html.dark-mode .phone .feat-card {
+  background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.015)), #1e1e1e !important;
+  border-color: rgba(255,255,255,.08) !important;
+}
+html.dark-mode .phone .cal-strip-icon {
+  background: linear-gradient(180deg, #2c2c2c, #202020) !important;
+  border-color: rgba(255,255,255,.09) !important;
+}
+html.dark-mode .phone .cal-day.today { background: #f0f0f0 !important; }
+html.dark-mode .phone .cal-day.today .cal-day-name { color: #151515 !important; }
+html.dark-mode .phone .cal-dot { background: rgba(240,240,240,.25) !important; }
+html.dark-mode .phone .cal-day.today .cal-dot { background: #151515 !important; }
+html.dark-mode .phone .seg-control,
+html.dark-mode .phone .seg-track {
+  background: rgba(255,255,255,.06) !important;
+  border-color: rgba(255,255,255,.07) !important;
+}
+html.dark-mode .phone .seg-thumb {
+  background: #242424 !important;
+  box-shadow: 0 2px 8px rgba(0,0,0,.5) !important;
+}
+
+/* ── CommunityMap ── */
+html.dark-mode .phone .map-card,
+html.dark-mode .phone .map-panel,
+html.dark-mode .phone .em-card,
+html.dark-mode .phone .grid-item,
+html.dark-mode .phone .energy-item {
+  background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.015)), #1e1e1e !important;
+  border-color: rgba(255,255,255,.08) !important;
+}
+
+/* ── Community page ── */
+html.dark-mode .phone .comment-sheet,
+html.dark-mode .phone .bt-sheet       { background: #1e1e1e !important; }
+html.dark-mode .phone .comment-bar,
+html.dark-mode .phone .comment-input-wrap {
+  background: #151515 !important;
+  border-top-color: rgba(255,255,255,.07) !important;
+}
+html.dark-mode .phone .comment-input-field {
+  background: rgba(255,255,255,.07) !important;
+  border-color: rgba(255,255,255,.09) !important;
+  color: #f0f0f0 !important;
+}
+
+/* Dark mode polish: neutral accents, stronger readability, black icon surfaces */
+html.dark-mode {
+  --green: #f0f0f0;
+  --green-bright: #ffffff;
+  --lime: #f0f0f0;
+  --muted: rgba(240,240,240,.72);
+}
+
+html.dark-mode .phone p,
+html.dark-mode .phone li,
+html.dark-mode .phone .setting-desc,
+html.dark-mode .phone .energy-option-desc,
+html.dark-mode .phone .warning-list li,
+html.dark-mode .phone .info-text,
+html.dark-mode .phone .detail-text,
+html.dark-mode .phone .detail-desc,
+html.dark-mode .phone .vote-desc,
+html.dark-mode .phone .archive-desc,
+html.dark-mode .phone .pot-desc,
+html.dark-mode .phone .topf-card-sub,
+html.dark-mode .phone .feed-excerpt,
+html.dark-mode .phone .notif-text,
+html.dark-mode .phone .comment-text,
+html.dark-mode .phone .org-post-body,
+html.dark-mode .phone .bt-impact-desc,
+html.dark-mode .phone .bt-impact-text,
+html.dark-mode .phone .bt-note {
+  color: rgba(240,240,240,.78) !important;
+}
+
+html.dark-mode .phone .header-eyebrow,
+html.dark-mode .phone .section-label,
+html.dark-mode .phone .section-label *,
+html.dark-mode .phone .section-title,
+html.dark-mode .phone .eyebrow,
+html.dark-mode .phone .warning-title,
+html.dark-mode .phone .detail-eyebrow,
+html.dark-mode .phone .detail-info-label,
+html.dark-mode .phone .value,
+html.dark-mode .phone .profile-meta,
+html.dark-mode .phone .stat-label,
+html.dark-mode .phone .stat-unit,
+html.dark-mode .phone .feed-time,
+html.dark-mode .phone .org-post-time,
+html.dark-mode .phone .comment-time,
+html.dark-mode .phone .comment-count-badge,
+html.dark-mode .phone .comment-sort-btn,
+html.dark-mode .phone .comment-like-btn,
+html.dark-mode .phone .comment-reply-btn,
+html.dark-mode .phone .feed-like-btn,
+html.dark-mode .phone .feed-comment-btn,
+html.dark-mode .phone .org-action-btn,
+html.dark-mode .phone .org-reply-btn,
+html.dark-mode .phone .bt-eyebrow,
+html.dark-mode .phone .stepper-unit {
+  color: rgba(240,240,240,.66) !important;
+}
+
+html.dark-mode .phone .warning-card {
+  background: rgba(255,255,255,.045) !important;
+  border-color: rgba(255,255,255,.10) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.045) !important;
+}
+
+html.dark-mode .phone .warning-list li::before {
+  background: rgba(240,240,240,.72) !important;
+}
+
+html.dark-mode .phone .app-icon-btn,
+html.dark-mode .phone .icon-button,
+html.dark-mode .phone .setting-icon,
+html.dark-mode .phone .energy-option-icon,
+html.dark-mode .phone .metric-card .icon-bubble,
+html.dark-mode .phone .cta-arrow,
+html.dark-mode .phone .inst-icon,
+html.dark-mode .phone .msg-avatar,
+html.dark-mode .phone .notif-icon,
+html.dark-mode .phone .notif-empty-icon,
+html.dark-mode .phone .detail-info-icon,
+html.dark-mode .phone .bt-icon-btn,
+html.dark-mode .phone .ed-icon-btn,
+html.dark-mode .phone .topf-card-arrow,
+html.dark-mode .phone .ms-bolt-bubble,
+html.dark-mode .phone .bt-impact-leaf,
+html.dark-mode .phone .cal-strip-icon,
+html.dark-mode .phone .tile-check,
+html.dark-mode .phone .sheet-close {
+  background: #000 !important;
+  border-color: rgba(255,255,255,.16) !important;
+  color: #f0f0f0 !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.08), 0 4px 14px rgba(0,0,0,.52) !important;
+}
+
+html.dark-mode .phone .app-icon-btn svg,
+html.dark-mode .phone .icon-button svg,
+html.dark-mode .phone .setting-icon svg,
+html.dark-mode .phone .energy-option-icon svg,
+html.dark-mode .phone .metric-card .icon,
+html.dark-mode .phone .cta-arrow svg,
+html.dark-mode .phone .inst-icon svg,
+html.dark-mode .phone .msg-avatar svg,
+html.dark-mode .phone .notif-icon svg,
+html.dark-mode .phone .notif-empty-icon svg,
+html.dark-mode .phone .detail-info-icon svg,
+html.dark-mode .phone .bt-icon-btn svg,
+html.dark-mode .phone .ed-icon-btn svg,
+html.dark-mode .phone .topf-card-arrow svg,
+html.dark-mode .phone .ms-bolt-bubble svg,
+html.dark-mode .phone .bt-impact-leaf svg,
+html.dark-mode .phone .cal-strip-icon svg,
+html.dark-mode .phone .tile-check svg,
+html.dark-mode .phone .sheet-close svg {
+  stroke: #f0f0f0 !important;
+}
+
+html.dark-mode .phone .notif-icon.lime,
+html.dark-mode .phone .lime {
+  color: #f0f0f0 !important;
+}
+
+html.dark-mode .phone .btn-confirm,
+html.dark-mode .phone .btn-cancel,
+html.dark-mode .phone .danger-button {
+  background: #000 !important;
+  border: 1px solid rgba(255,255,255,.18) !important;
+  color: #f0f0f0 !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.08), 0 8px 24px rgba(0,0,0,.32) !important;
+}
+
+html.dark-mode .phone .btn-confirm:active,
+html.dark-mode .phone .btn-cancel:active,
+html.dark-mode .phone .danger-button:active {
+  background: #111 !important;
+}
+
+html.dark-mode .phone .btn-action.voted,
+html.dark-mode .phone .clear-btn,
+html.dark-mode .phone .beteiligen-pill {
+  color: rgba(240,240,240,.72) !important;
+}
+
+html.dark-mode .phone .ms-divider { background: rgba(255,255,255,.07) !important; }
+html.dark-mode .phone .ms-av-more {
+  background: rgba(255,255,255,.10) !important;
+  border-color: #151515 !important;
+  color: rgba(240,240,240,.6) !important;
+}
+html.dark-mode .phone .org-badge {
+  background: rgba(255,255,255,.08) !important;
+  border-color: rgba(255,255,255,.10) !important;
+  color: #f0f0f0 !important;
+}
+html.dark-mode .phone .bt-handle,
+html.dark-mode .phone .comment-handle { background: rgba(255,255,255,.12) !important; }
+
+/* Community text */
+html.dark-mode .phone .topf-card-title   { color: #f0f0f0 !important; }
+html.dark-mode .phone .topf-card-sub     { color: rgba(240,240,240,.55) !important; }
+html.dark-mode .phone .topf-inline-cta {
+  background: #1a1a1a !important;
+  border: 1px solid rgba(255,255,255,.14) !important;
+  color: #ffffff !important;
+}
+html.dark-mode .phone .topf-inline-cta:active {
+  background: #242424 !important;
+}
+html.dark-mode .phone .topf-inline-cta svg {
+  stroke: #ffffff !important;
+}
+html.dark-mode .phone .ms-value          { color: #f0f0f0 !important; }
+html.dark-mode .phone .ms-unit,
+html.dark-mode .phone .ms-sub,
+html.dark-mode .phone .ms-bottom-text    { color: rgba(240,240,240,.5) !important; }
+html.dark-mode .phone .milestone-section-label { color: rgba(240,240,240,.42) !important; }
+html.dark-mode .phone .feed-section-label      { color: rgba(240,240,240,.42) !important; }
+html.dark-mode .phone .feed-show-all           { color: rgba(240,240,240,.6) !important; }
+html.dark-mode .phone .feed-institution        { color: rgba(240,240,240,.55) !important; }
+html.dark-mode .phone .feed-time               { color: rgba(240,240,240,.5) !important; }
+html.dark-mode .phone .feed-text               { color: #f0f0f0 !important; }
+html.dark-mode .phone .feed-excerpt            { color: rgba(240,240,240,.62) !important; }
+html.dark-mode .phone .feed-like-btn,
+html.dark-mode .phone .feed-comment-btn        { color: rgba(240,240,240,.55) !important; }
+html.dark-mode .phone .feed-like-btn.liked     { color: #c0514a !important; }
+html.dark-mode .phone .org-action-btn,
+html.dark-mode .phone .org-reply-btn           { color: rgba(240,240,240,.5) !important; }
+html.dark-mode .phone .org-action-btn.liked    { color: #c0514a !important; }
+html.dark-mode .phone .org-post-text           { color: #f0f0f0 !important; }
+html.dark-mode .phone .org-post-time           { color: rgba(240,240,240,.45) !important; }
+
+/* Community icon circles */
+html.dark-mode .phone .topf-card-arrow,
+html.dark-mode .phone .ms-bolt-bubble {
+  background: linear-gradient(180deg, #2e2e2e, #222222) !important;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.07), 0 3px 10px rgba(0,0,0,.38) !important;
+}
+html.dark-mode .phone .topf-card-arrow svg { stroke: rgba(240,240,240,.88) !important; }
+html.dark-mode .phone .ms-bolt-bubble svg  { stroke: rgba(240,240,240,.78) !important; }
+
+/* Community bt-impact card */
+html.dark-mode .phone .bt-impact {
+  background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.015)), #242424 !important;
+  border-color: rgba(255,255,255,.08) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.06) !important;
+}
+html.dark-mode .phone .bt-impact-title { color: #f0f0f0 !important; }
+html.dark-mode .phone .bt-impact-desc  { color: rgba(240,240,240,.62) !important; }
+html.dark-mode .phone .bt-impact-leaf {
+  background: linear-gradient(180deg, #2e2e2e, #222222) !important;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.07) !important;
+}
+
+/* ── Einstellungen ── */
+html.dark-mode .phone .setting-section,
+html.dark-mode .phone .settings-group {
+  background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.015)), #1e1e1e !important;
+  border: 1px solid rgba(255,255,255,.08) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.05), 0 4px 16px rgba(0,0,0,.22) !important;
+}
+html.dark-mode .phone .setting-divider { border-top-color: rgba(255,255,255,.06) !important; }
+
+/* Setting icon circles → nav-bar black */
+html.dark-mode .phone .setting-icon,
+html.dark-mode .phone .energy-option-icon {
+  background: #000 !important;
+  border-color: rgba(255,255,255,.12) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.10),
+    0 4px 12px rgba(0,0,0,.55) !important;
+  color: rgba(255,255,255,.88) !important;
+}
+
+html.dark-mode .phone .transparent-row {
+  background: transparent !important;
+}
+
+/* Einstellungen text → weiß */
+html.dark-mode .phone .setting-title   { color: #f0f0f0 !important; }
+html.dark-mode .phone .energy-option-title { color: #f0f0f0 !important; }
+html.dark-mode .phone .setting-value,
+html.dark-mode .phone .setting-desc,
+html.dark-mode .phone .energy-option-desc { color: rgba(240,240,240,.5) !important; }
+html.dark-mode .phone .section-title   { color: rgba(240,240,240,.42) !important; }
+html.dark-mode .phone .eyebrow         { color: rgba(240,240,240,.42) !important; }
+html.dark-mode .phone h1               { color: #f0f0f0 !important; }
+html.dark-mode .phone .chevron         { color: rgba(240,240,240,.38) !important; }
+html.dark-mode .phone .value           { color: rgba(240,240,240,.5) !important; }
+html.dark-mode .phone .profile-meta    { color: rgba(240,240,240,.5) !important; }
+html.dark-mode .phone .profile-energy  { color: rgba(240,240,240,.7) !important; }
+html.dark-mode .phone .keyboard-done   { color: #f0f0f0 !important; }
+html.dark-mode .phone .status-pill {
+  background: rgba(255,255,255,.07) !important;
+  border-color: rgba(255,255,255,.09) !important;
+  color: rgba(240,240,240,.62) !important;
+}
+html.dark-mode .phone .danger-button {
+  background: rgba(255,255,255,.07) !important;
+  border-color: rgba(255,255,255,.09) !important;
+  color: rgba(240,240,240,.46) !important;
+}
+
+/* ── Detail pages ── */
+html.dark-mode .phone .detail-body { background: #191919 !important; }
+html.dark-mode .phone .detail-back,
+html.dark-mode .phone .detail-share {
+  background: linear-gradient(180deg, #2c2c2c, #202020) !important;
+  border-color: rgba(255,255,255,.10) !important;
+  color: #f0f0f0 !important;
+}
+
+/* ── Notification sheet ── */
+html.dark-mode .phone .notif-sheet,
+html.dark-mode .phone .sheet-body   { background: #1e1e1e !important; }
+html.dark-mode .phone .sheet-handle { background: rgba(255,255,255,.12) !important; }
+html.dark-mode .phone .sheet-title  { color: #f0f0f0 !important; }
+html.dark-mode .phone .sheet-close  { background: rgba(255,255,255,.08) !important; color: #f0f0f0 !important; }
+html.dark-mode .phone .notif-icon   { background: rgba(255,255,255,.07) !important; color: rgba(240,240,240,.7) !important; }
+html.dark-mode .phone .notif-text   { color: rgba(240,240,240,.72) !important; }
+html.dark-mode .phone .notif-empty-icon { background: rgba(255,255,255,.06) !important; color: rgba(240,240,240,.5) !important; }
+html.dark-mode .phone .clear-btn    { background: rgba(255,255,255,.07) !important; color: rgba(240,240,240,.5) !important; }
+
+/* ── CommunityMap tiles ── */
+html.dark-mode .phone .tile {
+  background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.015)), #1e1e1e !important;
+  border-color: rgba(255,255,255,.08) !important;
+  color: #f0f0f0 !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.06), 0 3px 10px rgba(0,0,0,.28) !important;
+}
+html.dark-mode .phone .tile.active {
+  background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.03)), #272727 !important;
+}
+html.dark-mode .phone .tile-check {
+  background: linear-gradient(180deg, #2e2e2e, #222222) !important;
+  border-color: rgba(255,255,255,.08) !important;
+}
+
+/* ── Community stat pill & milestone card ── */
+html.dark-mode .phone .stat-pill {
+  background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.015)), #1e1e1e !important;
+  border-color: rgba(255,255,255,.08) !important;
+}
+html.dark-mode .phone .stat-label { color: rgba(240,240,240,.52) !important; }
+html.dark-mode .phone .stat-value  { color: #f0f0f0 !important; }
+html.dark-mode .phone .stat-unit   { color: rgba(240,240,240,.52) !important; }
+html.dark-mode .phone .milestone-card {
+  background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.015)), #1e1e1e !important;
+  border-color: rgba(255,255,255,.08) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.06), 0 8px 24px rgba(0,0,0,.28) !important;
+}
+
+/* ── Bottom sheet / detail icon buttons ── */
+html.dark-mode .phone .bt-icon-btn,
+html.dark-mode .phone .ed-icon-btn {
+  background: linear-gradient(180deg, #2c2c2c, #202020) !important;
+  border-color: rgba(255,255,255,.10) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.08), 0 2px 8px rgba(0,0,0,.4) !important;
+}
+html.dark-mode .phone .bt-icon-btn svg,
+html.dark-mode .phone .ed-icon-btn svg { stroke: #f0f0f0 !important; }
+
+/* ── Community .topf-card-cta (separate class from .topf-card) ── */
+html.dark-mode .phone .topf-card-cta {
+  background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.015)), #1e1e1e !important;
+  border-color: rgba(255,255,255,.08) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.06), 0 8px 24px rgba(0,0,0,.28) !important;
+}
+
+/* ── CommunityMap .emergency card (.em-card alias) ── */
+html.dark-mode .phone .emergency {
+  background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.015)), #1e1e1e !important;
+  border-color: rgba(255,255,255,.08) !important;
+}
+
+/* ── Einstellungen sub-pages: .settings-card, .profile-card, .mini-card ── */
+html.dark-mode .phone .settings-card,
+html.dark-mode .phone .profile-card,
+html.dark-mode .phone .mini-card {
+  background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.015)), #1e1e1e !important;
+  border-color: rgba(255,255,255,.08) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.06), 0 4px 16px rgba(0,0,0,.22) !important;
+}
+html.dark-mode .phone .mini-ring,
+html.dark-mode .phone .mini-radio {
+  transform: translateY(-50%) !important;
+}
+
+html.dark-mode .phone .mini-ring {
+  background: conic-gradient(#f0f0f0 0 var(--reserve-progress, 0%), #2b2b2b var(--reserve-progress, 0%) 100%) !important;
+  border: 0 !important;
+  box-shadow: 0 4px 12px rgba(0,0,0,.42) !important;
+}
+
+html.dark-mode .phone .mini-ring::after {
+  display: block !important;
+  background: #1e1e1e !important;
+}
+
+html.dark-mode .phone .mini-radio {
+  background: transparent !important;
+  border-color: rgba(240,240,240,.58) !important;
+  box-shadow:
+    0 0 0 5px rgba(240,240,240,.08),
+    0 0 0 10px rgba(240,240,240,.035) !important;
+}
+
+html.dark-mode .phone .mini-radio::before {
+  display: block !important;
+  border-color: rgba(240,240,240,.26) !important;
+  background: transparent !important;
+}
+
+html.dark-mode .phone .mini-radio::after {
+  display: block !important;
+  background: #f0f0f0 !important;
+}
+
+/* ══════════════════════════════════════════
+   IMAGES — dim in dark mode
+   ══════════════════════════════════════════ */
+html.dark-mode .phone img {
+  filter: brightness(0.72) saturate(0.88) !important;
+}
+/* Keep small logos/avatars slightly brighter */
+html.dark-mode .phone .commons-logo img,
+html.dark-mode .phone .tab-avatar img,
+html.dark-mode .phone .comment-input-av img {
+  filter: brightness(0.85) saturate(0.9) !important;
+}
+
+/* ══════════════════════════════════════════
+   DETAIL PAGES — body text & info icons
+   (EventDetail, PostDetail, SolarbankDetail, UserPostDetail)
+   ══════════════════════════════════════════ */
+html.dark-mode .phone .detail-body     { color: #f0f0f0 !important; }
+html.dark-mode .phone .detail-eyebrow  { color: rgba(240,240,240,.45) !important; }
+html.dark-mode .phone .detail-title    { color: #f0f0f0 !important; }
+html.dark-mode .phone .detail-divider  { background: rgba(255,255,255,.07) !important; }
+html.dark-mode .phone .detail-text,
+html.dark-mode .phone .detail-desc     { color: rgba(240,240,240,.85) !important; }
+html.dark-mode .phone .detail-no-desc  { color: rgba(240,240,240,.35) !important; }
+html.dark-mode .phone .detail-info-label { color: rgba(240,240,240,.42) !important; }
+html.dark-mode .phone .detail-info-value { color: #f0f0f0 !important; }
+
+html.dark-mode .phone .detail-info-icon {
+  background: linear-gradient(180deg, #2c2c2c, #202020) !important;
+  border-color: rgba(255,255,255,.09) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.07), 0 2px 8px rgba(0,0,0,.35) !important;
+}
+html.dark-mode .phone .detail-info-icon svg { stroke: rgba(240,240,240,.65) !important; }
+
+/* ══════════════════════════════════════════
+   EINSTELLUNGEN SUB-PAGES — save bar & field borders
+   ══════════════════════════════════════════ */
+html.dark-mode .phone .save-bar {
+  background: linear-gradient(to top, rgba(21,21,21,1) 60%, rgba(21,21,21,0)) !important;
+}
+html.dark-mode .phone .field-row {
+  border-top-color: rgba(255,255,255,.06) !important;
+}
+html.dark-mode .phone .field-input::placeholder {
+  color: rgba(240,240,240,.22) !important;
+}
+
+/* ══════════════════════════════════════════
+   SUBPAGE STATUS BAR — hardcoded in detail pages
+   ══════════════════════════════════════════ */
+html.dark-mode .phone .time,
+html.dark-mode .phone .status-icons { color: #f0f0f0 !important; }
+
+/* ══════════════════════════════════════════
+   COMMENT SHEET — all detail pages
+   ══════════════════════════════════════════ */
+html.dark-mode .phone .comment-title,
+html.dark-mode .phone .comment-name,
+html.dark-mode .phone .comment-text,
+html.dark-mode .phone .org-post-text,
+html.dark-mode .phone .org-post-body { color: #f0f0f0 !important; }
+
+html.dark-mode .phone .comment-time,
+html.dark-mode .phone .comment-count-badge,
+html.dark-mode .phone .comment-sort-btn,
+html.dark-mode .phone .org-post-time,
+html.dark-mode .phone .comment-like-btn,
+html.dark-mode .phone .comment-reply-btn { color: rgba(240,240,240,.5) !important; }
+
+html.dark-mode .phone .comment-like-btn.liked { color: #c0514a !important; }
+
+/* ══════════════════════════════════════════
+   BOTTOM SHEET (Beteiligen / Solarbank)
+   ══════════════════════════════════════════ */
+html.dark-mode .phone .bt-title,
+html.dark-mode .phone .stepper-value,
+html.dark-mode .phone .bt-impact-title { color: #f0f0f0 !important; }
+
+html.dark-mode .phone .bt-eyebrow,
+html.dark-mode .phone .stepper-unit,
+html.dark-mode .phone .bt-impact-text,
+html.dark-mode .phone .bt-note { color: rgba(240,240,240,.5) !important; }
+
+html.dark-mode .phone .bt-step-btn {
+  background: rgba(255,255,255,.06) !important;
+  border-color: rgba(255,255,255,.10) !important;
+  color: #f0f0f0 !important;
+}
+
+html.dark-mode .phone .beteiligen-pill {
+  background: rgba(255,255,255,.05) !important;
+  border-color: rgba(255,255,255,.08) !important;
+  color: rgba(240,240,240,.6) !important;
+}
+html.dark-mode .phone .beteiligen-pill.active {
+  background: #f0f0f0 !important;
+  color: #151515 !important;
+  border-color: #f0f0f0 !important;
+}
+
+/* ── Detail page comment input bar ── */
+html.dark-mode .phone .comment-input-bar {
+  background: #151515 !important;
+  border-top-color: rgba(255,255,255,.07) !important;
+}
+html.dark-mode .phone .comment-input-field {
+  background: rgba(255,255,255,.07) !important;
+  border-color: rgba(255,255,255,.09) !important;
+  color: #f0f0f0 !important;
+}
+
+/* Final dark mode consistency overrides */
+html.dark-mode {
+  --green: #f0f0f0;
+  --green-bright: #ffffff;
+  --lime: #f0f0f0;
+  --muted: rgba(240,240,240,.72);
+}
+
+html.dark-mode .phone p,
+html.dark-mode .phone li,
+html.dark-mode .phone .setting-desc,
+html.dark-mode .phone .energy-option-desc,
+html.dark-mode .phone .warning-list li,
+html.dark-mode .phone .info-text,
+html.dark-mode .phone .detail-text,
+html.dark-mode .phone .detail-desc,
+html.dark-mode .phone .vote-desc,
+html.dark-mode .phone .archive-desc,
+html.dark-mode .phone .pot-desc,
+html.dark-mode .phone .topf-card-sub,
+html.dark-mode .phone .feed-excerpt,
+html.dark-mode .phone .notif-text,
+html.dark-mode .phone .comment-text,
+html.dark-mode .phone .org-post-body,
+html.dark-mode .phone .bt-impact-desc,
+html.dark-mode .phone .bt-impact-text,
+html.dark-mode .phone .bt-note {
+  color: rgba(240,240,240,.78) !important;
+}
+
+html.dark-mode .phone .header-eyebrow,
+html.dark-mode .phone .section-label,
+html.dark-mode .phone .section-label *,
+html.dark-mode .phone .section-title,
+html.dark-mode .phone .eyebrow,
+html.dark-mode .phone .warning-title,
+html.dark-mode .phone .detail-eyebrow,
+html.dark-mode .phone .detail-info-label,
+html.dark-mode .phone .value,
+html.dark-mode .phone .profile-meta,
+html.dark-mode .phone .stat-label,
+html.dark-mode .phone .stat-unit,
+html.dark-mode .phone .feed-time,
+html.dark-mode .phone .org-post-time,
+html.dark-mode .phone .comment-time,
+html.dark-mode .phone .comment-count-badge,
+html.dark-mode .phone .comment-sort-btn,
+html.dark-mode .phone .comment-like-btn,
+html.dark-mode .phone .comment-reply-btn,
+html.dark-mode .phone .feed-like-btn,
+html.dark-mode .phone .feed-comment-btn,
+html.dark-mode .phone .org-action-btn,
+html.dark-mode .phone .org-reply-btn,
+html.dark-mode .phone .bt-eyebrow,
+html.dark-mode .phone .stepper-unit {
+  color: rgba(240,240,240,.66) !important;
+}
+
+html.dark-mode .phone .warning-card {
+  background: rgba(255,255,255,.045) !important;
+  border-color: rgba(255,255,255,.10) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.045) !important;
+}
+
+html.dark-mode .phone .warning-list li::before {
+  background: rgba(240,240,240,.72) !important;
+}
+
+html.dark-mode .phone .app-icon-btn,
+html.dark-mode .phone .icon-button,
+html.dark-mode .phone .setting-icon,
+html.dark-mode .phone .energy-option-icon,
+html.dark-mode .phone .metric-card .icon-bubble,
+html.dark-mode .phone .cta-arrow,
+html.dark-mode .phone .inst-icon,
+html.dark-mode .phone .msg-avatar,
+html.dark-mode .phone .notif-icon,
+html.dark-mode .phone .notif-empty-icon,
+html.dark-mode .phone .detail-info-icon,
+html.dark-mode .phone .bt-icon-btn,
+html.dark-mode .phone .ed-icon-btn,
+html.dark-mode .phone .topf-card-arrow,
+html.dark-mode .phone .ms-bolt-bubble,
+html.dark-mode .phone .bt-impact-leaf,
+html.dark-mode .phone .cal-strip-icon,
+html.dark-mode .phone .tile-check,
+html.dark-mode .phone .sheet-close {
+  background: #000 !important;
+  border: 1px solid rgba(255,255,255,.16) !important;
+  color: #f0f0f0 !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.08), 0 4px 14px rgba(0,0,0,.52) !important;
+}
+
+html.dark-mode .phone .app-icon-btn svg,
+html.dark-mode .phone .icon-button svg,
+html.dark-mode .phone .setting-icon svg,
+html.dark-mode .phone .energy-option-icon svg,
+html.dark-mode .phone .metric-card .icon,
+html.dark-mode .phone .cta-arrow svg,
+html.dark-mode .phone .inst-icon svg,
+html.dark-mode .phone .msg-avatar svg,
+html.dark-mode .phone .notif-icon svg,
+html.dark-mode .phone .notif-empty-icon svg,
+html.dark-mode .phone .detail-info-icon svg,
+html.dark-mode .phone .bt-icon-btn svg,
+html.dark-mode .phone .ed-icon-btn svg,
+html.dark-mode .phone .topf-card-arrow svg,
+html.dark-mode .phone .ms-bolt-bubble svg,
+html.dark-mode .phone .bt-impact-leaf svg,
+html.dark-mode .phone .cal-strip-icon svg,
+html.dark-mode .phone .tile-check svg,
+html.dark-mode .phone .sheet-close svg {
+  stroke: #f0f0f0 !important;
+}
+
+html.dark-mode .phone .notif-icon.lime,
+html.dark-mode .phone .lime {
+  color: #f0f0f0 !important;
+}
+
+html.dark-mode .phone .btn-confirm,
+html.dark-mode .phone .btn-cancel,
+html.dark-mode .phone .danger-button {
+  background: #000 !important;
+  border: 1px solid rgba(255,255,255,.18) !important;
+  color: #f0f0f0 !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.08), 0 8px 24px rgba(0,0,0,.32) !important;
+}
+
+html.dark-mode .phone .btn-confirm:active,
+html.dark-mode .phone .btn-cancel:active,
+html.dark-mode .phone .danger-button:active {
+  background: #111 !important;
+}
+
+html.dark-mode .phone .btn-action.voted,
+html.dark-mode .phone .clear-btn,
+html.dark-mode .phone .beteiligen-pill {
+  color: rgba(240,240,240,.72) !important;
+}
+
+/* Neuigkeiten page EOF dark mode overrides */
+html.dark-mode .phone .feat-arrow,
+html.dark-mode .phone .feed-arrow,
+html.dark-mode .phone .fab {
+  background: #000 !important;
+  border: 1px solid rgba(255,255,255,.16) !important;
+  color: #f0f0f0 !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.08), 0 4px 14px rgba(0,0,0,.52) !important;
+}
+
+html.dark-mode .phone .feat-arrow svg,
+html.dark-mode .phone .feed-arrow svg,
+html.dark-mode .phone .fab svg {
+  stroke: #f0f0f0 !important;
+}
+
+html.dark-mode .phone .cal-day.today {
+  background: #000 !important;
+  border: 1px solid rgba(255,255,255,.16) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.08), 0 4px 14px rgba(0,0,0,.42) !important;
+}
+
+html.dark-mode .phone .cal-day.today .cal-day-name,
+html.dark-mode .phone .cal-day.today .cal-dot {
+  color: #f0f0f0 !important;
+}
+
+html.dark-mode .phone .cal-day.today .cal-dot {
+  background: #f0f0f0 !important;
+}
+
+html.dark-mode .phone .cal-day-name,
+html.dark-mode .phone .feed-institution,
+html.dark-mode .phone .feed-time,
+html.dark-mode .phone .seg-btn {
+  color: rgba(240,240,240,.72) !important;
+}
+
+html.dark-mode .phone .seg-btn.active,
+html.dark-mode .phone .feed-text,
+html.dark-mode .phone .feat-title {
+  color: #f0f0f0 !important;
+}
+
+html.dark-mode .phone .seg-indicator {
+  background: #000 !important;
+  border: 1px solid rgba(255,255,255,.12) !important;
+}
+
+html.dark-mode .phone .cal-full,
+html.dark-mode .phone .create-sheet,
+html.dark-mode .phone .dtpick-card {
+  background: #1e1e1e !important;
+  border-color: rgba(255,255,255,.12) !important;
+  color: #f0f0f0 !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.06), 0 8px 28px rgba(0,0,0,.42) !important;
+}
+
+html.dark-mode .phone .create-close,
+html.dark-mode .phone .create-cat,
+html.dark-mode .phone .create-cat-icon,
+html.dark-mode .phone .create-submit-arrow,
+html.dark-mode .phone .dtpick-spin-btn,
+html.dark-mode .phone .dtpick-ok,
+html.dark-mode .phone .cal-nav {
+  background: #000 !important;
+  border: 1px solid rgba(255,255,255,.16) !important;
+  color: #f0f0f0 !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.08) !important;
+}
+
+html.dark-mode .phone .create-close svg,
+html.dark-mode .phone .create-cat-icon svg,
+html.dark-mode .phone .create-submit-arrow svg,
+html.dark-mode .phone .dtpick-spin-btn svg,
+html.dark-mode .phone .cal-nav svg {
+  stroke: #f0f0f0 !important;
+}
+
+html.dark-mode .phone .create-title,
+html.dark-mode .phone .create-img-text,
+html.dark-mode .phone .dtpick-month-lbl,
+html.dark-mode .phone .dtpick-time-val,
+html.dark-mode .phone .dtpick-cell {
+  color: #f0f0f0 !important;
+}
+
+html.dark-mode .phone .create-sub,
+html.dark-mode .phone .create-section-label,
+html.dark-mode .phone .create-img-sub,
+html.dark-mode .phone .create-char-count,
+html.dark-mode .phone .dtpick-year-lbl,
+html.dark-mode .phone .dtpick-dayname,
+html.dark-mode .phone .dtpick-colon,
+html.dark-mode .phone .dtpick-nav {
+  color: rgba(240,240,240,.68) !important;
+}
+
+html.dark-mode .phone .create-input,
+html.dark-mode .phone .create-input-wrap,
+html.dark-mode .phone .create-textarea,
+html.dark-mode .phone .create-img-area,
+html.dark-mode .phone .create-label-options,
+html.dark-mode .phone .create-label-option {
+  background: rgba(255,255,255,.045) !important;
+  border-color: rgba(255,255,255,.12) !important;
+  color: #f0f0f0 !important;
+}
+
+html.dark-mode .phone .create-input::placeholder,
+html.dark-mode .phone .create-input-wrap input::placeholder,
+html.dark-mode .phone .create-textarea::placeholder {
+  color: rgba(240,240,240,.42) !important;
+}
+
+/* ══════════════════════════════════════════
+   EINSTELLUNGEN — profile avatar edit button & avatar-picker sheet
+   ══════════════════════════════════════════ */
+html.dark-mode .phone .avatar-edit-btn {
+  background: #000 !important;
+  border-color: rgba(255,255,255,.16) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.08), 0 2px 8px rgba(0,0,0,.5) !important;
+}
+html.dark-mode .phone .avatar-edit-btn svg { stroke: #f0f0f0 !important; }
+
+html.dark-mode .phone .avatar-sheet {
+  background: #1e1e1e !important;
+  box-shadow: 0 -6px 28px rgba(0,0,0,.5) !important;
+}
+html.dark-mode .phone .sheet-grabber { background: rgba(255,255,255,.14) !important; }
+
+html.dark-mode .phone .sheet-upload-btn {
+  background: linear-gradient(180deg, #2c2c2c, #202020) !important;
+  border-color: rgba(255,255,255,.10) !important;
+  box-shadow: 0 2px 8px rgba(0,0,0,.4) !important;
+}
+html.dark-mode .phone .sheet-upload {
+  background: rgba(255,255,255,.045) !important;
+  border-color: rgba(255,255,255,.08) !important;
+}
+html.dark-mode .phone .sheet-upload-desc  { color: rgba(240,240,240,.5) !important; }
+html.dark-mode .phone .avatar-pager-btn,
+html.dark-mode .phone .avatar-pager-label { color: rgba(240,240,240,.55) !important; }
+html.dark-mode .phone .avatar-option.is-selected .avatar-opt-inner {
+  outline-color: rgba(255,255,255,.35) !important;
+}
+
+/* ══════════════════════════════════════════
+   BETEILIGEN SHEET (SolarbankDetail.html & Community.html) — inverted:
+   black sheet + white icon circles, per explicit request
+   ══════════════════════════════════════════ */
+html.dark-mode .phone .beteiligen-sheet {
+  background: #0c0c0c !important;
+  box-shadow: 0 -8px 32px rgba(0,0,0,.6) !important;
+}
+html.dark-mode .phone .beteiligen-sheet .bt-handle { background: rgba(255,255,255,.18) !important; }
+
+html.dark-mode .phone .beteiligen-sheet .bt-icon-btn,
+html.dark-mode .phone .beteiligen-sheet .bt-step-btn,
+html.dark-mode .phone .beteiligen-sheet .bt-impact-leaf,
+html.dark-mode .phone .beteiligen-sheet .bt-impact-icon {
+  background: #ffffff !important;
+  border-color: rgba(0,0,0,.08) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.9), 0 3px 10px rgba(0,0,0,.35) !important;
+}
+html.dark-mode .phone .beteiligen-sheet .bt-icon-btn svg,
+html.dark-mode .phone .beteiligen-sheet .bt-impact-leaf svg,
+html.dark-mode .phone .beteiligen-sheet .bt-impact-icon svg { stroke: #171a16 !important; }
+html.dark-mode .phone .beteiligen-sheet .bt-step-btn { color: #171a16 !important; }
+
+/* ── Loading-overlay success checkmark (same widget, 3 different class names) ── */
+html.dark-mode .phone .lo-check,
+html.dark-mode .phone .comm-check,
+html.dark-mode .phone .check {
+  background: #000 !important;
+  color: #f0f0f0 !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.08), 0 4px 14px rgba(0,0,0,.5) !important;
+}
+
+/* ── Community.html hero "open institution" link circle over photo ── */
+html.dark-mode .phone .bt-hero-link {
+  background: linear-gradient(180deg, #2c2c2c, #202020) !important;
+  border-color: rgba(255,255,255,.10) !important;
+}
+
+/* ── CommunityMap.html icon bubbles & map marker ── */
+html.dark-mode .phone .home-impact-icon,
+html.dark-mode .phone .emergency-icon {
+  background: linear-gradient(180deg, #2c2c2c, #202020) !important;
+  border-color: rgba(255,255,255,.10) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.08), 0 4px 12px rgba(0,0,0,.4) !important;
+}
+html.dark-mode .phone .home-impact-icon svg { stroke: #f0f0f0 !important; }
+html.dark-mode .phone .emergency-icon,
+html.dark-mode .phone .emergency.auto-donate-on .emergency-icon { color: #f0f0f0 !important; }
+
+html.dark-mode .phone .commons-hub {
+  background: #000 !important;
+  color: #f0f0f0 !important;
+}
+html.dark-mode .phone .commons-hub::after {
+  background: rgba(0,0,0,.62) !important;
+  border-color: rgba(255,255,255,.18) !important;
+  color: rgba(240,240,240,.85) !important;
+}
+
+/* ── Neuigkeiten.html avatar-stack "+N" overflow badge ── */
+html.dark-mode .phone .feed-av-more {
+  background: rgba(0,0,0,.45) !important;
+  border-color: rgba(255,255,255,.22) !important;
+  color: #f0f0f0 !important;
+}
+
+/* ── Toggle switches (Einstellungen*, CommunityMap) — "off" state
+   was a solid white pill; darken the track, keep knob light ── */
+html.dark-mode .phone .toggle.is-off,
+html.dark-mode .phone .energy-switch:not(.is-on) {
+  background: rgba(255,255,255,.10) !important;
+  border-color: rgba(255,255,255,.14) !important;
+}
+html.dark-mode .phone .toggle.is-off::after,
+html.dark-mode .phone .energy-switch:not(.is-on)::after {
+  background: #f0f0f0 !important;
+}
+
+/* Final darkmode pass: no bright white surfaces, darker glassmorphism everywhere */
+html.dark-mode {
+  --bg: #0b0c0c;
+  --panel: #111212;
+  --panel-dark: #090a0a;
+  --panel-mid: #171818;
+  --circle: #090a0a;
+  --white: #101111;
+  --card-solid: #121313;
+  --soft-panel: rgba(255,255,255,.025);
+}
+
+html.dark-mode .phone {
+  background: #0f1010 !important;
+}
+
+html.dark-mode .phone .app,
+html.dark-mode .phone .content,
+html.dark-mode .phone .detail-body,
+html.dark-mode .phone .sheet-body,
+html.dark-mode .phone .notif-sheet,
+html.dark-mode .phone .comment-sheet,
+html.dark-mode .phone .bt-sheet,
+html.dark-mode .phone .beteiligen-sheet,
+html.dark-mode .phone .energy-donation-sheet,
+html.dark-mode .phone .create-sheet,
+html.dark-mode .phone .avatar-sheet,
+html.dark-mode .phone .cal-full,
+html.dark-mode .phone .dtpick-card {
+  background: #101111 !important;
+  color: #f0f0f0 !important;
+}
+
+html.dark-mode .phone .glass-card,
+html.dark-mode .phone .metric-card,
+html.dark-mode .phone .stat-card,
+html.dark-mode .phone .topf-card,
+html.dark-mode .phone .topf-card-inner,
+html.dark-mode .phone .topf-card-cta,
+html.dark-mode .phone .milestone-card,
+html.dark-mode .phone .feed-card,
+html.dark-mode .phone .feat-card,
+html.dark-mode .phone .inst-card,
+html.dark-mode .phone .msg-card,
+html.dark-mode .phone .notif-row,
+html.dark-mode .phone .setting-section,
+html.dark-mode .phone .settings-group,
+html.dark-mode .phone .settings-card,
+html.dark-mode .phone .profile-card,
+html.dark-mode .phone .mini-card,
+html.dark-mode .phone .warning-card,
+html.dark-mode .phone .proj-card,
+html.dark-mode .phone .project-card,
+html.dark-mode .phone .archive-item,
+html.dark-mode .phone .vote-card,
+html.dark-mode .phone .map-card,
+html.dark-mode .phone .map-panel,
+html.dark-mode .phone .em-card,
+html.dark-mode .phone .emergency,
+html.dark-mode .phone .grid-item,
+html.dark-mode .phone .energy-item,
+html.dark-mode .phone .tile,
+html.dark-mode .phone .destination,
+html.dark-mode .phone .home-impact-card,
+html.dark-mode .phone .home-impact-sheet,
+html.dark-mode .phone .institution-info-card,
+html.dark-mode .phone .institution-action-sheet,
+html.dark-mode .phone .message-panel,
+html.dark-mode .phone .ed-message-card,
+html.dark-mode .phone .bt-impact {
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.035), rgba(255,255,255,.008)),
+    #121313 !important;
+  border-color: rgba(255,255,255,.075) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.045),
+    0 10px 28px rgba(0,0,0,.34) !important;
+  color: #f0f0f0 !important;
+}
+
+html.dark-mode .phone .bt-impact {
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.028), rgba(255,255,255,.006)),
+    #111212 !important;
+  border-color: rgba(255,255,255,.07) !important;
+}
+
+html.dark-mode .phone .bt-hero-location,
+html.dark-mode .phone .bt-hero-link,
+html.dark-mode .phone .hero-actions,
+html.dark-mode .phone .map-hint,
+html.dark-mode .phone .map-filter-bar,
+html.dark-mode .phone .map-filter-chip,
+html.dark-mode .phone .map-floating-close,
+html.dark-mode .phone .map-tool-button {
+  background: rgba(0,0,0,.62) !important;
+  border-color: rgba(255,255,255,.14) !important;
+  color: rgba(255,255,255,.92) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.06), 0 4px 16px rgba(0,0,0,.35) !important;
+}
+
+html.dark-mode .phone .app-icon-btn,
+html.dark-mode .phone .icon-button,
+html.dark-mode .phone .setting-icon,
+html.dark-mode .phone .energy-option-icon,
+html.dark-mode .phone .metric-card .icon-bubble,
+html.dark-mode .phone .cta-arrow,
+html.dark-mode .phone .inst-icon,
+html.dark-mode .phone .msg-avatar,
+html.dark-mode .phone .notif-icon,
+html.dark-mode .phone .notif-empty-icon,
+html.dark-mode .phone .detail-info-icon,
+html.dark-mode .phone .bt-icon-btn,
+html.dark-mode .phone .ed-icon-btn,
+html.dark-mode .phone .bt-step-btn,
+html.dark-mode .phone .topf-card-icon,
+html.dark-mode .phone .topf-card-arrow,
+html.dark-mode .phone .ms-bolt-bubble,
+html.dark-mode .phone .bt-impact-leaf,
+html.dark-mode .phone .bt-impact-icon,
+html.dark-mode .phone .home-impact-icon,
+html.dark-mode .phone .home-impact-chip-icon,
+html.dark-mode .phone .institution-mini-icon,
+html.dark-mode .phone .emergency-icon,
+html.dark-mode .phone .cal-strip-icon,
+html.dark-mode .phone .tile-check,
+html.dark-mode .phone .sheet-close,
+html.dark-mode .phone .create-close,
+html.dark-mode .phone .create-cat-icon,
+html.dark-mode .phone .create-submit-arrow,
+html.dark-mode .phone .dtpick-spin-btn,
+html.dark-mode .phone .dtpick-ok,
+html.dark-mode .phone .cal-nav,
+html.dark-mode .phone .avatar-edit-btn,
+html.dark-mode .phone .sheet-upload-btn {
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.045), rgba(255,255,255,.012)),
+    #050606 !important;
+  border: 1px solid rgba(255,255,255,.14) !important;
+  color: #f0f0f0 !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.07), 0 4px 14px rgba(0,0,0,.52) !important;
+}
+
+html.dark-mode .phone .beteiligen-sheet .bt-icon-btn,
+html.dark-mode .phone .beteiligen-sheet .bt-step-btn,
+html.dark-mode .phone .beteiligen-sheet .bt-impact-leaf,
+html.dark-mode .phone .beteiligen-sheet .bt-impact-icon {
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.045), rgba(255,255,255,.012)),
+    #050606 !important;
+  border-color: rgba(255,255,255,.14) !important;
+  color: #f0f0f0 !important;
+}
+
+html.dark-mode .phone .app-icon-btn svg,
+html.dark-mode .phone .icon-button svg,
+html.dark-mode .phone .setting-icon svg,
+html.dark-mode .phone .energy-option-icon svg,
+html.dark-mode .phone .metric-card .icon,
+html.dark-mode .phone .cta-arrow svg,
+html.dark-mode .phone .inst-icon svg,
+html.dark-mode .phone .msg-avatar svg,
+html.dark-mode .phone .notif-icon svg,
+html.dark-mode .phone .notif-empty-icon svg,
+html.dark-mode .phone .detail-info-icon svg,
+html.dark-mode .phone .bt-icon-btn svg,
+html.dark-mode .phone .ed-icon-btn svg,
+html.dark-mode .phone .topf-card-icon svg,
+html.dark-mode .phone .topf-card-arrow svg,
+html.dark-mode .phone .ms-bolt-bubble svg,
+html.dark-mode .phone .bt-impact-leaf svg,
+html.dark-mode .phone .bt-impact-icon svg,
+html.dark-mode .phone .home-impact-icon svg,
+html.dark-mode .phone .home-impact-chip-icon svg,
+html.dark-mode .phone .institution-mini-icon svg,
+html.dark-mode .phone .emergency-icon svg,
+html.dark-mode .phone .cal-strip-icon svg,
+html.dark-mode .phone .tile-check svg,
+html.dark-mode .phone .sheet-close svg,
+html.dark-mode .phone .create-close svg,
+html.dark-mode .phone .create-submit-arrow svg,
+html.dark-mode .phone .cal-nav svg {
+  stroke: #f0f0f0 !important;
+}
+
+html.dark-mode .phone .beteiligen-pill,
+html.dark-mode .phone .ed-pill,
+html.dark-mode .phone .status-pill,
+html.dark-mode .phone .org-badge,
+html.dark-mode .phone .seg-control,
+html.dark-mode .phone .seg-track,
+html.dark-mode .phone .create-cat,
+html.dark-mode .phone .create-label-option,
+html.dark-mode .phone .home-impact-chip {
+  background: rgba(255,255,255,.04) !important;
+  border-color: rgba(255,255,255,.09) !important;
+  color: rgba(240,240,240,.72) !important;
+}
+
+html.dark-mode .phone .beteiligen-pill.active,
+html.dark-mode .phone .ed-pill.active,
+html.dark-mode .phone .tile.active,
+html.dark-mode .phone .map-filter-chip.active,
+html.dark-mode .phone .seg-indicator {
+  background: #050606 !important;
+  border-color: rgba(255,255,255,.18) !important;
+  color: #f0f0f0 !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.08), 0 4px 14px rgba(0,0,0,.42) !important;
+}
+
+html.dark-mode .phone input:not([type="range"]),
+html.dark-mode .phone textarea,
+html.dark-mode .phone select,
+html.dark-mode .phone .field-input,
+html.dark-mode .phone .comment-input-field,
+html.dark-mode .phone .message-input,
+html.dark-mode .phone .create-input,
+html.dark-mode .phone .create-input-wrap,
+html.dark-mode .phone .create-textarea,
+html.dark-mode .phone .create-img-area,
+html.dark-mode .phone .create-label-options {
+  background: rgba(255,255,255,.035) !important;
+  border-color: rgba(255,255,255,.10) !important;
+  color: #f0f0f0 !important;
+}
+
+html.dark-mode .phone input::placeholder,
+html.dark-mode .phone textarea::placeholder,
+html.dark-mode .phone .field-input::placeholder,
+html.dark-mode .phone .comment-input-field::placeholder,
+html.dark-mode .phone .message-input::placeholder,
+html.dark-mode .phone .create-input::placeholder,
+html.dark-mode .phone .create-textarea::placeholder {
+  color: rgba(240,240,240,.38) !important;
+}
+
+html.dark-mode .phone .beteiligen-cta,
+html.dark-mode .phone .donate-energy-btn,
+html.dark-mode .phone .btn-confirm,
+html.dark-mode .phone .btn-cancel,
+html.dark-mode .phone .danger-button {
+  background: #050606 !important;
+  border: 1px solid rgba(255,255,255,.14) !important;
+  color: #f0f0f0 !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.08), 0 8px 24px rgba(0,0,0,.42) !important;
+}
+
+html.dark-mode .phone .beteiligen-legal,
+html.dark-mode .phone .bt-impact-desc,
+html.dark-mode .phone .bt-impact-text,
+html.dark-mode .phone .source-copy,
+html.dark-mode .phone .home-impact-copy,
+html.dark-mode .phone .home-impact-line,
+html.dark-mode .phone .home-impact-status-sub,
+html.dark-mode .phone .home-impact-thanks-text,
+html.dark-mode .phone .institution-info-copy,
+html.dark-mode .phone .message-panel-copy {
+  color: rgba(240,240,240,.68) !important;
+}
+
+html.dark-mode .phone #mapboxMap,
+html.dark-mode .phone .leaflet-container,
+html.dark-mode .phone .map {
+  background: #080909 !important;
+}
+
+html.dark-mode .phone .leaflet-tile {
+  filter: grayscale(1) brightness(1.08) contrast(1.08) saturate(.72) !important;
+}
+
+html.dark-mode .phone .leaflet-control,
+html.dark-mode .phone .leaflet-control a,
+html.dark-mode .phone .leaflet-control-attribution {
+  background: rgba(0,0,0,.58) !important;
+  color: rgba(240,240,240,.72) !important;
+  border-color: rgba(255,255,255,.12) !important;
+}
+
+/* CommunityMap readability: keep all text bright on dark cards/map */
+html.dark-mode .phone .page-title,
+html.dark-mode .phone .destination .name,
+html.dark-mode .phone .source-title,
+html.dark-mode .phone .source-title strong,
+html.dark-mode .phone .source-number,
+html.dark-mode .phone .goal-value,
+html.dark-mode .phone .goal-number,
+html.dark-mode .phone .home-impact-title,
+html.dark-mode .phone .home-impact-title strong,
+html.dark-mode .phone .home-impact-number,
+html.dark-mode .phone .home-impact-line,
+html.dark-mode .phone .home-impact-section-title,
+html.dark-mode .phone .home-impact-status-title,
+html.dark-mode .phone .home-impact-thanks-text,
+html.dark-mode .phone .institution-info-copy strong,
+html.dark-mode .phone .destination-source.institution-active #sourceGoalText,
+html.dark-mode .phone .ed-title,
+html.dark-mode .phone .ed-value,
+html.dark-mode .phone .ed-impact-title,
+html.dark-mode .phone .ed-message-title,
+html.dark-mode .phone .tile .label {
+  color: #f5f5f2 !important;
+}
+
+html.dark-mode .phone .destination .address,
+html.dark-mode .phone .source-copy,
+html.dark-mode .phone .source-unit,
+html.dark-mode .phone .goal-eyebrow,
+html.dark-mode .phone .goal-unit,
+html.dark-mode .phone .goal-meta-value,
+html.dark-mode .phone .goal-meta-label,
+html.dark-mode .phone .donation-goal-top,
+html.dark-mode .phone .surplus-summary,
+html.dark-mode .phone .home-impact-unit,
+html.dark-mode .phone .home-impact-copy,
+html.dark-mode .phone .home-impact-status-sub,
+html.dark-mode .phone .institution-info-copy span,
+html.dark-mode .phone .ed-eyebrow,
+html.dark-mode .phone .ed-unit,
+html.dark-mode .phone .ed-impact-desc,
+html.dark-mode .phone .ed-legal,
+html.dark-mode .phone .tile-priority {
+  color: rgba(245,245,242,.74) !important;
+}
+
+html.dark-mode .phone .goal-separator,
+html.dark-mode .phone .home-impact-heart,
+html.dark-mode .phone .home-impact-arrow {
+  color: rgba(245,245,242,.86) !important;
+}
+
+html.dark-mode .phone .ed-impact,
+html.dark-mode .phone .ed-message-card,
+html.dark-mode .phone .home-impact-status,
+html.dark-mode .phone .home-impact-thanks {
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.035), rgba(255,255,255,.008)),
+    #121313 !important;
+  border-color: rgba(255,255,255,.075) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.045), 0 8px 22px rgba(0,0,0,.30) !important;
+}
+
+html.dark-mode .phone .source-close,
+html.dark-mode .phone .poi-close,
+html.dark-mode .phone .ed-message-chip,
+html.dark-mode .phone .message-chip {
+  background: rgba(255,255,255,.055) !important;
+  border-color: rgba(255,255,255,.12) !important;
+  color: rgba(245,245,242,.82) !important;
+}
+
+html.dark-mode .phone .ed-message-chip.active,
+html.dark-mode .phone .message-chip.active {
+  background: #050606 !important;
+  border-color: rgba(255,255,255,.18) !important;
+  color: #f5f5f2 !important;
+}
+
+html.dark-mode .phone .ed-cta {
+  background: #050606 !important;
+  border: 1px solid rgba(255,255,255,.14) !important;
+  color: #f5f5f2 !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.08), 0 8px 24px rgba(0,0,0,.42) !important;
+}
+
+/* Community: Beteiligungs-Sheet */
+html.dark-mode .phone .beteiligen-sheet .stepper-value {
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+html.dark-mode .phone .beteiligen-sheet .bt-impact-leaf svg,
+html.dark-mode .phone .beteiligen-sheet .bt-impact-icon svg,
+html.dark-mode .phone .beteiligen-sheet .bt-icon-btn svg {
+  stroke: #ffffff !important;
+}
+
+html.dark-mode .phone .beteiligen-sheet .bt-icon-btn {
+  display: grid !important;
+  place-items: center !important;
+  padding: 0 !important;
+}
+
+html.dark-mode .phone .beteiligen-sheet .bt-icon-btn svg {
+  display: block !important;
+  margin: 0 !important;
+  position: static !important;
+  transform: none !important;
+}
+
+html.dark-mode .phone .topf-label {
+  color: rgba(240,240,240,.42) !important;
+}
+
+html.dark-mode .phone .stat-pill {
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.035), rgba(255,255,255,.008)),
+    #121313 !important;
+  border-color: rgba(255,255,255,.075) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.045),
+    0 10px 28px rgba(0,0,0,.34) !important;
+}
+
+/* Notifications: einheitliche dunkle Außen- und Inhaltsfläche */
+html.dark-mode .phone .notifications-modal .modal-sheet,
+html.dark-mode .phone .notifications-modal .sheet-header,
+html.dark-mode .phone .notifications-modal .sheet-body {
+  background: #101111 !important;
+}
+
+html.dark-mode .phone .notifications-modal .modal-sheet {
+  border-color: rgba(255,255,255,.09) !important;
+}
+
+html.dark-mode .phone .notifications-modal .sheet-header {
+  border-bottom-color: rgba(255,255,255,.07) !important;
+}
+
+html.dark-mode .phone .notifications-modal .sheet-header::before {
+  background: rgba(255,255,255,.14) !important;
+}
+
+/* Dark-mode contrast audit: CommunityMap */
+html.dark-mode .phone .emergency-text .title,
+html.dark-mode .phone .inst-title {
+  color: #f5f5f2 !important;
+}
+
+html.dark-mode .phone .emergency-text .sub,
+html.dark-mode .phone .inst-sub {
+  color: rgba(245,245,242,.62) !important;
+}
+
+html.dark-mode .phone .institution-icon {
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.045), rgba(255,255,255,.012)),
+    #050606 !important;
+  border-color: rgba(255,255,255,.14) !important;
+  color: #f5f5f2 !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.07), 0 4px 14px rgba(0,0,0,.52) !important;
+}
+
+html.dark-mode .phone .ed-step-btn {
+  background: #050606 !important;
+  border-color: rgba(255,255,255,.14) !important;
+  color: #f5f5f2 !important;
+}
+
+html.dark-mode .phone .ed-step-btn:active {
+  background: #1a1b1b !important;
+}
+
+/* Inputs that are designed to merge with their parent surface */
+html.dark-mode .phone .profile-name-input,
+html.dark-mode .phone .field-input,
+html.dark-mode .phone .stepper-value,
+html.dark-mode .phone .ed-value {
+  background: transparent !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+  color: #f5f5f2 !important;
+}
+
+html.dark-mode .phone .profile-name,
+html.dark-mode .phone .profile-name-text,
+html.dark-mode .phone .profile-name-input {
+  background: transparent !important;
+}
+
+html.dark-mode .phone .profile-name-input {
+  -webkit-text-fill-color: #f5f5f2 !important;
+  caret-color: #f5f5f2 !important;
+}
+
+html.dark-mode .phone .profile-name-input::selection {
+  background: transparent !important;
+  color: #f5f5f2 !important;
+}
+
+html.dark-mode .phone .profile-name-input::-moz-selection {
+  background: transparent !important;
+  color: #f5f5f2 !important;
+}
+
+html.dark-mode .phone .profile-name-input:-webkit-autofill,
+html.dark-mode .phone .profile-name-input:-webkit-autofill:hover,
+html.dark-mode .phone .profile-name-input:-webkit-autofill:focus {
+  background-color: transparent !important;
+  background-image: none !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: #f5f5f2 !important;
+  box-shadow: 0 0 0 1000px transparent inset !important;
+}
+
+/* Settings sub-pages and their bottom sheets */
+html.dark-mode .phone .bottom-sheet {
+  background: #101111 !important;
+  color: #f5f5f2 !important;
+  box-shadow: 0 -10px 32px rgba(0,0,0,.52) !important;
+}
+
+html.dark-mode .phone .bottom-sheet .sheet-body,
+html.dark-mode .phone .bottom-sheet .sheet-body p,
+html.dark-mode .phone .bottom-sheet .sheet-body li {
+  color: rgba(245,245,242,.76) !important;
+}
+
+html.dark-mode .phone .bottom-sheet .sheet-body label {
+  color: rgba(245,245,242,.52) !important;
+}
+
+html.dark-mode .phone .bottom-sheet .sheet-input {
+  background: #101111 !important;
+  border-color: rgba(255,255,255,.12) !important;
+  color: #f5f5f2 !important;
+}
+
+html.dark-mode .phone .bottom-sheet .sheet-btn {
+  background: #050606 !important;
+  border-color: rgba(255,255,255,.14) !important;
+  color: #f5f5f2 !important;
+}
+
+html.dark-mode .phone .bottom-sheet .sheet-btn.outline {
+  background: transparent !important;
+  border-color: rgba(255,255,255,.12) !important;
+  color: rgba(245,245,242,.76) !important;
+}
+
+html.dark-mode .phone .choice-dot {
+  border-color: rgba(255,255,255,.28) !important;
+}
+
+html.dark-mode .phone .choice-row.selected .choice-dot {
+  background: #f5f5f2 !important;
+  border-color: #f5f5f2 !important;
+}
+
+html.dark-mode .phone .choice-row.selected .choice-dot::after {
+  background: #101111 !important;
+}
+
+/* Notification and comment secondary text */
+html.dark-mode .phone .notifications-modal .notif-time,
+html.dark-mode .phone .notifications-modal .notif-empty-copy {
+  color: rgba(245,245,242,.52) !important;
+}
+
+html.dark-mode .phone .notifications-modal .notif-empty-title {
+  color: #f5f5f2 !important;
+}
+
+html.dark-mode .phone .notifications-modal .notif-delete {
+  color: rgba(245,245,242,.38) !important;
+}
+
+html.dark-mode .phone .notifications-modal .notif-delete:hover {
+  color: rgba(245,245,242,.72) !important;
+}
+
+html.dark-mode .phone .comment-empty,
+html.dark-mode .phone .comment-more-btn,
+html.dark-mode .phone .comment-delete-btn {
+  color: rgba(245,245,242,.48) !important;
+}
+
+/* Neuigkeiten: expanded calendar */
+html.dark-mode .phone .cal-month-label,
+html.dark-mode .phone .cal-full-cell {
+  color: #f5f5f2 !important;
+}
+
+html.dark-mode .phone .cal-full-dayname,
+html.dark-mode .phone .cal-full-cell.other-month {
+  color: rgba(245,245,242,.42) !important;
+}
+
+html.dark-mode .phone .cal-full-cell.today::before,
+html.dark-mode .phone .cal-full-cell.has-event.today::before {
+  border-color: #f5f5f2 !important;
+}
+
+html.dark-mode .phone .cal-full-cell:hover {
+  background: rgba(255,255,255,.07) !important;
+}
+
+/* Solarbank detail: progress and article-specific elements */
+html.dark-mode .phone .detail-progress-card {
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.035), rgba(255,255,255,.008)),
+    #121313 !important;
+  border-color: rgba(255,255,255,.075) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.045), 0 10px 28px rgba(0,0,0,.34) !important;
+}
+
+html.dark-mode .phone .detail-badge,
+html.dark-mode .phone .detail-tag {
+  background: rgba(255,255,255,.05) !important;
+  border-color: rgba(255,255,255,.09) !important;
+  color: rgba(245,245,242,.74) !important;
+}
+
+html.dark-mode .phone .detail-progress-val,
+html.dark-mode .phone .detail-stat-val,
+html.dark-mode .phone .detail-text strong {
+  color: #f5f5f2 !important;
+}
+
+html.dark-mode .phone .detail-progress-label,
+html.dark-mode .phone .detail-progress-unit,
+html.dark-mode .phone .detail-progress-goal,
+html.dark-mode .phone .detail-stat-label,
+html.dark-mode .phone .detail-quote p,
+html.dark-mode .phone .detail-quote-author,
+html.dark-mode .phone .detail-cta-legal {
+  color: rgba(245,245,242,.62) !important;
+}
+
+html.dark-mode .phone .detail-stats-row,
+html.dark-mode .phone .detail-stat + .detail-stat {
+  border-color: rgba(255,255,255,.07) !important;
+}
+
+html.dark-mode .phone .detail-quote {
+  border-left-color: rgba(255,255,255,.18) !important;
+}
+
+/* Neuigkeiten: Pfeile exakt in ihren runden Buttons zentrieren */
+html.dark-mode .phone .feat-arrow,
+html.dark-mode .phone .feed-arrow {
+  display: grid !important;
+  place-items: center !important;
+  padding: 0 !important;
+}
+
+html.dark-mode .phone .feat-arrow svg,
+html.dark-mode .phone .feed-arrow svg {
+  display: block !important;
+  position: static !important;
+  margin: 0 !important;
+  transform: none !important;
+}
+
+/* Shared dark glassmorphism — based on CommunityMap's destination glass */
+html.dark-mode .phone .destination,
+html.dark-mode .phone .feat-tag,
+html.dark-mode .phone .detail-location,
+html.dark-mode .phone .hero-actions,
+html.dark-mode .phone .detail-back,
+html.dark-mode .phone .detail-share,
+html.dark-mode .phone .bt-hero-location,
+html.dark-mode .phone .bt-hero-link,
+html.dark-mode .phone .tag-active,
+html.dark-mode .phone .an-filter,
+html.dark-mode .phone .communer-more,
+html.dark-mode .phone .feed-av-more {
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.055), rgba(255,255,255,.012)),
+    rgba(5,6,6,.78) !important;
+  border-color: rgba(255,255,255,.14) !important;
+  color: rgba(255,255,255,.94) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.08),
+    0 8px 22px rgba(0,0,0,.42) !important;
+  backdrop-filter: blur(24px) saturate(150%) !important;
+  -webkit-backdrop-filter: blur(24px) saturate(150%) !important;
+}
+
+html.dark-mode .phone .feat-tag svg,
+html.dark-mode .phone .detail-location svg,
+html.dark-mode .phone .detail-back svg,
+html.dark-mode .phone .detail-share svg,
+html.dark-mode .phone .bt-hero-location svg,
+html.dark-mode .phone .bt-hero-link svg,
+html.dark-mode .phone .an-filter svg {
+  stroke: rgba(255,255,255,.94) !important;
+}
+
+/* Profile settings: consistent dividers, merged inputs, and a solid dark CTA. */
+html.dark-mode .phone .field-input-row .field-row:first-child {
+  border-top: 1px solid rgba(255,255,255,.06) !important;
+}
+
+html.dark-mode .phone input.field-input {
+  background: transparent !important;
+  background-image: none !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+}
+
+html.dark-mode .phone input.field-input:-webkit-autofill,
+html.dark-mode .phone input.field-input:-webkit-autofill:hover,
+html.dark-mode .phone input.field-input:-webkit-autofill:focus {
+  background-color: transparent !important;
+  background-image: none !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: #f5f5f2 !important;
+  box-shadow: 0 0 0 1000px transparent inset !important;
+}
+
+html.dark-mode .phone .save-btn {
+  background: #050606 !important;
+  border-color: #050606 !important;
+  color: #ffffff !important;
+  box-shadow: none !important;
+}
+
+html.dark-mode .phone .save-btn:active {
+  background: #0b0c0c !important;
+  border-color: #0b0c0c !important;
+  box-shadow: none !important;
+}
+
+/* Energy values use the surrounding overlay/card surface without gray strips. */
+html.dark-mode .phone input.ed-value,
+html.dark-mode .phone input.stepper-value,
+html.dark-mode .phone .ed-stepper > div,
+html.dark-mode .phone .goal-summary,
+html.dark-mode .phone .goal-value,
+html.dark-mode .phone .donation-goal,
+html.dark-mode .phone .institution-action-sheet {
+  background: transparent !important;
+  background-image: none !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+}
+
+html.dark-mode .phone input.ed-value,
+html.dark-mode .phone input.stepper-value {
+  -webkit-text-fill-color: #f5f5f2 !important;
+}
+
+/* Final dark-only cleanup for profile and institution energy cards. */
+html.dark-mode .phone input.profile-name-input {
+  background: transparent !important;
+  background-image: none !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+}
+
+html.dark-mode .phone .profile-card .avatar {
+  background: #0c0d0c !important;
+  border: 1px solid #0c0d0c !important;
+  box-shadow: 0 4px 12px rgba(32,32,32,.05) !important;
+}
+
+html.dark-mode .phone .profile-card .avatar img {
+  width: 88% !important;
+  height: 88% !important;
+  object-fit: contain !important;
+  object-position: center !important;
+  background: #0c0d0c !important;
+  border-radius: 50% !important;
+}
+
+html.dark-mode .phone .avatar-field-circle {
+  background: #000000 !important;
+}
+
+html.dark-mode .phone .avatar-opt-inner {
+  background: #0c0d0c !important;
+  background-image: none !important;
+}
+
+html.dark-mode .phone .goal-dots circle.active-dot,
+html.dark-mode .phone .goal-dots circle[fill="rgba(23,26,22,.78)"] {
+  fill: #ffffff !important;
+  opacity: 1 !important;
+}
+
+html.dark-mode .phone .goal-dots circle.inactive-dot,
+html.dark-mode .phone .goal-dots circle[fill="rgba(23,26,22,.14)"] {
+  fill: #000000 !important;
+  opacity: 1 !important;
+}
+
+html.dark-mode .phone .message-panel {
+  background: transparent !important;
+  background-image: none !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+}
+
+/* Neuigkeiten: dark-only create-post form cleanup. */
+html.dark-mode .phone .create-input-wrap > svg {
+  stroke: #ffffff !important;
+  color: #ffffff !important;
+}
+
+html.dark-mode .phone .create-input-wrap input,
+html.dark-mode .phone .create-input-wrap input:hover,
+html.dark-mode .phone .create-input-wrap input:focus {
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  color: #f0f0f0 !important;
+  -webkit-text-fill-color: #f0f0f0 !important;
+}
+
+html.dark-mode .phone .create-input-wrap input:-webkit-autofill,
+html.dark-mode .phone .create-input-wrap input:-webkit-autofill:hover,
+html.dark-mode .phone .create-input-wrap input:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0 1000px #191a1a inset !important;
+  -webkit-text-fill-color: #f0f0f0 !important;
+}
+
+html.dark-mode .phone .create-submit,
+html.dark-mode .phone .create-submit-arrow {
+  background: #000000 !important;
+  background-image: none !important;
+  box-shadow: none !important;
+}
+
+html.dark-mode .phone .create-submit {
+  border-color: #000000 !important;
+}
+
+html.dark-mode .phone .create-submit-arrow svg {
+  stroke: #ffffff !important;
+}
+
+html.dark-mode .phone .create-img-icon svg {
+  stroke: #ffffff !important;
+  color: #ffffff !important;
+}
+
+html.dark-mode .phone .create-cat.active {
+  background: #000000 !important;
+  background-image: none !important;
+  border-color: rgba(255,255,255,.18) !important;
+  color: #ffffff !important;
+  box-shadow: none !important;
+}
+
+html.dark-mode .phone .create-cat.active .create-cat-icon {
+  background: #000000 !important;
+  background-image: none !important;
+  color: #ffffff !important;
+}
+
+html.dark-mode .phone .topf-card-icon svg circle {
+  fill: #ffffff !important;
+  stroke: none !important;
+}
+
+/* Rollback of the global palette experiment: keep the earlier component-level
+   dark-mode rules as the source of truth and leave light mode unchanged. */
+@media not all {
+
+/* ══════════════════════════════════════════
+   CANONICAL DARK-MODE PALETTE
+   One final source of truth for every page.
+   ══════════════════════════════════════════ */
+html.dark-mode {
+  --dm-page: #0b0c0c;
+  --dm-surface: #101111;
+  --dm-card: #121313;
+  --dm-control: #050606;
+  --dm-control-active: #1a1b1b;
+  --dm-text: #f5f5f2;
+  --dm-text-secondary: rgba(245,245,242,.72);
+  --dm-text-muted: rgba(245,245,242,.52);
+  --dm-text-faint: rgba(245,245,242,.38);
+  --dm-border: rgba(255,255,255,.09);
+  --dm-border-strong: rgba(255,255,255,.14);
+  --dm-card-fill:
+    linear-gradient(180deg, rgba(255,255,255,.035), rgba(255,255,255,.008)),
+    var(--dm-card);
+  --dm-control-fill:
+    linear-gradient(180deg, rgba(255,255,255,.045), rgba(255,255,255,.012)),
+    var(--dm-control);
+  --dm-card-shadow:
+    inset 0 1px 0 rgba(255,255,255,.045),
+    0 10px 28px rgba(0,0,0,.34);
+
+  /* Keep page-local variable systems on the same palette. */
+  --bg: var(--dm-page);
+  --panel: var(--dm-card);
+  --panel-dark: var(--dm-control);
+  --panel-mid: var(--dm-control-active);
+  --circle: var(--dm-control);
+  --white: var(--dm-surface);
+  --card-solid: var(--dm-card);
+  --soft-panel: rgba(255,255,255,.035);
+  --text: var(--dm-text);
+  --muted: var(--dm-text-muted);
+  --border: var(--dm-border);
+  --border-soft: rgba(255,255,255,.07);
+  --border-faint: rgba(255,255,255,.05);
+}
+
+html.dark-mode,
+html.dark-mode body {
+  background: var(--dm-page) !important;
+  color: var(--dm-text) !important;
+}
+
+html.dark-mode .phone,
+html.dark-mode .phone .app,
+html.dark-mode .phone .content,
+html.dark-mode .phone .detail-body,
+html.dark-mode .phone .sheet-body,
+html.dark-mode .phone .notif-sheet,
+html.dark-mode .phone .comment-sheet,
+html.dark-mode .phone .bt-sheet,
+html.dark-mode .phone .beteiligen-sheet,
+html.dark-mode .phone .energy-donation-sheet,
+html.dark-mode .phone .create-sheet,
+html.dark-mode .phone .avatar-sheet,
+html.dark-mode .phone .bottom-sheet,
+html.dark-mode .phone .cal-full,
+html.dark-mode .phone .dtpick-card,
+html.dark-mode .phone .notifications-modal .modal-sheet,
+html.dark-mode .phone .notifications-modal .sheet-header,
+html.dark-mode .phone .notifications-modal .sheet-body {
+  background: var(--dm-surface) !important;
+  color: var(--dm-text) !important;
+}
+
+html.dark-mode .phone .glass-card,
+html.dark-mode .phone .metric-card,
+html.dark-mode .phone .stat-card,
+html.dark-mode .phone .stat-pill,
+html.dark-mode .phone .topf-card,
+html.dark-mode .phone .topf-card-inner,
+html.dark-mode .phone .topf-card-cta,
+html.dark-mode .phone .milestone-card,
+html.dark-mode .phone .feed-card,
+html.dark-mode .phone .feat-card,
+html.dark-mode .phone .inst-card,
+html.dark-mode .phone .msg-card,
+html.dark-mode .phone .notif-row,
+html.dark-mode .phone .setting-section,
+html.dark-mode .phone .settings-group,
+html.dark-mode .phone .settings-card,
+html.dark-mode .phone .profile-card,
+html.dark-mode .phone .mini-card,
+html.dark-mode .phone .warning-card,
+html.dark-mode .phone .proj-card,
+html.dark-mode .phone .project-card,
+html.dark-mode .phone .archive-item,
+html.dark-mode .phone .vote-card,
+html.dark-mode .phone .map-card,
+html.dark-mode .phone .map-panel,
+html.dark-mode .phone .em-card,
+html.dark-mode .phone .emergency,
+html.dark-mode .phone .grid-item,
+html.dark-mode .phone .energy-item,
+html.dark-mode .phone .tile,
+html.dark-mode .phone .home-impact-card,
+html.dark-mode .phone .home-impact-sheet,
+html.dark-mode .phone .institution-info-card,
+html.dark-mode .phone .institution-action-sheet,
+html.dark-mode .phone .message-panel,
+html.dark-mode .phone .ed-message-card,
+html.dark-mode .phone .bt-impact,
+html.dark-mode .phone .detail-progress-card {
+  background: var(--dm-card-fill) !important;
+  border-color: var(--dm-border) !important;
+  box-shadow: var(--dm-card-shadow) !important;
+  color: var(--dm-text) !important;
+}
+
+html.dark-mode .phone .app-icon-btn,
+html.dark-mode .phone .icon-button,
+html.dark-mode .phone .setting-icon,
+html.dark-mode .phone .energy-option-icon,
+html.dark-mode .phone .metric-card .icon-bubble,
+html.dark-mode .phone .cta-arrow,
+html.dark-mode .phone .inst-icon,
+html.dark-mode .phone .msg-avatar,
+html.dark-mode .phone .notif-icon,
+html.dark-mode .phone .notif-empty-icon,
+html.dark-mode .phone .detail-info-icon,
+html.dark-mode .phone .bt-icon-btn,
+html.dark-mode .phone .ed-icon-btn,
+html.dark-mode .phone .bt-step-btn,
+html.dark-mode .phone .ed-step-btn,
+html.dark-mode .phone .topf-card-icon,
+html.dark-mode .phone .topf-card-arrow,
+html.dark-mode .phone .ms-bolt-bubble,
+html.dark-mode .phone .bt-impact-leaf,
+html.dark-mode .phone .bt-impact-icon,
+html.dark-mode .phone .home-impact-icon,
+html.dark-mode .phone .home-impact-chip-icon,
+html.dark-mode .phone .institution-icon,
+html.dark-mode .phone .institution-mini-icon,
+html.dark-mode .phone .emergency-icon,
+html.dark-mode .phone .cal-strip-icon,
+html.dark-mode .phone .tile-check,
+html.dark-mode .phone .sheet-close,
+html.dark-mode .phone .create-close,
+html.dark-mode .phone .create-cat-icon,
+html.dark-mode .phone .create-submit-arrow,
+html.dark-mode .phone .dtpick-spin-btn,
+html.dark-mode .phone .dtpick-ok,
+html.dark-mode .phone .cal-nav,
+html.dark-mode .phone .avatar-edit-btn,
+html.dark-mode .phone .sheet-upload-btn,
+html.dark-mode .phone .feat-arrow,
+html.dark-mode .phone .feed-arrow,
+html.dark-mode .phone .fab {
+  background: var(--dm-control-fill) !important;
+  border-color: var(--dm-border-strong) !important;
+  color: var(--dm-text) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.07), 0 4px 14px rgba(0,0,0,.52) !important;
+}
+
+html.dark-mode .phone .header-title,
+html.dark-mode .phone h1,
+html.dark-mode .phone .page-title,
+html.dark-mode .phone .setting-title,
+html.dark-mode .phone .energy-option-title,
+html.dark-mode .phone .detail-title,
+html.dark-mode .phone .detail-info-value,
+html.dark-mode .phone .stat-value,
+html.dark-mode .phone .topf-card-title,
+html.dark-mode .phone .ms-value,
+html.dark-mode .phone .feed-text,
+html.dark-mode .phone .feat-title,
+html.dark-mode .phone .vote-title,
+html.dark-mode .phone .archive-title,
+html.dark-mode .phone .comment-title,
+html.dark-mode .phone .comment-name,
+html.dark-mode .phone .org-post-text,
+html.dark-mode .phone .bt-title,
+html.dark-mode .phone .bt-impact-title,
+html.dark-mode .phone .source-title,
+html.dark-mode .phone .source-number,
+html.dark-mode .phone .goal-value,
+html.dark-mode .phone .goal-number,
+html.dark-mode .phone .home-impact-title,
+html.dark-mode .phone .home-impact-number,
+html.dark-mode .phone .ed-title,
+html.dark-mode .phone .ed-value,
+html.dark-mode .phone .emergency-text .title,
+html.dark-mode .phone .inst-title {
+  color: var(--dm-text) !important;
+}
+
+html.dark-mode .phone p,
+html.dark-mode .phone li,
+html.dark-mode .phone .setting-desc,
+html.dark-mode .phone .energy-option-desc,
+html.dark-mode .phone .detail-text,
+html.dark-mode .phone .detail-desc,
+html.dark-mode .phone .vote-desc,
+html.dark-mode .phone .archive-desc,
+html.dark-mode .phone .pot-desc,
+html.dark-mode .phone .feed-excerpt,
+html.dark-mode .phone .notif-text,
+html.dark-mode .phone .comment-text,
+html.dark-mode .phone .org-post-body,
+html.dark-mode .phone .bt-impact-desc,
+html.dark-mode .phone .bt-impact-text,
+html.dark-mode .phone .source-copy,
+html.dark-mode .phone .home-impact-copy,
+html.dark-mode .phone .institution-info-copy,
+html.dark-mode .phone .message-panel-copy {
+  color: var(--dm-text-secondary) !important;
+}
+
+html.dark-mode .phone .header-eyebrow,
+html.dark-mode .phone .section-label,
+html.dark-mode .phone .section-label *,
+html.dark-mode .phone .section-title,
+html.dark-mode .phone .eyebrow,
+html.dark-mode .phone .detail-eyebrow,
+html.dark-mode .phone .detail-info-label,
+html.dark-mode .phone .profile-meta,
+html.dark-mode .phone .stat-label,
+html.dark-mode .phone .stat-unit,
+html.dark-mode .phone .feed-time,
+html.dark-mode .phone .org-post-time,
+html.dark-mode .phone .comment-time,
+html.dark-mode .phone .milestone-section-label,
+html.dark-mode .phone .feed-section-label,
+html.dark-mode .phone .topf-label,
+html.dark-mode .phone .emergency-text .sub,
+html.dark-mode .phone .inst-sub {
+  color: var(--dm-text-muted) !important;
+}
+}

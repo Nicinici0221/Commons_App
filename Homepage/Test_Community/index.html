@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Wien Commons Community</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="app">
+        <!-- Status Bar -->
+        <div class="status-bar">
+            <span class="time">15:04</span>
+            <div class="dynamic-island"></div>
+            <div class="status-icons">
+                <svg width="18" height="12" viewBox="0 0 18 12" fill="none">
+                    <path d="M1 8.5C1 8.5 1 10 2.5 10C4 10 4 8.5 4 8.5V1H1V8.5Z" fill="currentColor"/>
+                    <path d="M6 6C6 6 6 10 7.5 10C9 10 9 6 9 6V1H6V6Z" fill="currentColor" opacity="0.4"/>
+                    <path d="M11 3.5C11 3.5 11 10 12.5 10C14 10 14 3.5 14 3.5V1H11V3.5Z" fill="currentColor" opacity="0.4"/>
+                    <path d="M16 1.5C16 1.5 16 10 17 10C17.5 10 17.5 1.5 17.5 1.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                </svg>
+                <svg width="16" height="12" viewBox="0 0 16 12" fill="none">
+                    <path d="M8 2C4.5 2 1.5 3.5 0 6C1.5 8.5 4.5 10 8 10C11.5 10 14.5 8.5 16 6C14.5 3.5 11.5 2 8 2Z" fill="currentColor"/>
+                    <circle cx="8" cy="6" r="2" fill="#f2f2f7"/>
+                </svg>
+                <div class="battery">
+                    <div class="battery-body"><div class="battery-level"></div></div>
+                    <div class="battery-cap"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Header -->
+        <header class="page-header">
+            <div class="header-text">
+                <p class="overline">Wien Commons</p>
+                <h1>Community</h1>
+            </div>
+            <div class="header-actions">
+                <button class="icon-btn pressable relative" aria-label="Benachrichtigungen">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/>
+                        <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/>
+                    </svg>
+                    <span class="badge"></span>
+                </button>
+                <button class="icon-btn pressable" aria-label="Menü">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/>
+                    </svg>
+                </button>
+            </div>
+        </header>
+
+        <!-- Stats -->
+        <section class="stats-grid">
+            <div class="stat-card pressable">
+                <p class="stat-label">Mitglieder</p>
+                <div class="stat-value">
+                    <span class="stat-num" data-target="242">0</span>
+                    <span class="stat-unit">Akt.</span>
+                </div>
+            </div>
+            <div class="stat-card pressable">
+                <p class="stat-label">Diese Woche</p>
+                <div class="stat-value">
+                    <span class="stat-num" data-target="2.4" data-float="true">0</span>
+                    <span class="stat-unit">MWh</span>
+                </div>
+            </div>
+            <div class="stat-card pressable">
+                <p class="stat-label">Projekte</p>
+                <div class="stat-value">
+                    <span class="stat-num" data-target="8">0</span>
+                    <span class="stat-unit">lokal</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Spenden Ziel -->
+        <section class="donation-section">
+            <p class="section-label">Nächstes Spendenziell</p>
+            <div class="donation-card pressable">
+                <img src="https://images.unsplash.com/photo-1497435334941-8c899ee9e8e9?w=800&q=80&auto=format&fit=crop" 
+                     class="donation-bg" alt="Energy Bench" onload="this.classList.add('loaded')">
+                <div class="donation-overlay"></div>
+                
+                <div class="donation-content">
+                    <div class="donation-top">
+                        <div class="donation-title-wrap">
+                            <h2>Energy Bench Vienna</h2>
+                            <p>Solarbetriebene Community-Bänke fürs Grätzel.</p>
+                        </div>
+                        <div class="avatar-group">
+                            <img src="https://i.pravatar.cc/150?img=11" class="avatar" alt="">
+                            <img src="https://i.pravatar.cc/150?img=5" class="avatar" alt="">
+                            <img src="https://i.pravatar.cc/150?img=3" class="avatar" alt="">
+                            <div class="avatar-more">+29</div>
+                        </div>
+                    </div>
+
+                    <div class="donation-bottom">
+                        <div class="progress-percent">67%</div>
+                        <div class="progress-dots">
+                            <div class="dot dot-orange"></div><div class="dot dot-orange"></div>
+                            <div class="dot dot-orange"></div><div class="dot dot-orange"></div>
+                            <div class="dot dot-orange"></div><div class="dot dot-orange"></div>
+                            <div class="dot dot-purple"></div><div class="dot dot-purple"></div>
+                            <div class="dot dot-blue"></div><div class="dot dot-blue"></div>
+                            <div class="dot dot-blue"></div><div class="dot dot-blue"></div>
+                            <div class="dot dot-blue"></div>
+                            <div class="dot dot-white"></div><div class="dot dot-white"></div>
+                            <div class="dot dot-white"></div><div class="dot dot-white"></div>
+                            <div class="dot dot-white"></div><div class="dot dot-white"></div>
+                            <div class="dot dot-white"></div>
+                        </div>
+                        <div class="progress-labels">
+                            <span>6.700 kWh gesammelt</span>
+                            <span>3.300 kWh fehlen noch</span>
+                        </div>
+                        <button class="cta-btn pressable">
+                            Jetzt beteiligen
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M7 17L17 7"/><path d="M7 7h10v10"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Community Karte -->
+        <section class="community-section">
+            <div class="community-card pressable">
+                <div class="community-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                        <circle cx="12" cy="10" r="3"/>
+                    </svg>
+                </div>
+                <div class="community-text">
+                    <h3>Community-Karte</h3>
+                    <p>Lokale Institutionen entdecken & unterstützen.</p>
+                </div>
+                <div class="community-arrow">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M7 17L17 7"/><path d="M7 7h10v10"/>
+                    </svg>
+                </div>
+            </div>
+        </section>
+
+        <!-- Aktuelles -->
+        <section class="news-section">
+            <div class="news-header">
+                <p class="section-label">Aktuelles aus dem Quartier</p>
+                <button class="link-btn pressable">
+                    Alle anzeigen
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M5 12h14"/><path d="M12 5l7 7-7 7"/>
+                    </svg>
+                </button>
+            </div>
+
+            <article class="news-card pressable">
+                <div class="news-image-wrap">
+                    <img src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=400&q=80&auto=format&fit=crop" 
+                         class="news-image" alt="Rooftop Party" onload="this.classList.add('loaded')">
+                </div>
+                <div class="news-content">
+                    <div>
+                        <div class="news-tag">Dachgarten Favoriten</div>
+                        <div class="news-time">Heute, 10:15 Uhr</div>
+                        <h3 class="news-title">Rooftop-Solarfest am Samstag!</h3>
+                        <p class="news-excerpt">Musik, Essen & die ersten kWh live erleben. 🎉</p>
+                    </div>
+                    <div class="news-footer">
+                        <div class="news-actions">
+                            <button class="action-btn pressable" onclick="toggleLike(this)">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                                </svg>
+                                <span>24</span>
+                            </button>
+                            <button class="action-btn pressable">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                                </svg>
+                                <span>12</span>
+                            </button>
+                        </div>
+                        <div class="avatar-group">
+                            <img src="https://i.pravatar.cc/150?img=8" class="avatar avatar-sm" alt="">
+                            <img src="https://i.pravatar.cc/150?img=9" class="avatar avatar-sm" alt="">
+                            <img src="https://i.pravatar.cc/150?img=12" class="avatar avatar-sm" alt="">
+                            <div class="avatar-more avatar-sm">+5</div>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </section>
+
+        <!-- Bottom Nav -->
+        <nav class="bottom-nav">
+            <div class="nav-pill">
+                <button class="nav-btn pressable" onclick="setActive(this)" aria-label="Home">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                        <polyline points="9 22 9 12 15 12 15 22"/>
+                    </svg>
+                </button>
+                <button class="nav-btn nav-active pressable" onclick="setActive(this)" aria-label="Community">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                        <circle cx="9" cy="7" r="4"/>
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                    </svg>
+                    <svg class="nav-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="6 9 12 15 18 9"/>
+                    </svg>
+                </button>
+                <button class="nav-btn pressable" onclick="setActive(this)" aria-label="Projekte">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>
+                    </svg>
+                </button>
+                <button class="nav-btn pressable" onclick="setActive(this)" aria-label="Statistiken">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="18" y1="20" x2="18" y2="10"/>
+                        <line x1="12" y1="20" x2="12" y2="4"/>
+                        <line x1="6" y1="20" x2="6" y2="14"/>
+                    </svg>
+                </button>
+            </div>
+        </nav>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
