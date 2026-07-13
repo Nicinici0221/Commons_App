@@ -51,22 +51,19 @@ html {
   }
 
   body {
-    padding: 0 !important;
+    display: grid !important;
+    place-items: center !important;
+    padding: 20px !important;
     overflow-x: hidden;
   }
 
   body > .phone {
-    width: 100% !important;
-    max-width: 100% !important;
-    height: 100vh !important;
-    height: 100dvh !important;
-    min-height: 100vh !important;
-    min-height: 100svh !important;
-    max-height: 100vh !important;
-    max-height: 100dvh !important;
-    aspect-ratio: auto !important;
-    border-radius: 0 !important;
-    box-shadow: none !important;
+    width: min(440px, calc(100vw - 40px)) !important;
+    max-width: none !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    aspect-ratio: 440 / 956 !important;
   }
 
   .app-header {
@@ -189,6 +186,16 @@ html {
 
 /* In der installierten Web-App zeichnet iOS die echte Statusleiste selbst. */
 @media (max-width: 540px) and (display-mode: standalone) {
+  html:not(.dark-mode),
+  html:not(.dark-mode) body {
+    background: #e2e5df !important;
+  }
+
+  html.dark-mode,
+  html.dark-mode body {
+    background: #0c0c0c !important;
+  }
+
   .statusbar {
     display: none !important;
   }
@@ -198,13 +205,4 @@ html {
     display: none !important;
   }
 
-  .app-header {
-    padding-top: max(24px, calc(var(--app-safe-top) + 8px)) !important;
-  }
-
-  .topbar,
-  .detail-back,
-  .detail-share {
-    top: max(24px, calc(var(--app-safe-top) + 8px)) !important;
-  }
 }
