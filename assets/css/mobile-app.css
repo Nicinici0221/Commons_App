@@ -51,19 +51,23 @@ html {
   }
 
   body {
-    display: grid !important;
-    place-items: center !important;
-    padding: 20px !important;
+    display: block !important;
+    padding: 0 !important;
     overflow-x: hidden;
   }
 
   body > .phone {
-    width: min(440px, calc(100vw - 40px)) !important;
-    max-width: none !important;
-    height: auto !important;
-    min-height: 0 !important;
-    max-height: none !important;
-    aspect-ratio: 440 / 956 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    height: 100vh !important;
+    height: 100dvh !important;
+    min-height: 100vh !important;
+    min-height: 100svh !important;
+    max-height: 100vh !important;
+    max-height: 100dvh !important;
+    aspect-ratio: auto !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
   }
 
   .app-header {
@@ -186,11 +190,6 @@ html {
 
 /* In der installierten Web-App zeichnet iOS die echte Statusleiste selbst. */
 @media (max-width: 540px) and (display-mode: standalone) {
-  html:not(.dark-mode),
-  html:not(.dark-mode) body {
-    background: #e2e5df !important;
-  }
-
   html.dark-mode,
   html.dark-mode body {
     background: #0c0c0c !important;
@@ -203,6 +202,17 @@ html {
   body > .phone::before {
     content: none !important;
     display: none !important;
+  }
+
+  /* Full-Bleed-Farbe hinter der echten iOS-Statusleiste. */
+  html:has(body > .phone.is-intro),
+  body:has(> .phone.is-intro) {
+    background: #02060d !important;
+  }
+
+  html:has(body > .phone .hero-bg),
+  body:has(> .phone .hero-bg) {
+    background: #000000 !important;
   }
 
 }
