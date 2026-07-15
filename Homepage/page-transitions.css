@@ -1,15 +1,6 @@
 html, body { background: #e2e5df; }
 html.dark-mode, html.dark-mode body { background: #0c0c0c !important; }
 
-/* Verhindert einen sichtbaren Wechsel von der System- zur Projektschrift. */
-html.wc-fonts-loading .phone {
-  visibility: hidden !important;
-}
-
-html.wc-fonts-ready .phone {
-  visibility: visible;
-}
-
 @keyframes wc-route-fade-in {
   from { opacity: 0; }
   to { opacity: 1; }

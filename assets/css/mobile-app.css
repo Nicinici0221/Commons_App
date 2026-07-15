@@ -275,7 +275,20 @@ textarea {
     max-height: 100dvh !important;
   }
 
-  /* Full-Bleed-Farbe hinter der echten iOS-Statusleiste. */
+  /*
+   * html/body müssen exakt dieselbe Farbe wie der obere Rand von .phone
+   * zeigen — sonst blitzt bei Rundungsfehlern von 100dvh unter der
+   * Dynamic Island/Statusleiste ein andersfarbiger Spalt des body-
+   * Hintergrunds durch. Das betrifft jede Seite, nicht nur Hero-Seiten.
+   */
+  html, body {
+    background: #fbfbfa !important;
+  }
+
+  html.dark-mode, html.dark-mode body {
+    background: #151515 !important;
+  }
+
   html:has(body > .phone.is-intro),
   body:has(> .phone.is-intro) {
     background: #02060d !important;
