@@ -264,16 +264,15 @@ textarea {
   }
 
   /*
-   * iOS 26 zieht die Systemleiste vom dynamischen Viewport ab. Die App
-   * behält trotzdem die volle Main-Referenzhöhe und wird um exakt diesen
-   * Unterschied nach oben gesetzt. So bleiben alle 440/956-Abstände gleich.
+   * Installierte iOS-Web-App: eigene Statusleiste, App füllt den echten
+   * sichtbaren Viewport (100dvh), damit Tabbar/CTA nie abgeschnitten werden.
    */
   body:not(.is-embedded) > .phone {
     position: relative !important;
-    top: calc(100dvh - 100lvh) !important;
-    height: 100lvh !important;
-    min-height: 100lvh !important;
-    max-height: 100lvh !important;
+    top: 0 !important;
+    height: 100dvh !important;
+    min-height: 100dvh !important;
+    max-height: 100dvh !important;
   }
 
   /* Full-Bleed-Farbe hinter der echten iOS-Statusleiste. */
