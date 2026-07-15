@@ -68,25 +68,21 @@ textarea {
   body:not(.is-embedded) {
     position: fixed !important;
     inset: 0 !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
+    display: block !important;
     padding: 0 !important;
     touch-action: pan-x pan-y;
   }
 
-  /*
-   * Referenzverhältnis 440:956 bleibt auf jedem Gerät erhalten, statt die
-   * App zu strecken. Je nachdem, ob das Gerät schlanker oder breiter als
-   * 440:956 ist, limitiert Breite ODER Höhe – .phone wird zentriert, ein
-   * eventueller Rand zeigt die body-Hintergrundfarbe (siehe unten).
-   */
   body:not(.is-embedded) > .phone {
-    width: min(100%, calc(100dvh * 440 / 956)) !important;
-    height: min(100dvh, calc(100% * 956 / 440)) !important;
+    width: 100% !important;
     max-width: 100% !important;
+    height: 100vh !important;
+    height: 100dvh !important;
+    min-height: 100vh !important;
+    min-height: 100svh !important;
+    max-height: 100vh !important;
     max-height: 100dvh !important;
-    aspect-ratio: 440 / 956 !important;
+    aspect-ratio: auto !important;
     border-radius: 0 !important;
     box-shadow: none !important;
   }
