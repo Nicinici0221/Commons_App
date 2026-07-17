@@ -5,6 +5,11 @@
   const DELAY = 130;
   let navigating = false;
   const primaryRoutes = ['Homepage.html', 'Community.html', 'Projekte.html', 'Analytics.html'];
+  const isInstalledApp = navigator.standalone === true ||
+    window.matchMedia('(display-mode: standalone)').matches ||
+    document.documentElement.classList.contains('pwa-runtime') ||
+    location.search.includes('embed=1');
+  const prefetchedRoutes = new Set();
 
   const scrollSelectors = [
     '.scroll-content',
@@ -77,15 +82,35 @@
     return url.origin === window.location.origin && /\.html(?:$|[?#])/.test(url.href);
   }
 
+  function prefetchRoute(target, urgent = false) {
+    const url = new URL(target, window.location.href);
+    if (url.href === window.location.href || prefetchedRoutes.has(url.href) || !isInternalHtmlUrl(url)) return;
+    prefetchedRoutes.add(url.href);
+    if (urgent && isInstalledApp) {
+      fetch(url.href, { credentials: 'same-origin', cache: 'force-cache' }).catch(() => {});
+      return;
+    }
+    const link = document.createElement('link');
+    link.rel = 'prefetch';
+    link.href = url.href;
+    document.head.appendChild(link);
+  }
+
   function prefetchPrimaryRoutes() {
-    primaryRoutes.forEach((target) => {
-      const url = new URL(target, window.location.href);
-      if (url.href === window.location.href) return;
-      const link = document.createElement('link');
-      link.rel = 'prefetch';
-      link.href = url.href;
-      document.head.appendChild(link);
-    });
+    primaryRoutes.forEach((target) => prefetchRoute(target));
+  }
+
+  function schedulePrimaryPrefetch() {
+    if (!isInstalledApp) {
+      prefetchPrimaryRoutes();
+      return;
+    }
+    const run = () => {
+      if ('requestIdleCallback' in window) window.requestIdleCallback(prefetchPrimaryRoutes, { timeout: 1500 });
+      else window.setTimeout(prefetchPrimaryRoutes, 650);
+    };
+    if (document.readyState === 'complete') run();
+    else window.addEventListener('load', run, { once: true });
   }
 
   function smoothNavigate(target) {
@@ -150,12 +175,20 @@
     smoothNavigate(url.href);
   }, true);
 
+  if (isInstalledApp) {
+    document.addEventListener('pointerdown', (event) => {
+      if (event.pointerType !== 'touch' || !event.isPrimary) return;
+      const targetElement = event.target.closest?.('[data-href], a[href]');
+      if (!targetElement) return;
+      const target = targetElement.getAttribute('data-href') || targetElement.getAttribute('href');
+      if (!target || target.startsWith('#') || target.startsWith('javascript:')) return;
+      prefetchRoute(target, true);
+    }, { passive: true, capture: true });
+  }
+
   window.addEventListener('pagehide', saveScrollPositions);
   window.addEventListener('pageshow', restoreAfterHistoryReturn);
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', prefetchPrimaryRoutes, { once: true });
-  } else {
-    prefetchPrimaryRoutes();
-  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', schedulePrimaryPrefetch, { once: true });
+  else schedulePrimaryPrefetch();
   restoreAfterHistoryReturn();
 })();
