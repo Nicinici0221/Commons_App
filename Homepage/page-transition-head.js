@@ -48,6 +48,7 @@
       'textarea',
       'select',
       '[contenteditable="true"]',
+      '[data-setting="dark-mode"]',
       '[data-pwa-native-touch]'
     ].join(', ');
     let activeTap = null;

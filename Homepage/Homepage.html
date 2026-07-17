@@ -1015,15 +1015,15 @@
       if (isEmbeddedInstalledApp) {
         try {
           if (typeof window.parent.smoothNavigate === 'function') {
-            window.parent.smoothNavigate('CommunityMap.html');
+            window.parent.smoothNavigate('CommunityMap.html?from=homepage');
             return;
           }
         } catch (error) {}
-        window.top.location.href = 'CommunityMap.html';
+        window.top.location.href = 'CommunityMap.html?from=homepage';
         return;
       }
 
-      smoothNavigate('CommunityMap.html');
+      smoothNavigate('CommunityMap.html?from=homepage');
     };
 
     // Live clock

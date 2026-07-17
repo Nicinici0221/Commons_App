@@ -1822,9 +1822,9 @@
     (function setCommunityMapBackTarget() {
       const backLink = document.getElementById('communityMapBack');
       if (!backLink) return;
-      let source = '';
+      let source = new URLSearchParams(window.location.search).get('from') || '';
       try {
-        source = sessionStorage.getItem('cmap_from') || '';
+        source = source || sessionStorage.getItem('cmap_from') || '';
         sessionStorage.removeItem('cmap_from');
       } catch (error) {}
       backLink.setAttribute('href', source === 'homepage' ? 'Homepage.html' : 'Community.html');

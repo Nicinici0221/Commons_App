@@ -19,7 +19,7 @@
   </script>
   <link rel="stylesheet" href="../assets/css/mobile-app.css?v=20260717-iphone-layout-9" />
   <title>Commons Einstellungen</title>
-  <script src="page-transition-head.js?v=20260717-performance-1"></script>
+  <script src="page-transition-head.js?v=20260717-performance-2"></script>
   <script>(function(){if(!sessionStorage.getItem('es_visited')){document.documentElement.classList.remove('wc-route-return');}})();</script>
   <link rel="stylesheet" href="page-transitions.css" />
   <style>
@@ -1255,6 +1255,7 @@
     }
 
     .sheet-upload {
+      position: relative;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -1264,6 +1265,19 @@
       border: 1px solid rgba(24,24,24,.05);
       cursor: pointer;
       -webkit-tap-highlight-color: transparent;
+    }
+
+    .avatar-file-input {
+      position: absolute;
+      inset: 0;
+      z-index: 4;
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      border: 0;
+      opacity: 0;
+      cursor: pointer;
     }
 
     .avatar-page { display: none; }
@@ -1342,6 +1356,21 @@
       stroke-linecap: round;
       stroke-linejoin: round;
       stroke-width: 1.7;
+    }
+
+    /* Nur PWA: Geschlossene, aufwendig gerenderte Ebenen komplett aus dem
+       iOS-Compositor nehmen und beim Theme-Wechsel keine Übergänge stapeln. */
+    html.ios-standalone body.settings-screen .avatar-sheet:not(.is-open),
+    html.ios-standalone body.settings-screen .avatar-sheet-scrim:not(.is-open),
+    html.ios-standalone body.settings-screen .phone:not(.keyboard-open) .keyboard-panel {
+      visibility: hidden !important;
+      pointer-events: none !important;
+    }
+
+    html.ios-standalone.theme-switching body.settings-screen .phone,
+    html.ios-standalone.theme-switching body.settings-screen .phone * {
+      transition: none !important;
+      animation: none !important;
     }
 
   </style>
@@ -1580,10 +1609,10 @@
           <div class="sheet-upload-title">Eigenes Bild hinzuf&uuml;gen</div>
           <div class="sheet-upload-desc">W&auml;hle ein Bild aus deiner Galerie.</div>
         </div>
-        <button class="sheet-upload-btn" type="button" aria-label="Bild aus Galerie wählen" id="uploadBtn">
+        <span class="sheet-upload-btn" aria-hidden="true">
           <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-        </button>
-        <input type="file" id="avatarFileInput" accept="image/*" style="display:none">
+        </span>
+        <input class="avatar-file-input" type="file" id="avatarFileInput" accept="image/*" aria-label="Eigenes Profilbild aus der Galerie auswählen">
       </div>
     </div>
 
@@ -1614,6 +1643,22 @@
       dark: '<svg viewBox="0 0 24 24"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>'
     };
 
+    const isInstalledSettingsApp = document.documentElement.classList.contains('pwa-runtime') ||
+      document.documentElement.classList.contains('ios-standalone');
+
+    // Die historisch doppelte Dark-Mode-CSS wird nur in der PWA auf eine
+    // aktive Instanz reduziert. Desktop behält seine bisherige Kaskade.
+    if (isInstalledSettingsApp) {
+      const darkModeSheets = [...document.querySelectorAll('link[rel="stylesheet"][href="dark-mode.css"]')];
+      darkModeSheets.slice(0, -1).forEach((sheet) => { sheet.disabled = true; });
+    }
+
+    function updateInstalledThemeColor(isDark) {
+      if (!isInstalledSettingsApp) return;
+      const themeColor = document.querySelector('meta[name="theme-color"]');
+      if (themeColor) themeColor.setAttribute('content', isDark ? '#0c0c0c' : '#f7f7f6');
+    }
+
     function updateThemeModeIcon(isDark) {
       const icon = document.querySelector('.theme-mode-icon');
       const title = document.querySelector('.theme-mode-title');
@@ -1630,18 +1675,47 @@
       toggle.classList.toggle('is-off', !savedState);
       if (toggle.dataset.setting === 'dark-mode') {
         updateThemeModeIcon(savedState);
+        updateInstalledThemeColor(savedState);
       }
-      toggle.addEventListener('click', () => {
+      const activateToggle = () => {
         const isOn = toggle.getAttribute('aria-pressed') === 'true';
         const nextState = !isOn;
+        const isPwaThemeToggle = isInstalledSettingsApp && toggle.dataset.setting === 'dark-mode';
+        if (isPwaThemeToggle) document.documentElement.classList.add('theme-switching');
         toggle.setAttribute('aria-pressed', String(nextState));
         toggle.classList.toggle('is-off', isOn);
         localStorage.setItem(storageKey, String(nextState));
         if (toggle.dataset.setting === 'dark-mode') {
           document.documentElement.classList.toggle('dark-mode', nextState);
           updateThemeModeIcon(nextState);
+          updateInstalledThemeColor(nextState);
         }
-      });
+        if (isPwaThemeToggle) {
+          requestAnimationFrame(() => requestAnimationFrame(() => {
+            document.documentElement.classList.remove('theme-switching');
+          }));
+        }
+      };
+
+      if (isInstalledSettingsApp && toggle.dataset.setting === 'dark-mode') {
+        let suppressClickUntil = 0;
+        toggle.addEventListener('pointerup', (event) => {
+          if (event.pointerType !== 'touch') return;
+          event.preventDefault();
+          event.stopPropagation();
+          suppressClickUntil = Date.now() + 450;
+          activateToggle();
+        });
+        toggle.addEventListener('click', (event) => {
+          if (Date.now() < suppressClickUntil) {
+            event.preventDefault();
+            return;
+          }
+          activateToggle();
+        });
+      } else {
+        toggle.addEventListener('click', activateToggle);
+      }
     });
 
     const profileNameInput = document.querySelector('.profile-name-input');
@@ -1935,25 +2009,51 @@
     nextBtn?.addEventListener('pointerdown', (e) => { e.preventDefault(); e.stopPropagation(); if (currentAvatarPage < pages.length) setAvatarPage(currentAvatarPage + 1); });
 
     const fileInput = document.getElementById('avatarFileInput');
-    document.getElementById('uploadRow')?.addEventListener('pointerdown', (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      fileInput.click();
-    });
+    function prepareAvatarImage(file) {
+      return new Promise((resolve, reject) => {
+        const objectUrl = URL.createObjectURL(file);
+        const image = new Image();
+        image.onload = () => {
+          try {
+            const maxSize = 512;
+            const scale = Math.min(1, maxSize / Math.max(image.naturalWidth, image.naturalHeight));
+            const width = Math.max(1, Math.round(image.naturalWidth * scale));
+            const height = Math.max(1, Math.round(image.naturalHeight * scale));
+            const canvas = document.createElement('canvas');
+            canvas.width = width;
+            canvas.height = height;
+            const context = canvas.getContext('2d', { alpha: true });
+            if (!context) throw new Error('Canvas nicht verfügbar');
+            context.drawImage(image, 0, 0, width, height);
+            const outputType = file.type === 'image/png' ? 'image/png' : 'image/jpeg';
+            resolve(canvas.toDataURL(outputType, .86));
+          } catch (error) {
+            reject(error);
+          } finally {
+            URL.revokeObjectURL(objectUrl);
+          }
+        };
+        image.onerror = () => {
+          URL.revokeObjectURL(objectUrl);
+          reject(new Error('Bild konnte nicht geladen werden'));
+        };
+        image.src = objectUrl;
+      });
+    }
 
-    fileInput?.addEventListener('change', () => {
+    fileInput?.addEventListener('change', async () => {
       const file = fileInput.files?.[0];
       if (!file) return;
-      const reader = new FileReader();
-      reader.onload = (ev) => {
-        const dataUrl = ev.target.result;
-        if (mainAvatarImg) mainAvatarImg.src = dataUrl;
-        localStorage.setItem(AVATAR_KEY, dataUrl);
-        document.querySelectorAll('.avatar-option').forEach((o) => o.classList.remove('is-selected'));
+      try {
+        const dataUrl = await prepareAvatarImage(file);
+        applyAvatar(dataUrl);
         closeAvatarSheet();
-      };
-      reader.readAsDataURL(file);
-      fileInput.value = '';
+      } catch (error) {
+        const description = document.querySelector('.sheet-upload-desc');
+        if (description) description.textContent = 'Das Bild konnte nicht geladen werden. Bitte erneut versuchen.';
+      } finally {
+        fileInput.value = '';
+      }
     });
   </script>
 <script src="page-transition.js?v=20260717-performance-1"></script>
