@@ -13,25 +13,7 @@
   <meta name="apple-mobile-web-app-title" content="HfG Erbe" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <link rel="apple-touch-icon" href="../assets/icons/icon-512.png" />
-  <link rel="stylesheet" href="../assets/css/mobile-app.css?v=20260717-iphone-layout-2" />
-  <script>
-    (function () {
-      const isIPhone = /iPhone/i.test(navigator.userAgent);
-      const isStandalone = navigator.standalone === true ||
-        window.matchMedia('(display-mode: standalone)').matches;
-      if (!isIPhone || !isStandalone) return;
-
-      const probe = document.createElement('div');
-      probe.style.cssText = 'position:absolute;visibility:hidden;padding-top:env(safe-area-inset-top,0px)';
-      document.documentElement.appendChild(probe);
-      const reportedSafeTop = parseFloat(getComputedStyle(probe).paddingTop) || 0;
-      probe.remove();
-
-      if (reportedSafeTop < 1) {
-        document.documentElement.classList.add('ios-pwa-safe-top-missing');
-      }
-    })();
-  </script>
+  <link rel="stylesheet" href="../assets/css/mobile-app.css?v=20260717-iphone-layout-3" />
   <title>Solar Dashboard</title>
   <script src="page-transition-head.js"></script>
   <script>(function(){if(!sessionStorage.getItem('hp_visited')){document.documentElement.classList.remove('wc-route-return');}})();</script>

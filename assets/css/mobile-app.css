@@ -6,29 +6,27 @@
 }
 
 /*
- * Fallback für iPhones, die im Standalone-Modus trotz viewport-fit=cover
- * keinen CSS-Safe-Area-Wert melden. Die Werte entsprechen den aktuellen
- * iPhone-Viewportbreiten; das iPhone 17 Pro Max erhält bei 440px exakt 62px.
+ * iOS-Standalone-Fallback: Die App-Höhe wird auf aktuellen iPhones um
+ * den vom nativen PWA-Viewport ausgelassenen oberen Bereich ergänzt.
+ * Android und der normale Browser treffen diese WebKit-Regel nicht.
  */
-@media (max-width: 540px) and (orientation: portrait) {
-  html.ios-pwa-safe-top-missing body.homepage-screen:not(.is-embedded) > .phone {
-    --homepage-pwa-frame-top: 47px;
-    top: calc(-1 * var(--homepage-pwa-frame-top)) !important;
-    height: calc(100dvh + var(--homepage-pwa-frame-top)) !important;
-    min-height: calc(100dvh + var(--homepage-pwa-frame-top)) !important;
-    max-height: calc(100dvh + var(--homepage-pwa-frame-top)) !important;
+@supports (-webkit-touch-callout: none) {
+  @media (max-width: 540px) and (orientation: portrait) and (display-mode: standalone) {
+    html body:not(.is-embedded) > .phone {
+      --pwa-frame-top: max(var(--app-safe-top), 47px);
+    }
   }
-}
 
-@media (min-width: 393px) and (max-width: 439px) and (orientation: portrait) {
-  html.ios-pwa-safe-top-missing body.homepage-screen:not(.is-embedded) > .phone {
-    --homepage-pwa-frame-top: 59px;
+  @media (min-width: 393px) and (max-width: 439px) and (orientation: portrait) and (display-mode: standalone) {
+    html body:not(.is-embedded) > .phone {
+      --pwa-frame-top: max(var(--app-safe-top), 59px);
+    }
   }
-}
 
-@media (min-width: 440px) and (max-width: 540px) and (orientation: portrait) {
-  html.ios-pwa-safe-top-missing body.homepage-screen:not(.is-embedded) > .phone {
-    --homepage-pwa-frame-top: 62px;
+  @media (min-width: 440px) and (max-width: 540px) and (orientation: portrait) and (display-mode: standalone) {
+    html body:not(.is-embedded) > .phone {
+      --pwa-frame-top: max(var(--app-safe-top), 62px);
+    }
   }
 }
 
@@ -294,13 +292,13 @@ textarea {
    * der Desktop-Vorlage erhalten, ohne Header oder Navigation separat zu
    * verschieben. Android (Safe Area = 0) bleibt unverändert.
    */
-  body.homepage-screen:not(.is-embedded) > .phone {
-    --homepage-pwa-frame-top: var(--app-safe-top);
-    top: calc(-1 * var(--homepage-pwa-frame-top)) !important;
+  body:not(.is-embedded) > .phone {
+    --pwa-frame-top: var(--app-safe-top);
+    top: calc(-1 * var(--pwa-frame-top)) !important;
     width: 100% !important;
-    height: calc(100dvh + var(--homepage-pwa-frame-top)) !important;
-    min-height: calc(100dvh + var(--homepage-pwa-frame-top)) !important;
-    max-height: calc(100dvh + var(--homepage-pwa-frame-top)) !important;
+    height: calc(100dvh + var(--pwa-frame-top)) !important;
+    min-height: calc(100dvh + var(--pwa-frame-top)) !important;
+    max-height: calc(100dvh + var(--pwa-frame-top)) !important;
   }
 
   html.dark-mode,
