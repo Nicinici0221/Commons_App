@@ -165,6 +165,28 @@ textarea {
     box-shadow: none !important;
   }
 
+  /* Im Onboarding-iframe ist die iframe-Fläche selbst die verbindliche
+   * Vollbildhöhe. 100dvh würde iOS hier erneut um die Statusleiste kürzen. */
+  html.is-embedded-document,
+  html.is-embedded-document body.is-embedded {
+    height: 100% !important;
+    min-height: 100% !important;
+    max-height: 100% !important;
+  }
+
+  html.is-embedded-document body.is-embedded > .phone {
+    top: 0 !important;
+    height: 100% !important;
+    min-height: 100% !important;
+    max-height: 100% !important;
+  }
+
+  /* Nur in der installierten iPhone-App: Zahl optisch wie in der
+   * Desktop-Vorlage ausrichten und etwas mehr Luft zur Einheit schaffen. */
+  html.ios-standalone body.homepage-screen .hero-number {
+    top: 5px !important;
+  }
+
   /* Keine sichtbare Browser-Scrollleiste innerhalb des App-Rahmens. */
   .phone,
   .phone * {
@@ -353,7 +375,16 @@ textarea {
 
   html:has(body > .phone.is-intro),
   body:has(> .phone.is-intro) {
-    background: #02060d !important;
+    background:
+      radial-gradient(ellipse 58% 46% at 106% 106%, rgba(255,207,171,.34) 0%, rgba(242,171,142,.20) 42%, rgba(7,14,28,0) 74%),
+      radial-gradient(ellipse 168% 132% at 104% 104%, rgba(242,171,142,.72) 0%, rgba(203,115,122,.48) 38%, rgba(99,74,83,.22) 72%, rgba(7,14,28,0) 96%),
+      radial-gradient(ellipse 92% 74% at 20% 12%, rgba(42,63,107,.68) 0%, rgba(21,33,58,.46) 46%, rgba(7,14,28,0) 78%),
+      linear-gradient(to right, rgba(1,4,10,.58) 0%, rgba(5,10,21,.18) 58%, transparent 82%),
+      linear-gradient(180deg, #02060d 0%, #0b162a 50%, #15213a 100%) !important;
+  }
+
+  body.homepage-screen .hero-number {
+    top: 5px !important;
   }
 
   html:has(body > .phone .hero-bg),
