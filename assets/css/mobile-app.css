@@ -59,6 +59,10 @@
   html.ios-standalone body > .phone.is-intro > .intro-overlay {
     background: transparent !important;
   }
+
+  html.ios-standalone body > .phone.is-intro::after {
+    opacity: 0 !important;
+  }
 }
 
 html {
@@ -195,7 +199,48 @@ textarea {
   /* Nur in der installierten iPhone-App: Zahl optisch wie in der
    * Desktop-Vorlage ausrichten und etwas mehr Luft zur Einheit schaffen. */
   html.ios-standalone body.homepage-screen .hero-number {
-    top: 5px !important;
+    top: 2px !important;
+  }
+
+  /* Die eingebettete Homepage wird vor ihrem ersten Frame angehalten und
+   * anschließend vom Morph genau einmal eingeblendet. */
+  html.is-embedded-document.ios-standalone body.homepage-screen .reveal-up,
+  html.is-embedded-document.ios-standalone body.homepage-screen .reveal-soft {
+    animation: none !important;
+  }
+
+  html.is-embedded-document.ios-standalone body.homepage-screen:not(.hero-reveal):not(.hero-reveal-done) .app-header,
+  html.is-embedded-document.ios-standalone body.homepage-screen:not(.hero-reveal):not(.hero-reveal-done) .hero-content,
+  html.is-embedded-document.ios-standalone body.homepage-screen:not(.hero-reveal):not(.hero-reveal-done) .cards .metric-card,
+  html.is-embedded-document.ios-standalone body.homepage-screen:not(.hero-reveal):not(.hero-reveal-done) .cards .cta-card,
+  html.is-embedded-document.ios-standalone body.homepage-screen:not(.hero-reveal):not(.hero-reveal-done) .tabbar {
+    opacity: 0 !important;
+    transform: translateY(22px) !important;
+    animation: none !important;
+  }
+
+  html.is-embedded-document.ios-standalone body.homepage-screen.hero-reveal .app-header,
+  html.is-embedded-document.ios-standalone body.homepage-screen.hero-reveal .hero-content,
+  html.is-embedded-document.ios-standalone body.homepage-screen.hero-reveal .cards .metric-card,
+  html.is-embedded-document.ios-standalone body.homepage-screen.hero-reveal .cards .cta-card,
+  html.is-embedded-document.ios-standalone body.homepage-screen.hero-reveal .tabbar {
+    animation: pwaHomepageFadeUpOnce .72s cubic-bezier(.22,1,.36,1) forwards !important;
+    will-change: opacity, transform !important;
+  }
+
+  html.is-embedded-document.ios-standalone body.homepage-screen.hero-reveal-done .app-header,
+  html.is-embedded-document.ios-standalone body.homepage-screen.hero-reveal-done .hero-content,
+  html.is-embedded-document.ios-standalone body.homepage-screen.hero-reveal-done .cards .metric-card,
+  html.is-embedded-document.ios-standalone body.homepage-screen.hero-reveal-done .cards .cta-card,
+  html.is-embedded-document.ios-standalone body.homepage-screen.hero-reveal-done .tabbar {
+    opacity: 1 !important;
+    transform: none !important;
+    animation: none !important;
+  }
+
+  @keyframes pwaHomepageFadeUpOnce {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
   }
 
   /* Keine sichtbare Browser-Scrollleiste innerhalb des App-Rahmens. */
@@ -399,8 +444,12 @@ textarea {
     background: transparent !important;
   }
 
+  body > .phone.is-intro::after {
+    opacity: 0 !important;
+  }
+
   body.homepage-screen .hero-number {
-    top: 5px !important;
+    top: 2px !important;
   }
 
   html:has(body > .phone .hero-bg),

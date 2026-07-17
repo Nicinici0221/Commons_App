@@ -13,7 +13,15 @@
   <meta name="apple-mobile-web-app-title" content="HfG Erbe" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <link rel="apple-touch-icon" href="../assets/icons/icon-512.png" />
-  <link rel="stylesheet" href="../assets/css/mobile-app.css?v=20260717-iphone-layout-6" />
+  <script>
+    if (location.search.includes('embed=1')) {
+      document.documentElement.classList.add('is-embedded-document');
+      if (navigator.standalone === true || window.matchMedia('(display-mode: standalone)').matches) {
+        document.documentElement.classList.add('ios-standalone');
+      }
+    }
+  </script>
+  <link rel="stylesheet" href="../assets/css/mobile-app.css?v=20260717-iphone-layout-7" />
   <title>Solar Dashboard</title>
   <script src="page-transition-head.js"></script>
   <script>(function(){if(!sessionStorage.getItem('hp_visited')){document.documentElement.classList.remove('wc-route-return');}})();</script>

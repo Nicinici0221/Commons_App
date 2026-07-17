@@ -23,7 +23,7 @@
       document.documentElement.classList.add('ios-standalone');
     }
   </script>
-  <link rel="stylesheet" href="../assets/css/mobile-app.css?v=20260717-iphone-layout-6" />
+  <link rel="stylesheet" href="../assets/css/mobile-app.css?v=20260717-iphone-layout-7" />
   <script src="page-transition-head.js"></script>
   <link rel="stylesheet" href="page-transitions.css" />
   <title>Onboarding — COMMONS</title>
@@ -1822,48 +1822,6 @@
   function setHomepageHeroReveal(on) {
     if (!fitEmbeddedScreen() || !isEmbeddedHomepage()) return false;
     const doc = embeddedDoc();
-    if (!doc.getElementById('obHeroRevealStyle')) {
-      const style = doc.createElement('style');
-      style.id = 'obHeroRevealStyle';
-      style.textContent = `
-        body .reveal-up,
-        body .reveal-soft {
-          animation: none !important;
-        }
-        body:not(.hero-reveal) .app-header,
-        body:not(.hero-reveal) .hero-content,
-        body:not(.hero-reveal) .cards .metric-card,
-        body:not(.hero-reveal) .cards .cta-card,
-        body:not(.hero-reveal) .tabbar {
-          opacity: 0 !important;
-          transform: translateY(22px) !important;
-          animation: none !important;
-        }
-        body.hero-reveal .app-header,
-        body.hero-reveal .hero-content,
-        body.hero-reveal .cards .metric-card,
-        body.hero-reveal .cards .cta-card,
-        body.hero-reveal .tabbar {
-          animation: obFloatUp .72s cubic-bezier(.22,1,.36,1) forwards !important;
-          will-change: opacity, transform !important;
-        }
-        body.hero-reveal-done .app-header,
-        body.hero-reveal-done .hero-content,
-        body.hero-reveal-done .cards .metric-card,
-        body.hero-reveal-done .cards .cta-card,
-        body.hero-reveal-done .tabbar {
-          opacity: 1 !important;
-          transform: none !important;
-          animation: none !important;
-        }
-        @keyframes obFloatUp {
-          0% { opacity: 0; transform: translateY(20px); }
-          100% { opacity: 1; transform: translateY(0); }
-        }
-      `;
-      doc.head.appendChild(style);
-    }
-
     syncHomepageUserName();
     if (on && doc.body.classList.contains('hero-reveal')) return true;
     doc.body.classList.remove('hero-reveal', 'hero-reveal-done');
