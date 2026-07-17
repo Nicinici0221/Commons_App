@@ -10,7 +10,12 @@
   <meta name="apple-mobile-web-app-title" content="HfG Erbe" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <link rel="apple-touch-icon" href="../assets/icons/icon-512.png" />
-  <link rel="stylesheet" href="../assets/css/mobile-app.css?v=20260717-iphone-layout-3" />
+  <script>
+    if (navigator.standalone === true || window.matchMedia('(display-mode: standalone)').matches) {
+      document.documentElement.classList.add('ios-standalone');
+    }
+  </script>
+  <link rel="stylesheet" href="../assets/css/mobile-app.css?v=20260717-iphone-layout-4" />
   <script src="page-transition-head.js"></script>
   <link rel="stylesheet" href="page-transitions.css" />
   <title>Onboarding — COMMONS</title>
@@ -784,6 +789,15 @@
     .phone.is-exiting::before {
       opacity: 0 !important;
       transition: opacity .15s ease !important;
+    }
+    @media (max-width: 540px) {
+      .phone.is-exiting {
+        inset: auto 0 auto 0 !important;
+        top: calc(-1 * var(--pwa-frame-top, 0px)) !important;
+        height: calc(100dvh + var(--pwa-frame-top, 0px)) !important;
+        min-height: calc(100dvh + var(--pwa-frame-top, 0px)) !important;
+        max-height: calc(100dvh + var(--pwa-frame-top, 0px)) !important;
+      }
     }
 
     /* ── Profilbild-Kreis auf Profil-Slide ────────────────────────────── */
@@ -1730,6 +1744,8 @@
   let initialsEdited = false;
   let introDone = false;
   let isLeaving = false;
+  let embeddedHomepageReady = false;
+  let homeMorphStarted = false;
   const hpFrame = document.getElementById('embeddedHomepage');
 
   function ensureOnboardingLightModeDefault() {
@@ -1831,16 +1847,14 @@
   }
 
   if (hpFrame) {
-    // Sobald home-ready aktiv ist: URL-Bar spiegeln, aber KEIN Seitenwechsel
-    // des Parents — der iframe bleibt der Renderer, so gibt es keinen Flash.
+    // Der iframe bleibt dauerhaft der Renderer. Erst wenn seine eingebettete
+    // Geometrie vollständig bereit ist, darf der eigentliche Morph starten.
     hpFrame.addEventListener('load', () => {
-      if (!phone.classList.contains('home-ready')) return;
-      try {
-        const dest = hpFrame.contentWindow.location.href;
-        if (dest && dest !== window.location.href) {
-          window.location.href = dest;
-        }
-      } catch (e) {}
+      if (!isEmbeddedHomepage()) return;
+      fitEmbeddedScreen();
+      syncHomepageUserName();
+      embeddedHomepageReady = true;
+      if (isLeaving) beginHomeMorph();
     });
     hpFrame.addEventListener('error', () => {
       if (isLeaving) window.setTimeout(() => { window.location.href = 'Homepage.html'; }, 1400);
@@ -1937,6 +1951,9 @@
       if (hpFrame) {
         hpFrame.setAttribute('aria-hidden', 'true');
         hpFrame.style.pointerEvents = 'none';
+        if (!embeddedHomepageReady && hpFrame.getAttribute('src') === 'about:blank') {
+          hpFrame.src = 'Homepage.html?embed=1';
+        }
       }
     } else {
       phone.classList.remove('is-final-slide', 'is-leaving', 'home-ready', 'is-final-fade');
@@ -2080,32 +2097,44 @@
   privacyScrim?.addEventListener('click', closePrivacy);
 
   // ── Finish ──────────────────────────────────────────────────────────────
-  function startHomeTransition() {
+  function beginHomeMorph() {
+    if (homeMorphStarted || !embeddedHomepageReady) return;
+    homeMorphStarted = true;
+
+    fitEmbeddedScreen();
+    setHomepageHeroReveal(false);
     phone.classList.add('is-leaving');
 
-    if (hpFrame) {
-      // Jetzt erst laden — frisch, mit allen Einstiegsanimationen.
-      // Der Gradient-Overlay bedeckt den iframe während des Ladens (~1 s).
-      hpFrame.src = 'Homepage.html';
-      hpFrame.setAttribute('aria-hidden', 'false');
-      hpFrame.style.pointerEvents = 'none';
-    }
+    // Homepage-Inhalte erscheinen erst, wenn der Gradient sie bereits
+    // freigibt. Dadurch gibt es auch beim kalten Erststart keinen Flash.
+    window.setTimeout(() => setHomepageHeroReveal(true), 520);
 
-    // Gradient-Animation fertig (~1 s): Phone-Rahmen wegblenden,
-    // Bühne auf Homepage-Farbe — kein Seitenwechsel, kein Flash.
     window.setTimeout(() => {
       phone.classList.add('is-exiting');
       document.body.classList.add('is-exiting');
     }, 1000);
 
-    // iframe interaktiv schalten, Onboarding-Reste ausblenden,
-    // URL-Bar auf Homepage.html setzen (ohne Neuladen).
     window.setTimeout(() => {
       phone.classList.add('home-ready');
       hpFrame.style.pointerEvents = 'auto';
       hpFrame.removeAttribute('scrolling');
       history.replaceState(null, '', 'Homepage.html');
     }, 1280);
+  }
+
+  function startHomeTransition() {
+    if (!hpFrame) {
+      window.location.href = 'Homepage.html';
+      return;
+    }
+
+    hpFrame.setAttribute('aria-hidden', 'false');
+    hpFrame.style.pointerEvents = 'none';
+
+    if (!embeddedHomepageReady && hpFrame.getAttribute('src') === 'about:blank') {
+      hpFrame.src = 'Homepage.html?embed=1';
+    }
+    beginHomeMorph();
   }
 
   function finish() {

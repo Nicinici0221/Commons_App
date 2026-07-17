@@ -30,6 +30,26 @@
   }
 }
 
+/* navigator.standalone greift auf dem allerersten iOS-PWA-Start zuverlässiger
+ * als die display-mode-Media-Query. */
+@media (max-width: 540px) and (orientation: portrait) {
+  html.ios-standalone body:not(.is-embedded) > .phone {
+    --pwa-frame-top: max(var(--app-safe-top), 47px);
+  }
+}
+
+@media (min-width: 393px) and (max-width: 439px) and (orientation: portrait) {
+  html.ios-standalone body:not(.is-embedded) > .phone {
+    --pwa-frame-top: max(var(--app-safe-top), 59px);
+  }
+}
+
+@media (min-width: 440px) and (max-width: 540px) and (orientation: portrait) {
+  html.ios-standalone body:not(.is-embedded) > .phone {
+    --pwa-frame-top: max(var(--app-safe-top), 62px);
+  }
+}
+
 html {
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
@@ -105,11 +125,13 @@ textarea {
   }
 
   body:not(.is-embedded) > .phone {
+    --pwa-frame-top: 0px;
     width: 100% !important;
     max-width: 100% !important;
-    height: 100dvh !important;
-    min-height: 100dvh !important;
-    max-height: 100dvh !important;
+    top: calc(-1 * var(--pwa-frame-top)) !important;
+    height: calc(100dvh + var(--pwa-frame-top)) !important;
+    min-height: calc(100dvh + var(--pwa-frame-top)) !important;
+    max-height: calc(100dvh + var(--pwa-frame-top)) !important;
     aspect-ratio: auto !important;
     border-radius: 0 !important;
     box-shadow: none !important;
