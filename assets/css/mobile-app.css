@@ -249,6 +249,18 @@ textarea {
 
 /* In der installierten Web-App zeichnet iOS die echte Statusleiste selbst. */
 @media (max-width: 540px) and (display-mode: standalone) {
+  html,
+  body,
+  body:not(.is-embedded),
+  body:not(.is-embedded) > .phone {
+    width: 100% !important;
+    height: 100vh !important;
+    height: 100dvh !important;
+    min-height: 100vh !important;
+    min-height: 100dvh !important;
+    max-height: 100dvh !important;
+  }
+
   html.dark-mode,
   html.dark-mode body {
     background: #0c0c0c !important;
@@ -285,6 +297,51 @@ textarea {
   html:has(body > .phone .hero-bg),
   body:has(> .phone .hero-bg) {
     background: #000000 !important;
+  }
+
+  /*
+   * iOS darf die intrinsischen Bildmaße nicht als Mindestbreite der
+   * Grid-Spalten verwenden. So bleiben vier wirklich runde Avatare in
+   * einer Reihe und das Sheet kann nicht seitlich aus dem Viewport laufen.
+   */
+  .avatar-sheet {
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow: hidden !important;
+    box-sizing: border-box !important;
+  }
+
+  .avatar-grid {
+    width: 100% !important;
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    gap: 8px !important;
+  }
+
+  .avatar-option {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    height: auto !important;
+    min-height: 0 !important;
+    aspect-ratio: 1 / 1 !important;
+    padding: 8px !important;
+    box-sizing: border-box !important;
+  }
+
+  .avatar-opt-inner {
+    width: 100% !important;
+    height: auto !important;
+    aspect-ratio: 1 / 1 !important;
+    border-radius: 50% !important;
+    overflow: hidden !important;
+  }
+
+  .avatar-opt-inner img {
+    display: block !important;
+    max-width: 100% !important;
+    max-height: 100% !important;
   }
 
 }
