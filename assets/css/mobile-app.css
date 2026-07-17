@@ -50,6 +50,17 @@
   }
 }
 
+@media (max-width: 540px) {
+  html.ios-standalone body:has(> .phone.is-intro) {
+    background: transparent !important;
+  }
+
+  html.ios-standalone body > .phone.is-intro,
+  html.ios-standalone body > .phone.is-intro > .intro-overlay {
+    background: transparent !important;
+  }
+}
+
 html {
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
@@ -373,14 +384,19 @@ textarea {
     background: #151515 !important;
   }
 
-  html:has(body > .phone.is-intro),
-  body:has(> .phone.is-intro) {
+  html:has(body > .phone.is-intro) {
     background:
       radial-gradient(ellipse 58% 46% at 106% 106%, rgba(255,207,171,.34) 0%, rgba(242,171,142,.20) 42%, rgba(7,14,28,0) 74%),
       radial-gradient(ellipse 168% 132% at 104% 104%, rgba(242,171,142,.72) 0%, rgba(203,115,122,.48) 38%, rgba(99,74,83,.22) 72%, rgba(7,14,28,0) 96%),
       radial-gradient(ellipse 92% 74% at 20% 12%, rgba(42,63,107,.68) 0%, rgba(21,33,58,.46) 46%, rgba(7,14,28,0) 78%),
       linear-gradient(to right, rgba(1,4,10,.58) 0%, rgba(5,10,21,.18) 58%, transparent 82%),
       linear-gradient(180deg, #02060d 0%, #0b162a 50%, #15213a 100%) !important;
+  }
+
+  body:has(> .phone.is-intro),
+  body > .phone.is-intro,
+  body > .phone.is-intro > .intro-overlay {
+    background: transparent !important;
   }
 
   body.homepage-screen .hero-number {

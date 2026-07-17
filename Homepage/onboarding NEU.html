@@ -5,8 +5,10 @@
     html,body{background:#02060d}
     @media (max-width:540px) and (display-mode:standalone){
       html,body{background:radial-gradient(ellipse 58% 46% at 106% 106%,rgba(255,207,171,.34) 0%,rgba(242,171,142,.20) 42%,rgba(7,14,28,0) 74%),radial-gradient(ellipse 168% 132% at 104% 104%,rgba(242,171,142,.72) 0%,rgba(203,115,122,.48) 38%,rgba(99,74,83,.22) 72%,rgba(7,14,28,0) 96%),radial-gradient(ellipse 92% 74% at 20% 12%,rgba(42,63,107,.68) 0%,rgba(21,33,58,.46) 46%,rgba(7,14,28,0) 78%),linear-gradient(to right,rgba(1,4,10,.58) 0%,rgba(5,10,21,.18) 58%,transparent 82%),linear-gradient(180deg,#02060d 0%,#0b162a 50%,#15213a 100%)}
+      body{background:transparent}
     }
     html.ios-standalone,html.ios-standalone body{background:radial-gradient(ellipse 58% 46% at 106% 106%,rgba(255,207,171,.34) 0%,rgba(242,171,142,.20) 42%,rgba(7,14,28,0) 74%),radial-gradient(ellipse 168% 132% at 104% 104%,rgba(242,171,142,.72) 0%,rgba(203,115,122,.48) 38%,rgba(99,74,83,.22) 72%,rgba(7,14,28,0) 96%),radial-gradient(ellipse 92% 74% at 20% 12%,rgba(42,63,107,.68) 0%,rgba(21,33,58,.46) 46%,rgba(7,14,28,0) 78%),linear-gradient(to right,rgba(1,4,10,.58) 0%,rgba(5,10,21,.18) 58%,transparent 82%),linear-gradient(180deg,#02060d 0%,#0b162a 50%,#15213a 100%)}
+    html.ios-standalone body{background:transparent}
   </style>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
@@ -21,7 +23,7 @@
       document.documentElement.classList.add('ios-standalone');
     }
   </script>
-  <link rel="stylesheet" href="../assets/css/mobile-app.css?v=20260717-iphone-layout-5" />
+  <link rel="stylesheet" href="../assets/css/mobile-app.css?v=20260717-iphone-layout-6" />
   <script src="page-transition-head.js"></script>
   <link rel="stylesheet" href="page-transitions.css" />
   <title>Onboarding — COMMONS</title>
@@ -798,11 +800,20 @@
     }
     @media (max-width: 540px) {
       .phone.is-exiting {
+        position: relative !important;
         inset: auto 0 auto 0 !important;
         top: calc(-1 * var(--pwa-frame-top, 0px)) !important;
         height: calc(100dvh + var(--pwa-frame-top, 0px)) !important;
         min-height: calc(100dvh + var(--pwa-frame-top, 0px)) !important;
         max-height: calc(100dvh + var(--pwa-frame-top, 0px)) !important;
+      }
+      html.ios-standalone body.is-exiting {
+        background: #000 !important;
+      }
+      html.ios-standalone .phone.is-final-slide .homepage-embedded,
+      html.ios-standalone .phone.is-leaving .homepage-embedded,
+      html.ios-standalone .phone.home-ready .homepage-embedded {
+        background: #000 !important;
       }
     }
 
@@ -1836,6 +1847,15 @@
           animation: obFloatUp .72s cubic-bezier(.22,1,.36,1) forwards !important;
           will-change: opacity, transform !important;
         }
+        body.hero-reveal-done .app-header,
+        body.hero-reveal-done .hero-content,
+        body.hero-reveal-done .cards .metric-card,
+        body.hero-reveal-done .cards .cta-card,
+        body.hero-reveal-done .tabbar {
+          opacity: 1 !important;
+          transform: none !important;
+          animation: none !important;
+        }
         @keyframes obFloatUp {
           0% { opacity: 0; transform: translateY(20px); }
           100% { opacity: 1; transform: translateY(0); }
@@ -1846,15 +1866,15 @@
 
     syncHomepageUserName();
     if (on && doc.body.classList.contains('hero-reveal')) return true;
-    doc.body.classList.remove('hero-reveal');
+    doc.body.classList.remove('hero-reveal', 'hero-reveal-done');
     void doc.body.offsetHeight;
     if (on) {
       doc.defaultView.requestAnimationFrame(() => {
         doc.body.classList.add('hero-reveal');
       });
       window.setTimeout(() => {
-        doc.getElementById('obHeroRevealStyle')?.remove();
         doc.body.classList.remove('hero-reveal');
+        doc.body.classList.add('hero-reveal-done');
       }, 900);
     }
     return true;
