@@ -58,7 +58,17 @@
       }
     } catch (error) {}
 
-    window.location.replace(destination);
+    // iOS muss Viewport und Statusleisten-Metadaten einmal aus dem Start-
+    // dokument uebernehmen, bevor die Weiterleitung beginnt. Andernfalls
+    // startet die erste PWA-Ansicht mit der weissen Standard-Statusleiste.
+    function openInitialScreen() {
+      requestAnimationFrame(() => window.location.replace(destination));
+    }
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', openInitialScreen, { once: true });
+    } else {
+      openInitialScreen();
+    }
   </script>
   <noscript>
     <meta http-equiv="refresh" content="0; url=Homepage/onboarding%20NEU.html">
