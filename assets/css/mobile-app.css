@@ -5,6 +5,33 @@
   --app-safe-left: env(safe-area-inset-left, 0px);
 }
 
+/*
+ * Fallback für iPhones, die im Standalone-Modus trotz viewport-fit=cover
+ * keinen CSS-Safe-Area-Wert melden. Die Werte entsprechen den aktuellen
+ * iPhone-Viewportbreiten; das iPhone 17 Pro Max erhält bei 440px exakt 62px.
+ */
+@media (max-width: 540px) and (orientation: portrait) {
+  html.ios-pwa-safe-top-missing body.homepage-screen:not(.is-embedded) > .phone {
+    --homepage-pwa-frame-top: 47px;
+    top: calc(-1 * var(--homepage-pwa-frame-top)) !important;
+    height: calc(100dvh + var(--homepage-pwa-frame-top)) !important;
+    min-height: calc(100dvh + var(--homepage-pwa-frame-top)) !important;
+    max-height: calc(100dvh + var(--homepage-pwa-frame-top)) !important;
+  }
+}
+
+@media (min-width: 393px) and (max-width: 439px) and (orientation: portrait) {
+  html.ios-pwa-safe-top-missing body.homepage-screen:not(.is-embedded) > .phone {
+    --homepage-pwa-frame-top: 59px;
+  }
+}
+
+@media (min-width: 440px) and (max-width: 540px) and (orientation: portrait) {
+  html.ios-pwa-safe-top-missing body.homepage-screen:not(.is-embedded) > .phone {
+    --homepage-pwa-frame-top: 62px;
+  }
+}
+
 html {
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
@@ -268,11 +295,12 @@ textarea {
    * verschieben. Android (Safe Area = 0) bleibt unverändert.
    */
   body.homepage-screen:not(.is-embedded) > .phone {
-    top: calc(-1 * var(--app-safe-top)) !important;
+    --homepage-pwa-frame-top: var(--app-safe-top);
+    top: calc(-1 * var(--homepage-pwa-frame-top)) !important;
     width: 100% !important;
-    height: calc(100dvh + var(--app-safe-top)) !important;
-    min-height: calc(100dvh + var(--app-safe-top)) !important;
-    max-height: calc(100dvh + var(--app-safe-top)) !important;
+    height: calc(100dvh + var(--homepage-pwa-frame-top)) !important;
+    min-height: calc(100dvh + var(--homepage-pwa-frame-top)) !important;
+    max-height: calc(100dvh + var(--homepage-pwa-frame-top)) !important;
   }
 
   html.dark-mode,
