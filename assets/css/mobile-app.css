@@ -249,6 +249,11 @@ textarea {
 
 /* In der installierten Web-App zeichnet iOS die echte Statusleiste selbst. */
 @media (max-width: 540px) and (display-mode: standalone) {
+  :root {
+    /* iOS reserviert auf Dynamic-Island-Geräten rund 62 CSS-Pixel. */
+    --pwa-status-offset: clamp(54px, 7dvh, 64px);
+  }
+
   html,
   body,
   body:not(.is-embedded),
@@ -259,6 +264,45 @@ textarea {
     min-height: 100vh !important;
     min-height: 100dvh !important;
     max-height: 100dvh !important;
+  }
+
+  /*
+   * Die Systemleiste liegt außerhalb des Web-Viewports. Die folgenden
+   * Abstände kompensieren nur vertikal; Breite und horizontale Proportionen
+   * bleiben exakt wie in der 440 × 956 Desktop-Komposition.
+   */
+  .app-header {
+    padding-top: max(14px, calc(78px - var(--pwa-status-offset))) !important;
+  }
+
+  .hero-bg {
+    height: calc(535px - var(--pwa-status-offset)) !important;
+  }
+
+  .hero-content {
+    top: calc(208px - var(--pwa-status-offset)) !important;
+  }
+
+  .cards {
+    top: calc(552px - var(--pwa-status-offset)) !important;
+  }
+
+  .slide-inner {
+    padding-top: max(44px, calc(108px - var(--pwa-status-offset))) !important;
+  }
+
+  .onb-top {
+    top: max(8px, calc(64px - var(--pwa-status-offset))) !important;
+  }
+
+  .intro-top {
+    padding-top: max(8px, calc(60px - var(--pwa-status-offset))) !important;
+  }
+
+  .topbar,
+  .detail-back,
+  .detail-share {
+    top: max(14px, calc(78px - var(--pwa-status-offset))) !important;
   }
 
   html.dark-mode,
