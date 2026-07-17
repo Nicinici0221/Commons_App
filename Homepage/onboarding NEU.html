@@ -1747,6 +1747,10 @@
   let embeddedHomepageReady = false;
   let homeMorphStarted = false;
   const hpFrame = document.getElementById('embeddedHomepage');
+  const useInstalledMobilePwaMorph = window.innerWidth <= 540 && (
+    navigator.standalone === true ||
+    window.matchMedia('(display-mode: standalone)').matches
+  );
 
   function ensureOnboardingLightModeDefault() {
     try {
@@ -1850,6 +1854,17 @@
     // Der iframe bleibt dauerhaft der Renderer. Erst wenn seine eingebettete
     // Geometrie vollständig bereit ist, darf der eigentliche Morph starten.
     hpFrame.addEventListener('load', () => {
+      if (!useInstalledMobilePwaMorph) {
+        if (!phone.classList.contains('home-ready')) return;
+        try {
+          const dest = hpFrame.contentWindow.location.href;
+          if (dest && dest !== window.location.href) {
+            window.location.href = dest;
+          }
+        } catch (e) {}
+        return;
+      }
+
       if (!isEmbeddedHomepage()) return;
       fitEmbeddedScreen();
       syncHomepageUserName();
@@ -1951,7 +1966,7 @@
       if (hpFrame) {
         hpFrame.setAttribute('aria-hidden', 'true');
         hpFrame.style.pointerEvents = 'none';
-        if (!embeddedHomepageReady && hpFrame.getAttribute('src') === 'about:blank') {
+        if (useInstalledMobilePwaMorph && !embeddedHomepageReady && hpFrame.getAttribute('src') === 'about:blank') {
           hpFrame.src = 'Homepage.html?embed=1';
         }
       }
@@ -2123,6 +2138,29 @@
   }
 
   function startHomeTransition() {
+    if (!useInstalledMobilePwaMorph) {
+      phone.classList.add('is-leaving');
+
+      if (hpFrame) {
+        hpFrame.src = 'Homepage.html';
+        hpFrame.setAttribute('aria-hidden', 'false');
+        hpFrame.style.pointerEvents = 'none';
+      }
+
+      window.setTimeout(() => {
+        phone.classList.add('is-exiting');
+        document.body.classList.add('is-exiting');
+      }, 1000);
+
+      window.setTimeout(() => {
+        phone.classList.add('home-ready');
+        hpFrame.style.pointerEvents = 'auto';
+        hpFrame.removeAttribute('scrolling');
+        history.replaceState(null, '', 'Homepage.html');
+      }, 1280);
+      return;
+    }
+
     if (!hpFrame) {
       window.location.href = 'Homepage.html';
       return;
