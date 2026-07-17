@@ -17,7 +17,7 @@
       document.documentElement.classList.add('ios-standalone');
     }
   </script>
-  <link rel="stylesheet" href="../assets/css/mobile-app.css?v=20260717-iphone-layout-9" />
+  <link rel="stylesheet" href="../assets/css/mobile-app.css?v=20260717-iphone-layout-12" />
   <title>Commons Einstellungen</title>
   <script src="page-transition-head.js?v=20260717-performance-2"></script>
   <script>(function(){if(!sessionStorage.getItem('es_visited')){document.documentElement.classList.remove('wc-route-return');}})();</script>
@@ -1390,13 +1390,31 @@
   <style>html,body{background:#e2e5df}</style>
   <script>(function(){try{if(localStorage.getItem("commons_setting_dark-mode")==="true")document.documentElement.classList.add("dark-mode");}catch(e){}})();</script>
   <link rel="stylesheet" href="dark-mode.css" />
-      <button class="icon-button" onclick="const r=document.referrer; (!r||r.includes('Einstellungen_'))?window.location.href='Homepage.html':history.back()" aria-label="Zur&uuml;ck">
+      <a class="icon-button" id="settingsBack" href="Homepage.html" aria-label="Zur&uuml;ck">
         <svg viewBox="0 0 24 24"><path d="M15 18 9 12l6-6"/></svg>
-      </button>
+      </a>
       <a class="icon-button" href="Homepage.html" aria-label="Homepage &ouml;ffnen">
         <svg viewBox="0 0 24 24"><path d="M6.8 11.5c0-.45.2-.88.55-1.16l3.7-3.02a1.48 1.48 0 0 1 1.9 0l3.7 3.02c.35.28.55.71.55 1.16v5.58a2.02 2.02 0 0 1-2.02 2.02H8.82a2.02 2.02 0 0 1-2.02-2.02Z"/></svg>
       </a>
     </header>
+
+    <script>
+      (function setSettingsBackTarget() {
+        const backLink = document.getElementById('settingsBack');
+        if (!backLink) return;
+        const allowed = new Set(['Homepage.html', 'Community.html', 'Projekte.html', 'Analytics.html']);
+        let target = new URLSearchParams(location.search).get('from') || '';
+        if (!allowed.has(target)) {
+          try {
+            const referrerFile = new URL(document.referrer).pathname.split('/').pop();
+            target = allowed.has(referrerFile) ? referrerFile : 'Homepage.html';
+          } catch (error) {
+            target = 'Homepage.html';
+          }
+        }
+        backLink.setAttribute('href', target);
+      })();
+    </script>
 
     <section class="settings-scroll">
       <small class="eyebrow reveal-up reveal-delay-2">Profil</small>

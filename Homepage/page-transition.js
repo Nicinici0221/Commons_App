@@ -143,6 +143,34 @@
   document.addEventListener('click', (event) => {
     if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
 
+    // Nach dem mobilen Onboarding wird die Homepage zunächst in einem
+    // gleich-originären iframe dargestellt. Interne Ziele müssen die äußere
+    // App navigieren, sonst entstehen ein zweiter PWA-Rahmen und ein kaputter
+    // iframe-Verlauf beim Zurückgehen.
+    if (isInstalledApp && window.self !== window.top &&
+        document.documentElement.classList.contains('is-embedded-document')) {
+      const embeddedTarget = event.target.closest?.('[data-href], a[href]');
+      const rawTarget = embeddedTarget?.getAttribute('data-href') || embeddedTarget?.getAttribute('href');
+      if (rawTarget && !rawTarget.startsWith('#') && !rawTarget.startsWith('javascript:')) {
+        const embeddedUrl = new URL(rawTarget, window.location.href);
+        if (isInternalHtmlUrl(embeddedUrl)) {
+          if (embeddedUrl.pathname.endsWith('/Einstellungen.html') && !embeddedUrl.searchParams.has('from')) {
+            embeddedUrl.searchParams.set('from', 'Homepage.html');
+          }
+          event.preventDefault();
+          event.stopPropagation();
+          try {
+            if (typeof window.parent.smoothNavigate === 'function') {
+              window.parent.smoothNavigate(embeddedUrl.href);
+              return;
+            }
+          } catch (error) {}
+          window.top.location.href = embeddedUrl.href;
+          return;
+        }
+      }
+    }
+
     const dataTarget = event.target.closest('[data-href]');
     if (dataTarget) {
       const target = dataTarget.getAttribute('data-href');

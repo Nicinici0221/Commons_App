@@ -216,7 +216,7 @@
     .map.is-fixed-height { aspect-ratio: auto; }
     #mapboxMap { position: absolute; inset: 0; z-index: 1; }
     .leaflet-container { background: #dcdcd8; }
-    .leaflet-tile { filter: grayscale(1); }
+    .leaflet-tile { filter: none; }
     .leaflet-control-attribution { font-size: 8px !important; }
     .leaflet-attribution-flag { display: none !important; }
 
@@ -2950,6 +2950,23 @@
     subdomains: 'abcd',
     maxZoom: 19
   }).addTo(map);
+
+  // Leaflet kann waehrend der Seitenanimation noch die vorherige Groesse des
+  // Containers messen. Der Abgleich verhindert graue oder abgeschnittene
+  // Kartenbereiche in der Desktop-Ansicht und in der installierten PWA.
+  let mapResizeFrame = 0;
+  function refreshLeafletSize() {
+    cancelAnimationFrame(mapResizeFrame);
+    mapResizeFrame = requestAnimationFrame(() => map?.invalidateSize({ pan: false }));
+  }
+  requestAnimationFrame(() => requestAnimationFrame(refreshLeafletSize));
+  window.setTimeout(refreshLeafletSize, 180);
+  window.setTimeout(refreshLeafletSize, 520);
+  window.addEventListener('load', refreshLeafletSize, { once: true });
+  if ('ResizeObserver' in window) {
+    const mapResizeObserver = new ResizeObserver(refreshLeafletSize);
+    mapResizeObserver.observe(mapEl);
+  }
 
   const poiIconByType = {
     kindergarten: '<svg viewBox="0 0 24 24"><path d="M4 19h16"/><path d="M7 19V9l5-4 5 4v10"/><path d="M9.5 14h5"/><path d="M10 11h.01"/><path d="M14 11h.01"/></svg>',
