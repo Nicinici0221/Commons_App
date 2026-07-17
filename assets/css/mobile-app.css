@@ -253,12 +253,26 @@ textarea {
 @media (max-width: 540px) and (display-mode: standalone) {
   html,
   body,
-  body:not(.is-embedded),
-  body:not(.is-embedded) > .phone {
+  body:not(.is-embedded) {
     width: 100% !important;
     height: 100dvh !important;
     min-height: 100dvh !important;
     max-height: 100dvh !important;
+  }
+
+  /*
+   * Manche installierten iPhone-PWAs liefern 100dvh erst unterhalb der
+   * Statusleiste. Der App-Rahmen wird deshalb um genau diese ausgelassene
+   * Safe Area nach oben erweitert. So bleiben die 440/956-Proportionen
+   * der Desktop-Vorlage erhalten, ohne Header oder Navigation separat zu
+   * verschieben. Android (Safe Area = 0) bleibt unverändert.
+   */
+  body.homepage-screen:not(.is-embedded) > .phone {
+    top: calc(-1 * var(--app-safe-top)) !important;
+    width: 100% !important;
+    height: calc(100dvh + var(--app-safe-top)) !important;
+    min-height: calc(100dvh + var(--app-safe-top)) !important;
+    max-height: calc(100dvh + var(--app-safe-top)) !important;
   }
 
   html.dark-mode,
