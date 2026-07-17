@@ -249,10 +249,6 @@ textarea {
 
 /* In der installierten Web-App zeichnet iOS die echte Statusleiste selbst. */
 @media (max-width: 540px) and (display-mode: standalone) {
-  :root {
-    --pwa-content-lift: 16px;
-  }
-
   html,
   body,
   body:not(.is-embedded),
@@ -301,41 +297,6 @@ textarea {
   html:has(body > .phone .hero-bg),
   body:has(> .phone .hero-bg) {
     background: #000000 !important;
-  }
-
-  /* Mobile PWA: Desktop-Proportionen erhalten, vertikal leicht anheben. */
-  .app-header {
-    padding-top: calc(78px - var(--pwa-content-lift)) !important;
-  }
-
-  .hero-bg {
-    height: calc(535px - var(--pwa-content-lift)) !important;
-  }
-
-  .hero-content {
-    top: calc(208px - var(--pwa-content-lift)) !important;
-  }
-
-  .cards {
-    top: calc(552px - var(--pwa-content-lift)) !important;
-  }
-
-  .slide-inner {
-    padding-top: calc(108px - var(--pwa-content-lift)) !important;
-  }
-
-  .onb-top {
-    top: calc(64px - var(--pwa-content-lift)) !important;
-  }
-
-  .intro-top {
-    padding-top: calc(60px - var(--pwa-content-lift)) !important;
-  }
-
-  .topbar,
-  .detail-back,
-  .detail-share {
-    top: calc(78px - var(--pwa-content-lift)) !important;
   }
 
   /*
