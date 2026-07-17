@@ -12,7 +12,12 @@
   <meta name="apple-mobile-web-app-title" content="HfG Erbe" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <link rel="apple-touch-icon" href="../assets/icons/icon-512.png" />
-  <link rel="stylesheet" href="../assets/css/mobile-app.css?v=20260717-iphone-layout-3" />
+  <script>
+    if (navigator.standalone === true || window.matchMedia('(display-mode: standalone)').matches) {
+      document.documentElement.classList.add('ios-standalone');
+    }
+  </script>
+  <link rel="stylesheet" href="../assets/css/mobile-app.css?v=20260717-iphone-layout-9" />
   <title>Commons Einstellungen</title>
   <script src="page-transition-head.js"></script>
   <script>(function(){if(!sessionStorage.getItem('es_visited')){document.documentElement.classList.remove('wc-route-return');}})();</script>
@@ -1341,7 +1346,7 @@
 
   </style>
 </head>
-<body>
+<body class="settings-screen">
   <main class="phone" aria-label="Commons Einstellungen">
     <div class="statusbar" aria-hidden="true">
       <div class="time">9:41</div>

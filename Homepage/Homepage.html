@@ -21,7 +21,7 @@
       document.documentElement.classList.add('is-embedded-document');
     }
   </script>
-  <link rel="stylesheet" href="../assets/css/mobile-app.css?v=20260717-iphone-layout-8" />
+  <link rel="stylesheet" href="../assets/css/mobile-app.css?v=20260717-iphone-layout-11" />
   <title>Solar Dashboard</title>
   <script src="page-transition-head.js"></script>
   <script>(function(){if(!sessionStorage.getItem('hp_visited')){document.documentElement.classList.remove('wc-route-return');}})();</script>
@@ -1014,6 +1014,17 @@
       smoothNavigate('CommunityMap.html');
     };
 
+    // iOS kann in der installierten PWA den synthetischen Click nach einer
+    // Berührung verschlucken. Nur dort direkt auf touchend navigieren.
+    if (document.documentElement.classList.contains('ios-standalone')) {
+      const donationButton = document.querySelector('.cta-card');
+      donationButton?.addEventListener('touchend', event => {
+        event.preventDefault();
+        event.stopPropagation();
+        window.openEnergyDonation();
+      }, { passive: false });
+    }
+
     // Live clock
     (function() {
       const el = document.querySelector('.time');
@@ -1129,6 +1140,22 @@
       notifBtn.addEventListener('click', open);
       closeBtn.addEventListener('click', close);
       backdrop.addEventListener('click', close);
+      if (document.documentElement.classList.contains('ios-standalone')) {
+        notifBtn.addEventListener('touchend', event => {
+          event.preventDefault();
+          event.stopPropagation();
+          open();
+        }, { passive: false });
+        closeBtn.addEventListener('touchend', event => {
+          event.preventDefault();
+          event.stopPropagation();
+          close();
+        }, { passive: false });
+        backdrop.addEventListener('touchend', event => {
+          event.preventDefault();
+          close();
+        }, { passive: false });
+      }
       document.addEventListener('keydown', event => {
         if (event.key === 'Escape' && modal.classList.contains('is-open')) close();
       });
