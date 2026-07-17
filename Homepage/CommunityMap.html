@@ -41,7 +41,7 @@
     @font-face { font-family: "HelvenaLight"; src: url("helvena-grotesk-modern-bold-brand-identity-font-2026-04-07-06-20-11-utc/Helvena Font File/WOFF2/Helvena-Light.woff2") format("woff2"), url("helvena-grotesk-modern-bold-brand-identity-font-2026-04-07-06-20-11-utc/Helvena Font File/WOFF/Helvena-Light.woff") format("woff"), url("helvena-grotesk-modern-bold-brand-identity-font-2026-04-07-06-20-11-utc/Helvena Font File/TTF/Helvena-Light.ttf") format("truetype"); font-weight: 300; font-style: normal; font-display: swap; }
 
     :root {
-      --bg: #f7f7f6;
+      --bg: #fbfbfa;
       --text: #171a16;
       --green: #34D041;
     }
@@ -83,7 +83,9 @@
       width: min(440px, calc(100vw - 40px));
       aspect-ratio: 440 / 956;
       overflow: hidden;
-      background: var(--bg);
+      background:
+        radial-gradient(ellipse 88% 48% at 50% 106%, rgba(232,235,230,.92) 0%, rgba(251,251,250,0) 66%),
+        var(--bg);
       border-radius: 32px;
       box-shadow: 0 28px 80px rgba(35,42,36,.18);
       animation: soft-fade .3s ease both;

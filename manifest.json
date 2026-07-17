@@ -1,6 +1,6 @@
 {
-  "name": "HfG Erbe",
-  "short_name": "HfG",
+  "name": "COMMONS App – Spende deine Solarenergie",
+  "short_name": "COMMONS",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",

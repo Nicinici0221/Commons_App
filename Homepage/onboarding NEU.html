@@ -659,7 +659,6 @@
       justify-content: space-between;
       overflow: hidden;
       background:
-        linear-gradient(180deg, #000 0%, rgba(0,0,0,.88) 72px, rgba(0,0,0,0) 170px),
         radial-gradient(ellipse 58% 46% at 106% 106%, rgba(255,207,171,.34) 0%, rgba(242,171,142,.20) 42%, rgba(7,14,28,0) 74%),
         radial-gradient(ellipse 168% 132% at 104% 104%, rgba(242,171,142,.72) 0%, rgba(203,115,122,.48) 38%, rgba(99,74,83,.22) 72%, rgba(7,14,28,0) 96%),
         radial-gradient(ellipse 92% 74% at 20% 12%, rgba(42,63,107,.68) 0%, rgba(21,33,58,.46) 46%, rgba(7,14,28,0) 78%),
@@ -2108,14 +2107,6 @@
       history.replaceState(null, '', 'Homepage.html');
     }, 1280);
 
-    /*
-     * Nach dem sichtbaren Morph den iframe durch die echte Seite ersetzen.
-     * Die Homepage ist zu diesem Zeitpunkt bereits vollständig im Cache;
-     * direkte DOM-Trefferflächen funktionieren auf iOS zuverlässiger.
-     */
-    window.setTimeout(() => {
-      window.location.replace('Homepage.html?from=onboarding');
-    }, 2100);
   }
 
   function finish() {
