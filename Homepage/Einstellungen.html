@@ -3,7 +3,7 @@
 <head>
   <style>html,body{background:#e2e5df}</style>
   <script>(function(){try{if(localStorage.getItem("commons_setting_dark-mode")==="true")document.documentElement.classList.add("dark-mode");}catch(e){}})();</script>
-  <link rel="stylesheet" href="dark-mode.css" />
+  <link rel="stylesheet" href="dark-mode.css?v=20260717-avatar-rings-3" />
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <meta name="theme-color" content="#FF7B00" />
@@ -19,7 +19,7 @@
   </script>
   <link rel="stylesheet" href="../assets/css/mobile-app.css?v=20260717-iphone-layout-12" />
   <title>Commons Einstellungen</title>
-  <script src="page-transition-head.js?v=20260717-performance-2"></script>
+  <script src="page-transition-head.js?v=20260717-performance-3"></script>
   <script>(function(){if(!sessionStorage.getItem('es_visited')){document.documentElement.classList.remove('wc-route-return');}})();</script>
   <link rel="stylesheet" href="page-transitions.css" />
   <style>
@@ -1367,12 +1367,6 @@
       pointer-events: none !important;
     }
 
-    html.ios-standalone.theme-switching body.settings-screen .phone,
-    html.ios-standalone.theme-switching body.settings-screen .phone * {
-      transition: none !important;
-      animation: none !important;
-    }
-
   </style>
 </head>
 <body class="settings-screen">
@@ -1387,9 +1381,6 @@
     </div>
 
     <header class="topbar reveal-up reveal-delay-1">
-  <style>html,body{background:#e2e5df}</style>
-  <script>(function(){try{if(localStorage.getItem("commons_setting_dark-mode")==="true")document.documentElement.classList.add("dark-mode");}catch(e){}})();</script>
-  <link rel="stylesheet" href="dark-mode.css" />
       <a class="icon-button" id="settingsBack" href="Homepage.html" aria-label="Zur&uuml;ck">
         <svg viewBox="0 0 24 24"><path d="M15 18 9 12l6-6"/></svg>
       </a>
@@ -1664,13 +1655,6 @@
     const isInstalledSettingsApp = document.documentElement.classList.contains('pwa-runtime') ||
       document.documentElement.classList.contains('ios-standalone');
 
-    // Die historisch doppelte Dark-Mode-CSS wird nur in der PWA auf eine
-    // aktive Instanz reduziert. Desktop behält seine bisherige Kaskade.
-    if (isInstalledSettingsApp) {
-      const darkModeSheets = [...document.querySelectorAll('link[rel="stylesheet"][href="dark-mode.css"]')];
-      darkModeSheets.slice(0, -1).forEach((sheet) => { sheet.disabled = true; });
-    }
-
     function updateInstalledThemeColor(isDark) {
       if (!isInstalledSettingsApp) return;
       const themeColor = document.querySelector('meta[name="theme-color"]');
@@ -1698,8 +1682,6 @@
       const activateToggle = () => {
         const isOn = toggle.getAttribute('aria-pressed') === 'true';
         const nextState = !isOn;
-        const isPwaThemeToggle = isInstalledSettingsApp && toggle.dataset.setting === 'dark-mode';
-        if (isPwaThemeToggle) document.documentElement.classList.add('theme-switching');
         toggle.setAttribute('aria-pressed', String(nextState));
         toggle.classList.toggle('is-off', isOn);
         localStorage.setItem(storageKey, String(nextState));
@@ -1708,32 +1690,9 @@
           updateThemeModeIcon(nextState);
           updateInstalledThemeColor(nextState);
         }
-        if (isPwaThemeToggle) {
-          requestAnimationFrame(() => requestAnimationFrame(() => {
-            document.documentElement.classList.remove('theme-switching');
-          }));
-        }
       };
 
-      if (isInstalledSettingsApp && toggle.dataset.setting === 'dark-mode') {
-        let suppressClickUntil = 0;
-        toggle.addEventListener('pointerup', (event) => {
-          if (event.pointerType !== 'touch') return;
-          event.preventDefault();
-          event.stopPropagation();
-          suppressClickUntil = Date.now() + 450;
-          activateToggle();
-        });
-        toggle.addEventListener('click', (event) => {
-          if (Date.now() < suppressClickUntil) {
-            event.preventDefault();
-            return;
-          }
-          activateToggle();
-        });
-      } else {
-        toggle.addEventListener('click', activateToggle);
-      }
+      toggle.addEventListener('click', activateToggle);
     });
 
     const profileNameInput = document.querySelector('.profile-name-input');

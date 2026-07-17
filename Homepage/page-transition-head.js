@@ -104,9 +104,14 @@
       if (activeTap.control === event.target || activeTap.control.contains(event.target)) clearActiveTap(70);
     }, { capture: true });
 
-    const imageFallbacks = new WeakSet();
+  }
 
-    function pwaImageSource(source) {
+  // Die vorhandenen, visuell identischen 960px-Varianten reichen selbst fuer
+  // die 2x-Darstellung des 440px-App-Rahmens. Sie werden auf Desktop und in
+  // der PWA verwendet, damit nicht mehrere Megabyte pro Bild geladen werden.
+  const imageFallbacks = new WeakSet();
+
+  function pwaImageSource(source) {
       if (!source || /^(?:data:|blob:|https?:)/i.test(source)) return '';
       const normalized = source.replace(/\\/g, '/');
       const marker = normalized.lastIndexOf('Icons/');
@@ -118,7 +123,7 @@
       return `Icons/pwa/${baseName}.${extension}`;
     }
 
-    function prepareImage(image) {
+  function prepareImage(image) {
       if (!(image instanceof HTMLImageElement)) return;
       image.decoding = 'async';
       const eager = image.matches('#mainAvatarImg, .hero-card-bg, [data-pwa-eager]') ||
@@ -140,7 +145,7 @@
       image.src = optimized;
     }
 
-    const imageObserver = new MutationObserver((records) => {
+  const imageObserver = new MutationObserver((records) => {
       records.forEach((record) => {
         if (record.type === 'attributes') {
           prepareImage(record.target);
@@ -153,8 +158,7 @@
         });
       });
     });
-    imageObserver.observe(root, { childList: true, subtree: true, attributes: true, attributeFilter: ['src'] });
-  }
+  imageObserver.observe(root, { childList: true, subtree: true, attributes: true, attributeFilter: ['src'] });
 
   try {
     if (sessionStorage.getItem('wc_internal_transition') === '1') {

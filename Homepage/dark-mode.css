@@ -1015,7 +1015,39 @@ html.dark-mode .phone .sheet-upload-desc  { color: rgba(240,240,240,.5) !importa
 html.dark-mode .phone .avatar-pager-btn,
 html.dark-mode .phone .avatar-pager-label { color: rgba(240,240,240,.55) !important; }
 html.dark-mode .phone .avatar-option.is-selected .avatar-opt-inner {
-  outline-color: rgba(255,255,255,.35) !important;
+  outline: none !important;
+  border-color: #ffffff !important;
+  box-shadow:
+    0 0 0 3px #0c0d0c,
+    0 0 0 5px rgba(255,255,255,.92),
+    0 5px 14px rgba(0,0,0,.42) !important;
+  transform: scale(.96);
+}
+
+html.dark-mode .phone .avatar-option .avatar-opt-inner {
+  border: 0 solid transparent !important;
+  transform: translateZ(0);
+  transition: border-color .22s ease, box-shadow .22s ease, transform .22s cubic-bezier(.22,1,.36,1);
+}
+
+html.dark-mode .phone .avatar-option:not(.is-selected) .avatar-opt-inner {
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,.72),
+    0 3px 10px rgba(0,0,0,.30) !important;
+}
+
+html.dark-mode .phone .avatar-option:active .avatar-opt-inner {
+  transform: scale(.92);
+}
+
+html.dark-mode .phone .avatar-option .avatar-opt-check {
+  background: #ffffff !important;
+  border: 2px solid #0c0d0c !important;
+  box-shadow: 0 0 0 1px rgba(255,255,255,.92), 0 2px 6px rgba(0,0,0,.45) !important;
+}
+
+html.dark-mode .phone .avatar-option .avatar-opt-check svg {
+  stroke: #111410 !important;
 }
 
 /* ══════════════════════════════════════════
