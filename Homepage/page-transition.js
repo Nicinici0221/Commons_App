@@ -4,6 +4,7 @@
   const SCROLL_KEY_PREFIX = 'wc_scroll_state:';
   const DELAY = 130;
   let navigating = false;
+  const primaryRoutes = ['Homepage.html', 'Community.html', 'Projekte.html', 'Analytics.html'];
 
   const scrollSelectors = [
     '.scroll-content',
@@ -76,6 +77,17 @@
     return url.origin === window.location.origin && /\.html(?:$|[?#])/.test(url.href);
   }
 
+  function prefetchPrimaryRoutes() {
+    primaryRoutes.forEach((target) => {
+      const url = new URL(target, window.location.href);
+      if (url.href === window.location.href) return;
+      const link = document.createElement('link');
+      link.rel = 'prefetch';
+      link.href = url.href;
+      document.head.appendChild(link);
+    });
+  }
+
   function smoothNavigate(target) {
     if (!target || navigating) return;
     const url = new URL(target, window.location.href);
@@ -140,5 +152,10 @@
 
   window.addEventListener('pagehide', saveScrollPositions);
   window.addEventListener('pageshow', restoreAfterHistoryReturn);
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', prefetchPrimaryRoutes, { once: true });
+  } else {
+    prefetchPrimaryRoutes();
+  }
   restoreAfterHistoryReturn();
 })();
