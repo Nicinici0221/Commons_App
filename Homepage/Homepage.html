@@ -14,14 +14,14 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <link rel="apple-touch-icon" href="../assets/icons/icon-512.png" />
   <script>
+    if (navigator.standalone === true || window.matchMedia('(display-mode: standalone)').matches) {
+      document.documentElement.classList.add('ios-standalone');
+    }
     if (location.search.includes('embed=1')) {
       document.documentElement.classList.add('is-embedded-document');
-      if (navigator.standalone === true || window.matchMedia('(display-mode: standalone)').matches) {
-        document.documentElement.classList.add('ios-standalone');
-      }
     }
   </script>
-  <link rel="stylesheet" href="../assets/css/mobile-app.css?v=20260717-iphone-layout-7" />
+  <link rel="stylesheet" href="../assets/css/mobile-app.css?v=20260717-iphone-layout-8" />
   <title>Solar Dashboard</title>
   <script src="page-transition-head.js"></script>
   <script>(function(){if(!sessionStorage.getItem('hp_visited')){document.documentElement.classList.remove('wc-route-return');}})();</script>
@@ -941,7 +941,7 @@
           </div>
         </article>
 
-        <button class="cta-card reveal-up reveal-delay-6" type="button" aria-label="Energie spenden" onclick="sessionStorage.setItem('cmap_from','homepage');smoothNavigate('CommunityMap.html')">
+        <button class="cta-card reveal-up reveal-delay-6" type="button" aria-label="Energie spenden" onclick="openEnergyDonation()">
           <span class="cta-label">Energie<br>spenden</span>
           <div class="cta-arrow">
             <svg viewBox="0 0 24 24"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg>
@@ -992,6 +992,28 @@
   </main>
 
   <script>
+    // CTA funktioniert sowohl direkt als auch in der Homepage, die nach dem
+    // mobilen Onboarding im iframe weitergerendert wird.
+    window.openEnergyDonation = function openEnergyDonation() {
+      sessionStorage.setItem('cmap_from', 'homepage');
+
+      const isEmbeddedInstalledApp = window.self !== window.top &&
+        document.documentElement.classList.contains('ios-standalone');
+
+      if (isEmbeddedInstalledApp) {
+        try {
+          if (typeof window.parent.smoothNavigate === 'function') {
+            window.parent.smoothNavigate('CommunityMap.html');
+            return;
+          }
+        } catch (error) {}
+        window.top.location.href = 'CommunityMap.html';
+        return;
+      }
+
+      smoothNavigate('CommunityMap.html');
+    };
+
     // Live clock
     (function() {
       const el = document.querySelector('.time');
@@ -1107,6 +1129,9 @@
       notifBtn.addEventListener('click', open);
       closeBtn.addEventListener('click', close);
       backdrop.addEventListener('click', close);
+      document.addEventListener('keydown', event => {
+        if (event.key === 'Escape' && modal.classList.contains('is-open')) close();
+      });
       if (clearBtn) clearBtn.addEventListener('click', () => { saveDeleted(new Set(ALL.map(n=>n.id))); render(); close(); });
       list.addEventListener('click', e => {
         const btn = e.target.closest('.notif-delete');

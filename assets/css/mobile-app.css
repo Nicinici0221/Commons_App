@@ -243,6 +243,42 @@ textarea {
     to { opacity: 1; transform: translateY(0); }
   }
 
+  /* Benachrichtigungen liegen in der installierten App immer als eigene
+   * oberste Ebene über Hero, Karten und Navigation. */
+  html.ios-standalone body.homepage-screen .notifications-modal {
+    position: absolute !important;
+    inset: 0 !important;
+    z-index: 1000 !important;
+    isolation: isolate !important;
+    pointer-events: none !important;
+  }
+
+  html.ios-standalone body.homepage-screen .notifications-modal.is-open {
+    pointer-events: auto !important;
+  }
+
+  html.ios-standalone body.homepage-screen .notifications-modal .modal-backdrop {
+    position: absolute !important;
+    inset: 0 !important;
+    z-index: 0 !important;
+  }
+
+  html.ios-standalone body.homepage-screen .notifications-modal .modal-sheet {
+    z-index: 1 !important;
+    bottom: max(20px, var(--app-safe-bottom)) !important;
+    max-height: calc(100% - var(--app-safe-top) - var(--app-safe-bottom) - 24px) !important;
+  }
+
+  html.ios-standalone body.homepage-screen .notifications-modal .sheet-close {
+    position: relative !important;
+    z-index: 3 !important;
+    width: 44px !important;
+    height: 44px !important;
+    border-radius: 50% !important;
+    pointer-events: auto !important;
+    touch-action: manipulation !important;
+  }
+
   /* Keine sichtbare Browser-Scrollleiste innerhalb des App-Rahmens. */
   .phone,
   .phone * {
