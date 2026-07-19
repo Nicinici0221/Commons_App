@@ -40,7 +40,7 @@
     @media (min-width:440px) and (max-width:540px) and (orientation:portrait){html.ios-standalone body>.phone{--pwa-critical-top:max(env(safe-area-inset-top,0px),62px)}}
   </style>
   <link rel="stylesheet" href="../assets/css/mobile-app.css?v=20260717-iphone-layout-10" />
-  <script src="page-transition-head.js?v=20260717-performance-3"></script>
+  <script src="page-transition-head.js?v=20260717-onboarding-no-flash-3"></script>
   <link rel="stylesheet" href="page-transitions.css" />
   <title>Onboarding — COMMONS</title>
   <style>
@@ -2138,7 +2138,11 @@
       phone.classList.add('home-ready');
       hpFrame.style.pointerEvents = 'auto';
       hpFrame.removeAttribute('scrolling');
-      history.replaceState(null, '', 'Homepage.html');
+      // Die vorab geladene Homepage war bisher nur als iframe sichtbar und
+      // replaceState änderte lediglich die URL. Jetzt wird sie wirklich zum
+      // Hauptdokument; durch das vorherige iframe-Laden liegt sie bereits im
+      // Browser-Cache und der Wechsel bleibt visuell nahtlos.
+      window.location.replace('Homepage.html');
     }, 1280);
   }
 
@@ -2161,7 +2165,7 @@
         phone.classList.add('home-ready');
         hpFrame.style.pointerEvents = 'auto';
         hpFrame.removeAttribute('scrolling');
-        history.replaceState(null, '', 'Homepage.html');
+        window.location.replace('Homepage.html');
       }, 1280);
       return;
     }
@@ -2315,6 +2319,6 @@
   // Intro bleibt offen — User muss tippen (kein Auto-Dismiss).
 </script>
 
-<script src="page-transition.js?v=20260717-performance-1"></script>
+<script src="page-transition.js?v=20260720-onboarding-iframe-1"></script>
 </body>
 </html>

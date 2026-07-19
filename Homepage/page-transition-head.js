@@ -6,6 +6,9 @@
     root.classList.contains('is-embedded-document') ||
     location.search.includes('embed=1');
   const viewport = document.querySelector('meta[name="viewport"]');
+  if (location.search.includes('embed=1')) {
+    root.classList.add('is-embedded-document');
+  }
   if (viewport) {
     viewport.setAttribute(
       'content',

@@ -122,6 +122,48 @@
     }
     navigating = true;
     saveScrollPositions();
+
+    // Nach dem Onboarding zeigt die aeussere Seite die Homepage bereits in
+    // einem iframe. Hier ohne den zusaetzlichen Exit-Frame wechseln, da beim
+    // Aufloesen dieses Wrappers sonst kurz dessen helle Leerflaeche sichtbar
+    // wird. Auch die Einblend-Markierung darf hier nicht gesetzt werden:
+    // Sie wuerde auf der Zielseite erneut einen kurzen leeren Frame erzeugen.
+    const onboardingHomepage = document.querySelector('.phone.home-ready > .homepage-embedded');
+    if (onboardingHomepage) {
+      try { sessionStorage.removeItem(KEY); } catch (e) {}
+
+      const embeddedUrl = new URL(url.href);
+      embeddedUrl.searchParams.set('embed', '1');
+
+      const nextFrame = document.createElement('iframe');
+      nextFrame.className = 'homepage-embedded';
+      nextFrame.title = 'Commons App';
+      nextFrame.setAttribute('scrolling', 'no');
+      nextFrame.style.opacity = '0';
+      nextFrame.style.pointerEvents = 'none';
+      nextFrame.style.transition = 'none';
+
+      nextFrame.addEventListener('load', () => {
+        requestAnimationFrame(() => requestAnimationFrame(() => {
+          onboardingHomepage.replaceWith(nextFrame);
+          nextFrame.style.opacity = '1';
+          nextFrame.style.pointerEvents = 'auto';
+          nextFrame.removeAttribute('scrolling');
+          history.replaceState(null, '', url.href);
+          navigating = false;
+        }));
+      }, { once: true });
+
+      nextFrame.addEventListener('error', () => {
+        navigating = false;
+        nextFrame.remove();
+      }, { once: true });
+
+      onboardingHomepage.parentElement.appendChild(nextFrame);
+      nextFrame.src = embeddedUrl.href;
+      return;
+    }
+
     markInternalTransition();
     document.documentElement.classList.add('wc-route-exit');
     window.setTimeout(() => { window.location.href = url.href; }, DELAY);
@@ -143,11 +185,12 @@
   document.addEventListener('click', (event) => {
     if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
 
-    // Nach dem mobilen Onboarding wird die Homepage zunächst in einem
-    // gleich-originären iframe dargestellt. Interne Ziele müssen die äußere
-    // App navigieren, sonst entstehen ein zweiter PWA-Rahmen und ein kaputter
-    // iframe-Verlauf beim Zurückgehen.
-    if (isInstalledApp && window.self !== window.top &&
+    // Nach dem Onboarding wird die Homepage zunächst in einem
+    // gleich-originären iframe dargestellt. Das gilt auch im normalen Browser,
+    // nicht nur in der installierten PWA. Interne Ziele müssen deshalb immer
+    // die äußere App navigieren. Dort bleibt der aktuelle iframe sichtbar, bis
+    // der neue vollständig geladen ist; so gibt es keinen weißen Leer-Frame.
+    if (window.self !== window.top &&
         document.documentElement.classList.contains('is-embedded-document')) {
       const embeddedTarget = event.target.closest?.('[data-href], a[href]');
       const rawTarget = embeddedTarget?.getAttribute('data-href') || embeddedTarget?.getAttribute('href');
